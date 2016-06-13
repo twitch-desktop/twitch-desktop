@@ -1,0 +1,24 @@
+#main-container {
+  background: #221F2A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dad8de;
+}
+
+.error-display {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.retry-button {
+  background: #3A1F64;
+  transition: background 0.4s;
+  color: #dad8de;
+  
+  &:hover {
+    background: #7550b9;
+  }
+}

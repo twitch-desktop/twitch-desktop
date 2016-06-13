@@ -1,0 +1,42 @@
+$md-font-url: "./fonts/";
+@import "~ng2-material/font/font";
+@import "~ng2-material/all";
+
+@font-face {
+  font-family: Moderna;
+  src: url('./fonts/mgopenmodernabold.ttf');
+}
+
+body {
+  font-family: Moderna,Helvetica,sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  background: #17141f;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.dragzone {
+  border: 2px dotted #ccc;
+  margin: 10px;
+}
+
+#sidebar {
+  overflow-y: scroll;
+  background: #17141f;
+  color: #dad8de;
+}
+
+#sidebar i {
+  color: #dad8de;
+  margin-right: 10px;
+}
+
+.content {
+  max-height: calc(100% - 70px);
+  height: calc(100% - 70px);
+  background-color: #efeef1;
+}
+

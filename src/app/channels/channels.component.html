@@ -1,0 +1,19 @@
+<div infinite-scroll (scrolled)="onScrolled()" flex layout="row" class="channel-list" layout-fill layout-wrap layout-align="center start">
+
+  <div class="channel-item" flex-sm="100" flex-gt-sm="40" flex-gt-md="30" flex-gt-lg="25" layout="column" layout-align="center center"
+    (click)="router.navigate(['/play',{channel: channel}])"
+    *ngFor="let channel of channels">
+    <div class="channel-title"><span>{{channel.channel.display_name}}</span></div>
+    <div>
+      <img class="channel-cover" src="{{ channel.preview.medium }}">
+    </div>
+    <div class="channel-info" layout="row">
+      <div class="channel-uptime"><span><i md-icon>schedule</i>{{channel.created_at | twTimeSince}}</span></div>
+      <div class="channel-viewers"><span><i md-icon>people</i>{{channel.viewers | number}}</span></div>
+    </div>
+  </div>
+
+  <div class="fetching-more" [hidden]="!fetchingMore">
+    <md-progress-circle color="accent" mode="indeterminate" [style.width]="'30px'"></md-progress-circle>
+  </div>
+</div>

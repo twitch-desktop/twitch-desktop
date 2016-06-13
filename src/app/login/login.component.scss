@@ -1,0 +1,26 @@
+.login-container {
+  background: #221F2A;
+}
+
+.login-display {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: #DAD8DE;
+}
+
+.logout-button {
+  color: #DAD8DE;
+  background: #3A1F64;
+  transition: background 0.4s;
+  
+  &:hover {
+    background: #7550b9;
+  }
+}
+
+.login-logo {
+  font-size: 130px;
+}
