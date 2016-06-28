@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, OnDestroy} from "@angular/core";
-import {OnActivate, Router, RouteSegment} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 import {MdProgressCircle, MdSpinner} from "@angular2-material/progress-circle/progress-circle";
 
@@ -9,6 +9,7 @@ let querystring = require("querystring");
 import {ChatComponent} from "./chat/chat.component";
 
 import {ToolbarService} from "../toolbar/toolbar.service";
+import {ChannelService} from "../channels/channels.service";
 
 // Player component
 @Component({
@@ -18,7 +19,7 @@ import {ToolbarService} from "../toolbar/toolbar.service";
   directives: [MATERIAL_DIRECTIVES, ChatComponent, MdProgressCircle, MdSpinner]
 })
 
-export class PlayerComponent implements OnActivate, OnInit, OnDestroy {
+export class PlayerComponent implements OnInit, OnDestroy {
 
   channel: any;
   channel_name: string;
@@ -29,12 +30,17 @@ export class PlayerComponent implements OnActivate, OnInit, OnDestroy {
   constructor (
     private element: ElementRef,
     private router: Router,
-    private toolbarService: ToolbarService) {}
+    private route: ActivatedRoute,
+    private toolbarService: ToolbarService,
+    private channelService: ChannelService) {}
 
-  routerOnActivate(curr: RouteSegment): void {
-    this.channel = curr.getParam("channel");
-    console.log(this.channel);
-    this.channel_name = this.channel.channel.name;
+  ngOnInit() {
+
+    this.route.params.subscribe(params => {
+      this.channel = this.channelService.getChannel(params["channel"]);
+      this.channel_name = this.channel.channel.name;
+      console.log(this.channel);
+    });
 
     // Set dark mode in chat
     let webview = this.element.nativeElement.lastElementChild.lastElementChild.firstElementChild;
@@ -43,9 +49,6 @@ export class PlayerComponent implements OnActivate, OnInit, OnDestroy {
     });
 
     this.chat_url = `https://www.twitch.tv/${this.channel_name}/chat`;
-  }
-
-  ngOnInit() {
 
     // Set toolbar title and logo
     this.toolbarService.setTitle(this.channel.channel.status);

@@ -1,5 +1,5 @@
 <div  flex layout="row" class="login-container" layout-fill layout-wrap layout-align="center start">
-  <webview webview-helper (logued)="onLogued()" id="auth-webview" [authUrl]="authUrl" style="width:100%; height:100%" [hidden]="logued" partition="twitch"></webview>
+  <webview webview-helper (logued)="onLogued()" id="auth-webview" [authUrl]="authUrl" style="width:100%; height:100%" [hidden]="logued" partition="persist:twitch"></webview>
   <div class="login-display" layout="column" [hidden]="!logued">
     <i md-icon class="login-logo">person</i>
     <span>Logued in as {{username}}</span>

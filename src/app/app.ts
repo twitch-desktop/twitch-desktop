@@ -5,14 +5,11 @@ import {Component, ViewEncapsulation, Pipe, PipeTransform} from "@angular/core";
 import {NgFor} from "@angular/common";
 import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material";
 import {HTTP_PROVIDERS} from "@angular/http";
-import {Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from "@angular/router";
+import {Router, ROUTER_DIRECTIVES, provideRouter, RouterConfig } from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 import {MD_SIDENAV_DIRECTIVES} from "@angular2-material/sidenav";
 import * as _ from "lodash";
 import * as request from "request";
-let m3u8 = require("m3u8");
-let Stream = require("stream");
-let querystring = require("querystring");
 
 // Electron mainWindow
 let mainWindow = require("electron").remote.getGlobal("mainWindow");
@@ -32,6 +29,19 @@ import {ErrorService} from "./error-handler/errorhandler.service";
 import {SpinnerService} from "./spinner/spinner.service";
 import {TwitchService} from "./twitch/twitch.service";
 import {ToolbarService} from "./toolbar/toolbar.service";
+import {GameService} from "./games/games.service";
+import {ChannelService} from "./channels/channels.service";
+
+export const routes: RouterConfig = [
+  {path: "play/:channel",  component: PlayerComponent},
+  {path: "games", component: GamesComponent},
+  {path: "channels/:game", component: ChannelsComponent},
+  {path: "login", component: LoginComponent}
+];
+
+export const APP_ROUTER_PROVIDERS = [
+  provideRouter(routes)
+];
 
 
 @Component({
@@ -52,16 +62,11 @@ import {ToolbarService} from "./toolbar/toolbar.service";
     TwitchService,
     ToolbarService,
     SpinnerService,
-    ErrorService
+    ErrorService,
+    GameService,
+    ChannelService
   ]
 })
-
-@Routes([
-  {path: "/play",  component: PlayerComponent},
-  {path: "/games", component: GamesComponent},
-  {path: "/channels", component: ChannelsComponent},
-  {path: "/login", component: LoginComponent}
-])
 
 export default class App {
   sidebar_collapsed = false;
@@ -99,4 +104,4 @@ export default class App {
   }
 }
 
-bootstrap(App, [MATERIAL_BROWSER_PROVIDERS, ROUTER_PROVIDERS]);
+bootstrap(App, [MATERIAL_BROWSER_PROVIDERS, APP_ROUTER_PROVIDERS]);

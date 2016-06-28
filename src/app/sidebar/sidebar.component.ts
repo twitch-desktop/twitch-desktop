@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {OnActivate, Router, RouteSegment} from "@angular/router";
+import {Router} from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 
 import {TwitchService} from "../twitch/twitch.service";

@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, OnDestroy, Input} from "@angular/core";
-import {OnActivate, Router, RouteSegment} from "@angular/router";
+import {Router} from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 import {MdProgressCircle, MdSpinner} from "@angular2-material/progress-circle/progress-circle";
 

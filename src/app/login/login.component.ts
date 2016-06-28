@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, NgZone} from "@angular/core";
-import {OnActivate, Router, RouteSegment} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 
 let request = require("request");
@@ -17,7 +17,7 @@ import config from "../config";
   directives: [MATERIAL_DIRECTIVES, WebviewHelper]
 })
 
-export class LoginComponent implements OnActivate, OnInit {
+export class LoginComponent implements OnInit {
 
   authUrl: string;
   logued: Boolean = false;
@@ -35,10 +35,7 @@ export class LoginComponent implements OnActivate, OnInit {
     private twitchService: TwitchService,
     private zone: NgZone) {
   }
-
-  routerOnActivate(curr: RouteSegment): void {
-  }
-
+  
   ngOnInit() {
     // Clears toolbar title and logo
     this.toolbarService.setTitle("");

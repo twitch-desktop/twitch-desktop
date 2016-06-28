@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {OnActivate, Router, RouteSegment} from "@angular/router";
+import {ActivatedRoute, Router, NavigationStart} from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 
 import {ErrorService} from "./errorhandler.service.ts";
@@ -19,6 +19,7 @@ export class ErrorComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private errorService: ErrorService) {
 
     // Subscribe to the onError event of the service to show or hide
@@ -36,9 +37,11 @@ export class ErrorComponent implements OnInit {
     });
 
     // Hide error message on any route change
-    this.router.changes.subscribe(() => {
-      this.displayError = false;
-      this.error = "";
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.displayError = false;
+        this.error = "";
+      }
     });
   }
 

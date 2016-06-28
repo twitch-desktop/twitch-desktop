@@ -1,11 +1,10 @@
 import {Component, OnInit, Pipe, PipeTransform, NgZone} from "@angular/core";
-import {OnActivate, Router, RouteSegment} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 import {MD_INPUT_DIRECTIVES} from "@angular2-material/input";
 import {MdProgressCircle, MdSpinner} from "@angular2-material/progress-circle/progress-circle";
 import {InfiniteScroll} from "../infinite-scroll/infinitescroll.directive.ts";
 
-let request = require("request");
 let _ = require("lodash");
 let moment = require("moment");
 
@@ -13,6 +12,8 @@ import {TwitchService} from "../twitch/twitch.service";
 import {ToolbarService} from "../toolbar/toolbar.service";
 import {SpinnerService} from "../spinner/spinner.service";
 import {ErrorService} from "../error-handler/errorhandler.service";
+import {GameService} from "../games/games.service";
+import {ChannelService} from "./channels.service";
 
 // Transforms a time string into a string representing time since that moment
 @Pipe({
@@ -38,7 +39,7 @@ class TimeSincePipe implements PipeTransform {
   pipes: [TimeSincePipe]
 })
 
-export class ChannelsComponent implements OnActivate, OnInit {
+export class ChannelsComponent implements OnInit {
 
   private game: string = null;
   private game_obj: any;
@@ -47,24 +48,28 @@ export class ChannelsComponent implements OnActivate, OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private twitchService: TwitchService,
     private toolbarService: ToolbarService,
     private spinnerService: SpinnerService,
     private errorService: ErrorService,
+    private gameService: GameService,
+    private channelService: ChannelService,
     private zone: NgZone) {}
 
-  routerOnActivate(curr: RouteSegment): void {
-
-    this.game_obj = curr.getParam("game");
-
-    // Setting game as null twitchService returns streams from all games
-    if (this.game_obj === "top")  this.game = null;
-    else this.game = this.game_obj.game.name;
-
-    this.spinnerService.show();
-  }
-
   ngOnInit() {
+
+    this.route.params.subscribe(params => {
+      console.log(params);
+      this.game_obj = this.gameService.getGame(params["game"]);
+
+      console.log(this.game_obj);
+
+      if (this.game_obj === "top")  this.game = null;
+      else this.game = this.game_obj.game.name;
+
+      this.spinnerService.show();
+    });
 
     // Set toolbar title
     if (this.game) this.toolbarService.setTitle(this.game);
@@ -74,8 +79,8 @@ export class ChannelsComponent implements OnActivate, OnInit {
     this.toolbarService.setLogo("videocam");
 
     // Load streams list and hide the spinner
-    this.twitchService.getStreams(this.game).then((streams: any) => {
-      this.channels = _.concat(this.channels, streams.streams);
+    this.channelService.getStreams(this.game).then((streams: any) => {
+      this.channels = streams;
       this.spinnerService.hide();
       console.log(this.channels);
     }).catch((reason) => {
@@ -94,8 +99,8 @@ export class ChannelsComponent implements OnActivate, OnInit {
       this.fetchingMore = true;
       this.zone.run(() => {});
 
-      this.twitchService.fetchMoreStreams(this.game).then((streams: any) => {
-        this.channels = _.concat(this.channels, streams.streams);
+      this.channelService.fetchMoreStreams(this.game).then((streams: any) => {
+        this.channels = streams;
         this.fetchingMore = false;
         this.zone.run(() => {});
       }).catch((reason) => {

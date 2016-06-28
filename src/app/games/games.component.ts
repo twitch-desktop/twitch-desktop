@@ -1,5 +1,5 @@
 import {Component, OnInit, NgZone} from "@angular/core";
-import {OnActivate, Router, RouteSegment} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 import {MD_INPUT_DIRECTIVES} from "@angular2-material/input";
 import {MdProgressCircle, MdSpinner} from "@angular2-material/progress-circle/progress-circle";
@@ -11,6 +11,7 @@ import {TwitchService} from "../twitch/twitch.service";
 import {ToolbarService} from "../toolbar/toolbar.service";
 import {SpinnerService} from "../spinner/spinner.service";
 import {ErrorService} from "../error-handler/errorhandler.service";
+import {GameService} from "./games.service";
 
 // Game list component
 @Component({
@@ -24,31 +25,31 @@ import {ErrorService} from "../error-handler/errorhandler.service";
     InfiniteScroll]
 })
 
-export class GamesComponent implements OnActivate, OnInit {
+export class GamesComponent implements OnInit {
   games: Array<Object> = [];
   fetchingMore: Boolean = false;
 
   constructor (
     private router: Router,
+    private route: ActivatedRoute,
     private twitchService: TwitchService,
     private toolbarService: ToolbarService,
     private spinnerService: SpinnerService,
     private errorService: ErrorService,
+    private gameService: GameService,
     private zone: NgZone) {}
 
-  // Show spinner while loading game list data
-  routerOnActivate(curr: RouteSegment): void {
-    this.spinnerService.show();
-  }
-
   ngOnInit() {
+
+    this.spinnerService.show();
+
     // Set toolbar tile and logo
     this.toolbarService.setTitle("Games");
     this.toolbarService.setLogo("games");
 
     // Load the list of top games and hide the spinner
-    this.twitchService.getTopGames().then((games: any) => {
-      this.games = _.concat(this.games, games.top);
+    this.gameService.getTopGames().then((games: any) => {
+      this.games = _.concat(this.games, games);
       this.spinnerService.hide();
       console.log(this.games);
     }).catch((reason) => {
@@ -67,8 +68,8 @@ export class GamesComponent implements OnActivate, OnInit {
       this.fetchingMore = true;
       this.zone.run(() => {});
 
-      this.twitchService.fetchMoreTopGames().then((games: any) => {
-        this.games = _.concat(this.games, games.top);
+      this.gameService.fetchMoreTopGames().then((games: any) => {
+        this.games = games;
         this.fetchingMore = false;
         this.zone.run(() => {});
       }).catch((reason) => {
