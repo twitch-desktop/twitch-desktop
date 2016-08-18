@@ -18,6 +18,10 @@
 - Autoupdater
 - Something more 
 
+## Downloads
+
+[Downloads](https://github.com/hzeroo/pokemon-go-stats/releases)
+
 ## Techs behind
 + [Electron](http://electron.atom.io/)
 + [Angular 2](https://angular.io/)
