@@ -20,7 +20,7 @@
 
 ## Downloads
 
-[Downloads](https://github.com/hzeroo/pokemon-go-stats/releases)
+[Downloads](https://github.com/hzeroo/twitch-desktop/releases)
 
 ## Techs behind
 + [Electron](http://electron.atom.io/)
