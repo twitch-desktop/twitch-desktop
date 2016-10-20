@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material";
 
 import {TwitchService} from "../twitch/twitch.service";
+import {ChannelService} from "../channels/channels.service";
 
 // Sidebar component
 @Component({
@@ -20,7 +21,8 @@ export class SidebarComponent implements OnInit {
 
   constructor (
     private router: Router,
-    private twitchService: TwitchService) {
+    private twitchService: TwitchService,
+    private channelService: ChannelService) {
 
     // Subscribe to login change event (login and logout)
     this.twitchService.loginChange$.subscribe((userInfo: any) => {
@@ -29,6 +31,7 @@ export class SidebarComponent implements OnInit {
         // Fetch online followed streams
         this.logued = true;
         this.twitchService.getFollowedStreams().then((followedStreams: any) => {
+          this.channelService.addFollowedChannels(followedStreams.streams);
           this.onlineStreams = followedStreams.streams;
           console.log(this.onlineStreams);
         }).catch((reason) => {

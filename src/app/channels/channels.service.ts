@@ -44,4 +44,8 @@ export class ChannelService {
       return channel.channel._id === +id;
     });
   }
+
+  addFollowedChannels(channels) {
+    this.channels = _.union(this.channels, channels);
+  }
 }

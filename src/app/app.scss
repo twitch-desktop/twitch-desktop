@@ -7,11 +7,15 @@ $md-font-url: "./fonts/";
   src: url('./fonts/mgopenmodernabold.ttf');
 }
 
+html {
+  background: #221F2A;
+}
+
 body {
   font-family: Moderna,Helvetica,sans-serif;
   font-size: 14px;
   line-height: 20px;
-  background: #17141f;
+  background: #221F2A;
 }
 
 [hidden] {
@@ -37,6 +41,6 @@ body {
 .content {
   max-height: calc(100% - 70px);
   height: calc(100% - 70px);
-  background-color: #efeef1;
+  background-color: #221F2A;
 }
 

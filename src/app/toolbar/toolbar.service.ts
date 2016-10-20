@@ -4,7 +4,6 @@ import { Subject }    from "rxjs/Subject";
 export interface SubheaderValue {
     player_username: string;
     player_game: string;
-    player_viewers: number;
     player_logo: string;
 };
 
@@ -16,7 +15,6 @@ export class ToolbarService implements SubheaderValue {
   logo: string;
   player_username: string;
   player_game: string;
-  player_viewers: number;
   player_logo: string;
 
   // Observables used by toolbar.component
@@ -51,13 +49,11 @@ export class ToolbarService implements SubheaderValue {
     if (subHeader === null) {
       this.player_username = null;
       this.player_game = null;
-      this.player_viewers = null;
       this.subheaderChange.next(null);
     }
     else {
       this.player_username = subHeader.player_username;
       this.player_game = subHeader.player_game;
-      this.player_viewers = subHeader.player_viewers;
       this.player_logo = subHeader.player_logo;
       this.subheaderChange.next(subHeader);
     }

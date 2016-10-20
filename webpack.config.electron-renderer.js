@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var bourbon = require('bourbon').includePaths;
 
 module.exports = {
 
@@ -29,11 +30,10 @@ module.exports = {
       {
         test: /\.ts$/,
         loader: 'ts',
-        exclude: [ /node_modules/ ]
       },
       {
         test: /\.scss$/,
-        loaders: ["raw-loader", "sass"],
+        loaders: ["raw-loader", "sass?includePaths[]=" + bourbon],
       },
       {
         test: /\.html$/,
@@ -42,6 +42,10 @@ module.exports = {
       {
         test: /\.json$/,
         loader: 'json-loader'
+      },
+      {
+        test: /\.proto$/,
+        loader: "proto-loader"
       }
     ]
   },
@@ -54,6 +58,7 @@ module.exports = {
 
       {from: 'src/node_modules/clappr/dist/clappr.min.js', to: 'vendor'},
       {from: 'src/node_modules/level-selector/dist/level-selector.min.js', to: 'vendor'},
+      {from: 'src/node_modules/clappr-chromecast-plugin/dist/clappr-chromecast-plugin.min.js', to: 'vendor'},
 
       {from: 'src/node_modules/ng2-material/font/MaterialIcons-Regular.ttf', to: 'fonts'},
       {from: 'src/node_modules/ng2-material/font/MaterialIcons-Regular.woff', to: 'fonts'},
@@ -62,5 +67,6 @@ module.exports = {
       {from: 'src/app/assets/img/404.jpg', to: 'img'}
     ])
   ],
+
   target:'electron-renderer'
 };

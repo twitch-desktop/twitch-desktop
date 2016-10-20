@@ -60,13 +60,12 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
 
     this.route.params.subscribe(params => {
-      console.log(params);
-      this.game_obj = this.gameService.getGame(params["game"]);
 
-      console.log(this.game_obj);
-
-      if (this.game_obj === "top")  this.game = null;
-      else this.game = this.game_obj.game.name;
+      if (params["game"] === "top")  this.game = null;
+      else {
+        this.game_obj = this.gameService.getGame(params["game"]);
+        this.game = this.game_obj.game.name;
+      }
 
       this.spinnerService.show();
     });

@@ -8,7 +8,6 @@ import {ToolbarService} from "./toolbar.service";
 export interface SubheaderValue {
     player_username: string;
     player_game: string;
-    player_viewers: number;
     player_logo: string;
 };
 
@@ -35,7 +34,6 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   isFullscreen: boolean = false;
   player_username: string = null;
   player_game: string = null;
-  player_viewers: number = null;
   player_logo: string = null;
 
   constructor(
@@ -70,13 +68,11 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
       if (!subHeader) {
         this.player_username = null;
         this.player_game = null;
-        this.player_viewers = null;
         this.player_logo = null;
       }
       else {
         this.player_username = subHeader.player_username;
         this.player_game = subHeader.player_game;
-        this.player_viewers = subHeader.player_viewers;
         this.player_logo = subHeader.player_logo;
       }
     });

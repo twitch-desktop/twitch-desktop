@@ -17,7 +17,9 @@ export class WebviewHelper implements OnInit {
     private element: ElementRef,
     private twitchService: TwitchService,
     private spinnerService: SpinnerService,
-    private errorService: ErrorService) {}
+    private errorService: ErrorService) {
+      this.spinnerService.show();
+    }
 
   ngOnInit() {
 

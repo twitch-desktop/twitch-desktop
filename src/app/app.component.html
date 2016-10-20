@@ -1,9 +1,9 @@
 <div flex layout="column" layout-fill>
-  <tw-toolbar (close)="closeWindow()" (maximize)="maximizeWindow()" (minimize)="minimizeWindow()" (collapse)="collapseSidebar()" (fullscreen)="enterFullscreen()"></tw-toolbar>
+  <tw-toolbar (close)="closeWindow()" (maximize)="maximizeWindow()" (minimize)="minimizeWindow()" (collapse)="toggleSidebar()" (fullscreen)="enterFullscreen()"></tw-toolbar>
 
   <md-content class="content" flex layout="row" (dragover)="false" (dragend)="false" (drop)="false">
 
-    <div flex="20" layout="column" id="sidebar" layout-fill [hidden]="sidebar_collapsed">
+    <div flex="20" layout="column" id="sidebar" layout-fill @sbState="sidebarState">
       <tw-sidebar></tw-sidebar>
     </div>
 

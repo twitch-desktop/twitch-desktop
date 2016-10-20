@@ -1,7 +1,7 @@
 ///<reference path="../../typings/browser.d.ts"/>
 
 import {bootstrap} from "@angular/platform-browser-dynamic";
-import {Component, ViewEncapsulation, Pipe, PipeTransform} from "@angular/core";
+import {Component, trigger, state, style, transition, animate, ViewEncapsulation, Pipe, PipeTransform} from "@angular/core";
 import {NgFor} from "@angular/common";
 import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material";
 import {HTTP_PROVIDERS} from "@angular/http";
@@ -10,6 +10,17 @@ import {MATERIAL_DIRECTIVES} from "ng2-material";
 import {MD_SIDENAV_DIRECTIVES} from "@angular2-material/sidenav";
 import * as _ from "lodash";
 import * as request from "request";
+
+/*
+let chromecast = require("electron-chromecast");
+chromecast((receivers) => {
+    return new Promise((resolve, reject) => {
+        console.log(receivers);
+        let chosenReceiver = receivers[0];
+        resolve(chosenReceiver);
+    });
+});
+*/
 
 // Electron mainWindow
 let mainWindow = require("electron").remote.getGlobal("mainWindow");
@@ -65,11 +76,26 @@ export const APP_ROUTER_PROVIDERS = [
     ErrorService,
     GameService,
     ChannelService
+  ],
+
+  animations: [
+    trigger("sbState", [
+      state("visible", style({
+        transform: "translateX(0)",
+        flex: 1
+      })),
+      state("hidden",   style({
+        transform: "translateX(-100%)",
+        flex: 0
+      })),
+      transition("visible => hidden", animate("200ms ease-out")),
+      transition("hidden => visible", animate("200ms ease-in"))
+    ])
   ]
 })
 
 export default class App {
-  sidebar_collapsed = false;
+  sidebarState = "visible";
 
   constructor(private router: Router, private twitchService: TwitchService) {}
 
@@ -99,8 +125,9 @@ export default class App {
     mainWindow.setFullScreen(!mainWindow.isFullScreen());
   }
 
-  collapseSidebar() {
-    this.sidebar_collapsed = !this.sidebar_collapsed;
+  toggleSidebar() {
+    if (this.sidebarState === "visible") this.sidebarState = "hidden";
+    else if (this.sidebarState === "hidden") this.sidebarState = "visible";
   }
 }
 
