@@ -1,0 +1,10 @@
+<div id="main-container" flex layout="row" layout-fill>
+  <div flex id="player">
+    <div id="spinner-container" flex layout="row" layout-fill [hidden]="!isLoading">
+      <div clas="circle"></div>
+    </div>
+  </div>
+  <div flex="30" id="chat">
+    <tw-chat [chat_url]="chat_url"></tw-chat>
+  </div>
+</div>
