@@ -7,7 +7,7 @@ import {TwitchService} from "../../providers/twitch.service";
 import {ToolbarService} from "../../providers/toolbar.service";
 import {SpinnerService} from "../../providers/spinner.service";
 import {ErrorService} from "../../providers/errorhandler.service";
-import {GameService} from "./games.service";
+import {GameService} from "../../providers/games.service";
 
 // Game list component
 @Component({

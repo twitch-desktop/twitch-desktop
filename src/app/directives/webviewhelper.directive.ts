@@ -18,6 +18,8 @@ export class WebviewHelper implements OnInit {
     private spinnerService: SpinnerService,
     private errorService: ErrorService) {
       this.spinnerService.show();
+
+      console.log("Webview-helper init!");
     }
 
   ngOnInit() {
@@ -40,6 +42,9 @@ export class WebviewHelper implements OnInit {
     // On webview redirect
     this.element.nativeElement.addEventListener("did-get-redirect-request", (event) => {
 
+      console.log('On-redirect-request');
+      console.log(event);
+
       // Remove finish-load callback while we do this
       this.element.nativeElement.removeEventListener("did-finish-load", finishLoad);
 
@@ -55,10 +60,12 @@ export class WebviewHelper implements OnInit {
 
         // Set user as authenticated and fetch user information
         this.twitchService.getAuthenticatedUser(auth_token).then((userInfo) => {
+          console.log(userInfo);
           // Trigger (logued) event to login.component
           this.logued.next("event");
           this.spinnerService.hide();
         }).catch((reason) => {
+          console.log(reason);
           this.spinnerService.hide();
           this.errorService.showError("Error during authentication, try again later");
         });

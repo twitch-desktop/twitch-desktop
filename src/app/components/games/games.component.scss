@@ -1,6 +1,7 @@
 .game-list {
   overflow-y: auto;
   background: #221F2A;
+  max-height: 100%;
 }
 .game-item {
   cursor:  pointer;

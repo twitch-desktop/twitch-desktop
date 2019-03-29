@@ -1,17 +1,19 @@
-<div>
-    <tw-toolbar (close)="closeWindow()" (maximize)="maximizeWindow()" (minimize)="minimizeWindow()" (collapse)="toggleSidebar()" (fullscreen)="enterFullscreen()"></tw-toolbar>
-  
-    <div class="content" (dragover)="false" (dragend)="false" (drop)="false">
-  
-      <div id="sidebar" [sbState]="sidebarState">
-        <tw-sidebar></tw-sidebar>
-      </div>
-  
-      <div>
-        <tw-spinner></tw-spinner>
-        <tw-error></tw-error>
-        <router-outlet></router-outlet>
-      </div>
-  
+<div class="container-fluid h-100">
+
+  <tw-toolbar class="row" (close)="closeWindow()" (maximize)="maximizeWindow()" (minimize)="minimizeWindow()"
+    (collapse)="toggleSidebar()" (fullscreen)="enterFullscreen()"></tw-toolbar>
+
+  <div class="content row" (dragover)="false" (dragend)="false" (drop)="false">
+
+    <div id="sidebar" class="container">
+      <tw-sidebar></tw-sidebar>
     </div>
+
+    <div id="main-content" class="container">
+      <tw-spinner></tw-spinner>
+      <tw-error></tw-error>
+      <router-outlet></router-outlet>
+    </div>
+
   </div>
+</div>

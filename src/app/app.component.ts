@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { ElectronService } from './providers/electron.service';
-import {TwitchService} from './providers/twitch.service';
-import { Routes, RouterModule } from '@angular/router';
+import { TwitchService } from './providers/twitch.service';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
+
+let mainWindow = require("electron").remote.getGlobal("mainWindow");
+
 
 @Component({
   selector: 'app-root',

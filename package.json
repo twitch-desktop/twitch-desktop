@@ -79,9 +79,15 @@
     "zone.js": "0.8.29"
   },
   "dependencies": {
+    "@ng-bootstrap/ng-bootstrap": "^4.1.0",
+    "bootstrap": "^4.3.1",
     "bourbon": "^5.1.0",
     "clappr": "^0.3.3",
+    "font-awesome": "^4.7.0",
     "lodash": "^4.17.11",
-    "moment": "^2.24.0"
+    "material-icons": "^0.3.0",
+    "moment": "^2.24.0",
+    "normalize-scss": "^7.0.1",
+    "octicons": "^8.5.0"
   }
 }

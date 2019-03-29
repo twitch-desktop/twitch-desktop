@@ -15,9 +15,21 @@ function createWindow() {
         y: 0,
         width: size.width,
         height: size.height,
+        frame: false,
+        title: "Twitch Desktop",
+        backgroundColor: "#221F2A",
         webPreferences: {
             nodeIntegration: true,
         },
+    });
+    // We set this to be able to acces the main window object inside angular application
+    global.mainWindow = win;
+    var filter = {
+        urls: ["http://usher.twitch.tv/*"]
+    };
+    electron_1.session.defaultSession.webRequest.onBeforeSendHeaders(filter, function (details, callback) {
+        details.requestHeaders["Client-ID"] = "jzkbprff40iqj646a697cyrvl0zt2m6";
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
     });
     if (serve) {
         require('electron-reload')(__dirname, {

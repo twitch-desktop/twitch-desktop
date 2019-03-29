@@ -1,20 +1,29 @@
-<div>
-  <h4 class="sidebar-header">BROWSE</h4>
-  <div class="sidebar-menu-item" (click)="router.navigate(['/games'])"><i class="sidebar-icon">games</i>Games</div>
-  <div class="sidebar-menu-item" (click)="router.navigate(['/channels/top'])"><i class="sidebar-icon">videocam</i>Channels</div>
+<div class="row">
+  <div class="cotainer w-100">
+    <h4 class="sidebar-header row align-items-center">BROWSE</h4>
+    <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/games'])">
+      <span class="material-icons">games</span>Games
+    </div>
+    <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/channels/top'])">
+      <span class="material-icons">videocam</span>Channels
+    </div>
+  </div>
 </div>
-  
-<div [hidden]="!logued">
-  <h4 class="sidebar-header">ONLINE FOLLOWS</h4>
-  <div class="sidebar-stream-item"
-    *ngFor="let stream of onlineStreams"
-    (click)="router.navigate(['/play/'+stream.channel._id])">
-    <div>
-      <div class="sidebar-stream-item-inner">
-        <img [src]="stream.channel.logo"/>
-        <h3>{{stream.channel.display_name}}</h3>
+
+<hr>
+
+<div class="row">
+  <div class="cotainer">
+    <h4 class="sidebar-header">ONLINE FOLLOWS</h4>
+    <div class="sidebar-stream-item" *ngFor="let stream of onlineStreams"
+      (click)="router.navigate(['/play/'+stream.channel._id])">
+      <div>
+        <div class="sidebar-stream-item-inner">
+          <img [src]="stream.channel.logo" />
+          <h3>{{stream.channel.display_name}}</h3>
+        </div>
+        <div class="sidebar-stream-item-description">{{stream.channel.game}}</div>
       </div>
-      <div class="sidebar-stream-item-description">{{stream.channel.game}}</div>
     </div>
   </div>
 </div>

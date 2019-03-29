@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Subject } from 'rxjs';
 
 import {TwitchService} from "./twitch.service";
 let _ = require("lodash");

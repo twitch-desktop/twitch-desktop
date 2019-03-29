@@ -5,6 +5,8 @@ import { NgModule, Pipe, PipeTransform} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 let moment = require("moment");
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -84,6 +86,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    NgbModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,

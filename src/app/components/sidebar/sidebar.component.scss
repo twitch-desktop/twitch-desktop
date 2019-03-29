@@ -11,16 +11,16 @@
 
 .sidebar-header {
   text-align: center;
-  -webkit-margin-before: 0px;
-  -webkit-margin-after: 2px;
-  font-size: 12px;
 }
 
-md-divider {
+hr {
   background: #2c2541;
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
+
 .sidebar-stream-item {
   margin-top: 10px;
   min-height: 50px;

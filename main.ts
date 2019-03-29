@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, session, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -17,9 +17,24 @@ function createWindow() {
     y: 0,
     width: size.width,
     height: size.height,
+    frame: false,
+    title: "Twitch Desktop",
+    backgroundColor: "#221F2A",
     webPreferences: {
       nodeIntegration: true,
     },
+  });
+
+  // We set this to be able to acces the main window object inside angular application
+  (<any>global).mainWindow = win;
+
+  const filter = {
+    urls: ["http://usher.twitch.tv/*"]
+  };
+
+  session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+    details.requestHeaders["Client-ID"] = "jzkbprff40iqj646a697cyrvl0zt2m6";
+    callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
 
   if (serve) {

@@ -17,7 +17,7 @@
 
 .toolbar-content {
   width: 100%;
-  height: 100%;
+  height: 50px;
 }
 
 .toolbar-topline {
@@ -32,10 +32,11 @@
   cursor: move;
   
   h1 {
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 0;
     font-size: 12px;
     text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    width: 100%;
   }
   
   button {
@@ -43,7 +44,7 @@
   }
 }
 
-.toolbar i {
+.toolbar span {
   color: #dad8de;
 }
 
@@ -69,6 +70,8 @@
   padding: 5px;
   margin-right: 10px;
   transition: background 0.4s;
+  border-width: 0px;
+  background-color: transparent;
 
   &:hover {
     background: #7550b9;
@@ -112,14 +115,20 @@
   margin: 0px;
   background: #3A1F64;
   min-width: 40px;
+  border-width: 0px;
   
   &:hover {
     background: #7550b9;
   }
 }
 
-.window-control i {
+.window-control span {
   font-size: 18px;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 20px;
 }
 
 .close-button {
@@ -138,12 +147,6 @@
   border-bottom-left-radius: 4px;
 }
 
-md-divider {
-  width: 1px;
-  height: 35px;
-  background: #2C2541;
-}
-
 .toolbar-subheader {
   display: flex;
   align-items: center;
@@ -151,7 +154,7 @@ md-divider {
 }
 
 .logo-icon {
-  margin-left: 10px;
+  margin-left: 50px;
 }
 
 .player-logo {
