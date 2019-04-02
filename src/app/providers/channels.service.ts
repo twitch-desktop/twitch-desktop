@@ -18,7 +18,7 @@ export class ChannelService {
   getStreams(game?) {
     return new Promise((resolve, reject) => {
       this.twitchService.getStreams(game).then((streams: any) => {
-        this.channels = streams.streams;
+        this.channels = streams;
         console.log(this.channels);
         resolve(this.channels);
       }).catch((reason) => {
@@ -30,7 +30,7 @@ export class ChannelService {
   fetchMoreStreams(game?) {
     return new Promise((resolve, reject) => {
       this.twitchService.fetchMoreStreams(game).then((streams: any) => {
-          this.channels = _.concat(this.channels, streams.streams);
+          this.channels = _.concat(this.channels, streams);
           resolve(this.channels);
         }).catch((reason) => {
           reject(reason);
@@ -40,7 +40,7 @@ export class ChannelService {
 
   getChannel(id: string) {
     return _.find(this.channels, (channel) => {
-      return channel.channel._id === +id;
+      return channel.id === id;
     });
   }
 

@@ -1,10 +1,10 @@
 <div infinite-scroll (scrolled)="onScrolled()" class="game-list row">
 
-  <div class="game-item col-2" (click)="router.navigate(['/channels/'+game.game._id])" *ngFor="let game of games">
+  <div class="game-item col-2" (click)="router.navigate(['/channels/'+game.id])" *ngFor="let game of games">
     <div class="game-content">
-      <img class="game-cover" src="{{game.game.box.large}}">
+      <img class="game-cover" src="{{game.box_art_url | twScaleImage:'285':'380'}}">
     </div>
-    <div class="game-viewers"><span><span class="material-icons">people</span>{{game.viewers | number}}</span></div>
+    <div class="game-viewers"><span><span class="material-icons">people</span>N/A</span></div>
   </div>
 
   <div class="fetching-more" [hidden]="!fetchingMore">

@@ -44,7 +44,7 @@ export class ChannelsComponent implements OnInit {
       if (params["game"] === "top")  this.game = null;
       else {
         this.game_obj = this.gameService.getGame(params["game"]);
-        this.game = this.game_obj.game.name;
+        this.game = this.game_obj.name;
       }
 
       this.spinnerService.show();

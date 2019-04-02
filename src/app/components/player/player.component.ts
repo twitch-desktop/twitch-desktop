@@ -76,104 +76,20 @@ export class PlayerComponent implements OnInit, OnDestroy {
       console.log(base_url + querystring.stringify(qs));
       // Start the player with the video source url
 
-      let CustomMediaControl = (<any>window).Clappr.MediaControl.extend({
-        get template() {
-          return (<any>window).Clappr.template(require("./clappr.template.html"));
-        },
-        get stylesheet () {
-          return (<any>window).Clappr.Styler.getStyleFor(require("./clappr.template.scss"));
-        }
-      });
-
-      let customPlugin = (<any>window).Clappr.UICorePlugin.extend({
-
-        get name() { return "twitch_plugin"; },
-        get template() { return (<any>window).Clappr.template("<div class='twitch-viewers'><%= twitch_viewers %></div>"); },
-        get attributes() {
-          return {
-            "class": this.name,
-          };
-        },
-
-        bindEvents: function() {
-          this.listenTo(this.core.mediaControl, (<any>window).Clappr.Events.MEDIACONTROL_SHOW, this.show);
-          this.listenTo(this.core.mediaControl, (<any>window).Clappr.Events.MEDIACONTROL_HIDE, this.hide);
-          this.listenTo(this.core.mediaControl, (<any>window).Clappr.Events.MEDIACONTROL_RENDERED, this.render);
-        },
-
-        hide: function() {
-
-        },
-
-        show: function() {
-
-        },
-
-        getViewers() {
-          return this.core.options.twitchConfig.viewers;
-        },
-
-        render: function() {
-          this.$el.html(this.template({"twitch_viewers": this.getViewers()}));
-          this.$el.append((<any>window).Clappr.Styler.getStyleFor(`
-            .twitch_plugin {
-              float: right;
-              position: relative;
-              min-height: 32px;
-              background: transparent;
-              margin-top: 5px !important;
-            }
-            .twitch-viewers {
-              background: transparent;
-              height: 100%;
-              color: white;
-              font-size: 14px !important;
-            }
-            .twitch-viewers::before {
-              content: "";
-              display: inline-block;
-              position: relative;
-              width: 10px;
-              height: 10px;
-              border-radius: 5px;
-              margin-right: 5px;
-              background-color: red;
-            }
-            `));
-
-          this.core.mediaControl.$(".media-control-left-panel").append(this.el);
-          return this;
-        }
-      });
-
       this.player = new (<any>window).Clappr.Player({
         source: base_url + querystring.stringify(qs),
         plugins: {
           core: [
-            (<any>window).LevelSelector,
-            customPlugin,
-/*          (<any>window).ChromecastPlugin*/
+//            (<any>window).LevelSelector,
+//            customPlugin,
+//          (<any>window).ChromecastPlugin
           ]
         },
         parentId: "#player",
         width: "100%",
         height: "100%",
         autoPlay: true,
-        maxBufferLength: 20,
-        mediacontrol: { external: CustomMediaControl },
-        levelSelectorConfig: {
-          title: "Quality",
-          labels: {
-            4: "Source",
-            3: "High",
-            2: "Medium",
-            1: "Low",
-            0: "Mobile",
-          }
-        },
-        twitchConfig: {
-          viewers: new DecimalPipe('en-US').transform(this.channel.viewers)
-        }
+        maxBufferLength: 20
 
         /*chromecast: {
           appId: '9DFB77C0',

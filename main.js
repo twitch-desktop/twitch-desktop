@@ -20,6 +20,7 @@ function createWindow() {
         backgroundColor: "#221F2A",
         webPreferences: {
             nodeIntegration: true,
+            webSecurity: false
         },
     });
     // We set this to be able to acces the main window object inside angular application

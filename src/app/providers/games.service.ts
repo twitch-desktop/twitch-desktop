@@ -18,8 +18,7 @@ export class GameService {
   getTopGames() {
     return new Promise((resolve, reject) => {
       this.twitchService.getTopGames().then((games: any) => {
-        this.games = games.top;
-        console.log(this.games);
+        this.games = games;
         resolve(this.games);
       }).catch((reason) => {
         reject(reason);
@@ -30,7 +29,7 @@ export class GameService {
   fetchMoreTopGames() {
     return new Promise((resolve, reject) => {
       this.twitchService.fetchMoreTopGames().then((games: any) => {
-          this.games = _.concat(this.games, games.top);
+          this.games = _.concat(this.games, games);
           resolve(this.games);
         }).catch((reason) => {
           reject(reason);
@@ -40,7 +39,7 @@ export class GameService {
 
   getGame(id: string) {
     return _.find(this.games, (game) => {
-      return game.game._id === +id;
+      return game.id === id;
     });
   }
 }

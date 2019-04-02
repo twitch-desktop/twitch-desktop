@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
     this.toolbarService.setTitle("");
     this.toolbarService.setLogo("");
 
-    let base_url = "https://api.twitch.tv/kraken/oauth2/authorize?";
+    let base_url = "https://id.twitch.tv/oauth2/authorize?";
 
     let params = {
       response_type: "token",

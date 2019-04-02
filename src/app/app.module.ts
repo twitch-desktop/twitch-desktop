@@ -30,6 +30,15 @@ export class TimeSincePipe implements PipeTransform {
   }
 }
 
+@Pipe({
+  name: "twScaleImage"
+})
+export class ScaleImagePipe implements PipeTransform {
+  transform(url: string, width:string, height:string) {
+    return url.replace('{width}',width).replace('{height}',height);
+  }
+}
+
 
 // Components
 import {AppComponent} from './app.component';
@@ -82,7 +91,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     InfiniteScroll,
 
     //Pipes
-    TimeSincePipe
+    TimeSincePipe,
+    ScaleImagePipe
   ],
   imports: [
     BrowserModule,
@@ -107,7 +117,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToolbarService,
     GameService,
     ChannelService,
-    TimeSincePipe
+    TimeSincePipe,
+    ScaleImagePipe
   ],
 
   bootstrap: [AppComponent]

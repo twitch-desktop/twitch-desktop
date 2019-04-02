@@ -1,9 +1,9 @@
 <div infinite-scroll (scrolled)="onScrolled()" class="channel-list row">
 
-  <div class="channel-item col-3" (click)="router.navigate(['/play/'+channel.channel._id])" *ngFor="let channel of channels">
-    <div class="channel-title"><span>{{channel.channel.display_name}}</span></div>
+  <div class="channel-item col-3" (click)="router.navigate(['/play/'+channel.id])" *ngFor="let channel of channels">
+    <div class="channel-title"><span>{{channel.user_name}}</span></div>
     <div>
-      <img class="channel-cover" src="{{ channel.preview.medium }}">
+      <img class="channel-cover" src="{{ channel.thumbnail_url | twScaleImage:'320':'180' }}">
     </div>
     <div class="channel-info row">
       <div class="channel-uptime col-6"><span><span class="material-icons">schedule</span>{{channel.created_at | twTimeSince}}</span></div>
