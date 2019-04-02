@@ -1,13 +1,13 @@
-import {Component, ElementRef, OnInit, NgZone} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-
+import { Component, ElementRef, OnInit, NgZone } from "@angular/core";
+import { ActivatedRoute, Router, UrlSegmentGroup } from "@angular/router";
+const { BrowserWindow } = require('electron').remote
 
 let request = require("request");
 let querystring = require("querystring");
 
-import {ToolbarService} from "../../providers/toolbar.service";
-import {TwitchService} from "../../providers/twitch.service";
-import {WebviewHelper} from "../../directives/webviewhelper.directive";
+import { ToolbarService } from "../../providers/toolbar.service";
+import { TwitchService } from "../../providers/twitch.service";
+import { WebviewHelper } from "../../directives/webviewhelper.directive";
 
 import config from "../../config";
 
@@ -36,38 +36,29 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    /*
+      body#kraken_auth{
+        background: #221F2A !important;
+        color: #dad8de !important;
+      }
+      .authorize .wrap {
+        background: #17141f !important;
+        border-bottom: 1px solid #201c2b !important;
+        border-top: 1px solid #201c2b !important;
+      }
 
-    // Change login page to a dark theme
-    let webview = this.element.nativeElement.lastElementChild.firstElementChild;
-    webview.addEventListener("load-commit", (event) => {
-      webview.insertCSS(`.authorize .app_permissions,.authorize .wrap{border-top:1px solid #201c2b!important}body#kraken_auth
-      {background:#221F2A!important;color:#dad8de!important}.authorize .wrap{background:#17141f!important;
-        border-bottom:1px solid #201c2b!important}#header_logo svg path{fill:#fff!important}.authorize .signed_in 
-        .userinfo p{color:#fff!important}`);
-      /*
-        body#kraken_auth{
-          background: #221F2A !important;
-          color: #dad8de !important;
-        }
-        .authorize .wrap {
-          background: #17141f !important;
-          border-bottom: 1px solid #201c2b !important;
-          border-top: 1px solid #201c2b !important;
-        }
+      #header_logo svg path {
+        fill: white !important;
+      }
 
-        #header_logo svg path {
-          fill: white !important;
-        }
+      .authorize .signed_in .userinfo p {
+        color: white !important;
+      }
 
-        .authorize .signed_in .userinfo p {
-          color: white !important;
-        }
-
-        .authorize .app_permissions {
-          border-top: 1px solid #201c2b !important;
-        }
-      */
-    });
+      .authorize .app_permissions {
+        border-top: 1px solid #201c2b !important;
+      }
+    */
 
     // Clears toolbar title and logo
     this.toolbarService.setTitle("");
@@ -85,6 +76,22 @@ export class LoginComponent implements OnInit {
 
 
     this.authUrl = base_url + querystring.stringify(params);
+
+
+    let authWindow = new BrowserWindow({
+      show: false, webPreferences: {
+        nodeIntegration: false
+      }
+    });
+
+    authWindow.webContents.on('will-redirect', (event, newUrl) => {
+      this.getAuthToken(authWindow,newUrl);
+    });
+
+    authWindow.loadURL(this.authUrl);
+    authWindow.show();
+
+
   }
 
   // Emited from webview when loging process completed
@@ -92,6 +99,30 @@ export class LoginComponent implements OnInit {
     this.userInfo = this.twitchService.authUserInfo;
     this.username = this.userInfo.display_name;
     this.logued = true;
+  }
+
+  getAuthToken(authWindow : Electron.BrowserWindow, authUrl: string) {
+    if (authUrl.includes('access_token')) {
+      // Get access_token from the redirect url
+      let token_regex = /localhost\/#access_token=([a-z0-9]{30})/.exec(authUrl);
+      let auth_token: string;
+      // If we found the token on the redirect url
+      if (token_regex && token_regex.length > 1 && token_regex[1]) {
+
+        // Show the spinner and get the token
+        auth_token = token_regex[1];
+
+        // Set user as authenticated and fetch user information
+        this.twitchService.getAuthenticatedUser(auth_token).then((userInfo) => {
+          console.log(userInfo);
+          // Trigger (logued) event to login.component
+          this.onLogued();
+          authWindow.close();
+        }).catch((reason) => {
+          console.log(reason);
+        });
+      }
+    }
   }
 
   logout() {

@@ -1,10 +1,10 @@
-<div id="main-container">
-  <div id="player">
+<div id="main-container" class="h-100 w-100 row">
+  <div id="player" class="col-9">
     <div id="spinner-container" [hidden]="!isLoading">
       <div clas="circle"></div>
     </div>
   </div>
-  <div flex="30" id="chat">
+  <div id="chat" class="col-3">
     <tw-chat [chat_url]="chat_url"></tw-chat>
   </div>
 </div>

@@ -80,7 +80,7 @@
   },
   "dependencies": {
     "@ng-bootstrap/ng-bootstrap": "^4.1.0",
-    "bootstrap": "^4.3.1",
+    "bootstrap-scss": "^4.3.1",
     "bourbon": "^5.1.0",
     "clappr": "^0.3.3",
     "font-awesome": "^4.7.0",
