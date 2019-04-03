@@ -84,6 +84,7 @@
     "bourbon": "^5.1.0",
     "clappr": "^0.3.3",
     "font-awesome": "^4.7.0",
+    "level-selector": "^0.2.0",
     "lodash": "^4.17.11",
     "material-icons": "^0.3.0",
     "moment": "^2.24.0",

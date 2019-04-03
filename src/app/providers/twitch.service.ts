@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Subject } from 'rxjs';
 
 let request = require("request");
+let querystring = require("querystring");
 
 import config from "../config";
 
@@ -148,8 +149,8 @@ export class TwitchService {
         method: "GET",
         path: "/streams"
       }, {
-        game_id: game? game.id:null,
-        first: 25
+          game_id: game ? game.id : null,
+          first: 25
         }, (err, streams) => {
           if (err || !streams || !streams.data) reject(err);
           else {
@@ -171,7 +172,7 @@ export class TwitchService {
       },
         //Params
         {
-          game_id: game? game.id:null,
+          game_id: game ? game.id : null,
           after: this.streams_pagination.cursor,
           first: 25
 
@@ -183,6 +184,55 @@ export class TwitchService {
             resolve(streams.data);
           }
         });
+    });
+  }
+
+  getUserLoginFromId(id: string) {
+    return new Promise((resolve, reject) => {
+      let data: any = this.executeRequest({
+        method: "GET",
+        path: "/users",
+      }, {
+          id: id
+        }, (err, data) => {
+          if (err || !data) reject(err);
+          console.log(data);
+          let username = data.data[0].login;
+          resolve(username);
+        });
+    });
+  }
+
+  getVideoUrl(channel) {
+    return new Promise(async (resolve, reject) => {
+
+      // Get access_token required to read video data
+      let username = await this.getUserLoginFromId(channel.user_id)
+      console.log(username);
+
+      if (!username) reject();
+
+      let token_url = `https://api.twitch.tv/api/channels/${username}/access_token`;
+      request.get({ url: token_url, headers: { "Client-ID": config.client_id }, json: true }, (error, response, body) => {
+
+        if (error) reject();
+
+        // Setup video source url with the channel access_token
+        let base_url = `https://usher.ttvnw.net/api/channel/hls/${username}.m3u8?`;
+        // Params order matter for some reason
+        let qs = {
+          player: "twitchweb",
+          p: Math.round(Math.random() * 1e7),
+          type: "any",
+          allow_source: true,
+          allow_audio_only: true,
+          allow_spectre: false,
+          sig: body.sig,
+          token: body.token
+        };
+        let video_url = base_url + querystring.stringify(qs);
+        resolve(video_url);
+      });
     });
   }
 
