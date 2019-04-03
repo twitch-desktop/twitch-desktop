@@ -116,7 +116,7 @@ export class TwitchService {
       method: "GET",
       path: "/streams"
     }, {
-        game_id: game ? game.id : null,
+        game_id: game ? game.id : undefined,
         first: 25
       });
 
@@ -132,7 +132,7 @@ export class TwitchService {
       path: "/streams"
     },
       {
-        game_id: game ? game.id : null,
+        game_id: game ? game.id : undefined,
         after: this.streams_pagination.cursor,
         first: 25
       });

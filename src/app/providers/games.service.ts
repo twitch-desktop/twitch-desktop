@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import {TwitchService} from "./twitch.service";
+import { TwitchService } from "./twitch.service";
 let _ = require("lodash");
 
 // Service that allows components to get game list information
@@ -15,26 +15,16 @@ export class GameService {
 
   }
 
-  getTopGames() {
-    return new Promise((resolve, reject) => {
-      this.twitchService.getTopGames().then((games: any) => {
-        this.games = games;
-        resolve(this.games);
-      }).catch((reason) => {
-        reject(reason);
-      });
-    });
+  async getTopGames() {
+    let games = await this.twitchService.getTopGames();
+    this.games = games;
+    return this.games;
   }
 
-  fetchMoreTopGames() {
-    return new Promise((resolve, reject) => {
-      this.twitchService.fetchMoreTopGames().then((games: any) => {
-          this.games = _.concat(this.games, games);
-          resolve(this.games);
-        }).catch((reason) => {
-          reject(reason);
-        });
-    });
+  async fetchMoreTopGames() {
+    let games = await this.twitchService.fetchMoreTopGames();
+    this.games = _.concat(this.games, games);
+    return this.games;
   }
 
   getGame(id: string) {

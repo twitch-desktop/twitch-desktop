@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import {TwitchService} from "./twitch.service";
+import { TwitchService } from "./twitch.service";
 let _ = require("lodash");
 
 // Service that allows components to get channel list information
@@ -15,27 +15,16 @@ export class ChannelService {
 
   }
 
-  getStreams(game?) {
-    return new Promise((resolve, reject) => {
-      this.twitchService.getStreams(game).then((streams: any) => {
-        this.channels = streams;
-        console.log(this.channels);
-        resolve(this.channels);
-      }).catch((reason) => {
-        reject(reason);
-      });
-    });
+  async getStreams(game?) {
+    let streams = await this.twitchService.getStreams(game);
+    this.channels = streams;
+    return this.channels;
   }
 
-  fetchMoreStreams(game?) {
-    return new Promise((resolve, reject) => {
-      this.twitchService.fetchMoreStreams(game).then((streams: any) => {
-          this.channels = _.concat(this.channels, streams);
-          resolve(this.channels);
-        }).catch((reason) => {
-          reject(reason);
-        });
-    });
+  async fetchMoreStreams(game?) {
+    let streams = await this.twitchService.fetchMoreStreams(game);
+    this.channels = _.concat(this.channels, streams);
+    return this.channels;
   }
 
   getChannel(id: string) {
