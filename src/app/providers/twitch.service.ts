@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject } from 'rxjs';
 
-let request = require("request");
+import * as request from "request-promise-native";
 let querystring = require("querystring");
 
 import config from "../config";
@@ -29,12 +29,7 @@ export class TwitchService {
 
   constructor() { }
 
-  executeRequest(options, parameters, callback?) {
-    if (!callback) {
-      callback = parameters;
-      parameters = undefined;
-    }
-
+  async executeRequest(options, parameters?) {
     let req = {
       method: options.method,
       url: this.baseUrl + options.path,
@@ -47,41 +42,30 @@ export class TwitchService {
       json: true
     };
 
-    request(req, (err, response, body) => {
-      if (!err && body && !body.error) {
-        callback(null, body);
-      }
-      else {
-        callback(err || body);
-      }
-    });
+    let body = await request(req);
+    return body;
   }
 
   // Return Authenticated User Info
   // https://dev.twitch.tv/docs/api/reference/#get-users
-  getAuthenticatedUser(access_token): Promise<any> {
+  async getAuthenticatedUser(access_token: string) {
 
     if (access_token) {
       if (this.authUserInfo !== null && this.access_token === access_token) {
         return Promise.resolve(this.authUserInfo);
       }
       else {
-        return new Promise<any>((resolve, reject) => {
-          this.executeRequest({
-            method: "GET",
-            path: "/users",
-            accessToken: access_token
-          }, (err, userInfo) => {
-            if (err || !userInfo || !userInfo.data || !userInfo.data[0]) reject(err);
-            else {
-              this.access_token = access_token;
-              console.log(userInfo);
-              this.authUserInfo = userInfo.data[0];
-              this.loginChange.next(userInfo.data[0]);
-              resolve(userInfo);
-            }
-          });
+        let data = await this.executeRequest({
+          method: "GET",
+          path: "/users",
+          accessToken: access_token
         });
+
+        this.access_token = access_token;
+        console.log(data);
+        this.authUserInfo = data.data[0];
+        this.loginChange.next(data.data[0]);
+        return data;
       }
     }
   }
@@ -97,45 +81,29 @@ export class TwitchService {
   // Returns a promise that resolves to a list of games objects sorted by number 
   // of current viewers on Twitch, most popular first.
   // https://dev.twitch.tv/docs/api/reference/#get-top-games
-  getTopGames() {
-    return new Promise((resolve, reject) => {
-      this.executeRequest({
-        method: "GET",
-        path: "/games/top"
-      },
-        { first: 25 },
-        (err, games) => {
-          if (err || !games || !games.data) reject(err);
-          else {
-            this.games_pagination = games.pagination;
-            resolve(games.data);
-          }
-        }
-      );
-    });
+  async getTopGames() {
+    let data = await this.executeRequest({
+      method: "GET",
+      path: "/games/top"
+    }, {
+        first: 25
+      });
+
+    return data.data;
   }
 
   // Fetch next page of top games
   // https://dev.twitch.tv/docs/api/reference/#get-top-games
-  fetchMoreTopGames() {
-    return new Promise((resolve, reject) => {
-      this.executeRequest({
-        method: "GET",
-        path: "/games/top"
-      },
-        {
-          first: 25,
-          after: this.games_pagination.cursor
-        },
-        (err, games) => {
-          if (err || !games) reject(err);
-          else {
-            this.games_pagination = games.pagination;
-            resolve(games.data);
-          }
-        }
-      );
-    });
+  async fetchMoreTopGames() {
+    let data = await this.executeRequest({
+      method: "GET",
+      path: "/games/top"
+    }, {
+        first: 25,
+        after: this.games_pagination.cursor
+      });
+
+    return data.data;
   }
 
   // Returns a promise that resovles to a list of stream objects that are queried by a 
@@ -143,97 +111,70 @@ export class TwitchService {
   // If game specified, filters by game
   // If game is null, get top streams of all games
   // https://dev.twitch.tv/docs/api/reference/#get-streams
-  getStreams(game?) {
-    return new Promise((resolve, reject) => {
-      this.executeRequest({
-        method: "GET",
-        path: "/streams"
-      }, {
-          game_id: game ? game.id : null,
-          first: 25
-        }, (err, streams) => {
-          if (err || !streams || !streams.data) reject(err);
-          else {
-            console.log(streams);
-            this.streams_pagination = streams.pagination;
-            resolve(streams.data);
-          }
-        });
-    });
+  async getStreams(game?) {
+    let data = await this.executeRequest({
+      method: "GET",
+      path: "/streams"
+    }, {
+        game_id: game ? game.id : null,
+        first: 25
+      });
+
+    return data.data;
+
   }
 
   // Fetch next page of streams, using this.streams_offset as offset param
   // https://dev.twitch.tv/docs/api/reference/#get-streams
-  fetchMoreStreams(game?) {
-    return new Promise((resolve, reject) => {
-      this.executeRequest({
-        method: "GET",
-        path: "/streams"
-      },
-        //Params
-        {
-          game_id: game ? game.id : null,
-          after: this.streams_pagination.cursor,
-          first: 25
-
-        }, (err, streams) => {
-          if (err || !streams) reject(err);
-          else {
-            console.log(streams);
-            this.streams_pagination = streams.pagination;
-            resolve(streams.data);
-          }
-        });
-    });
-  }
-
-  getUserLoginFromId(id: string) {
-    return new Promise((resolve, reject) => {
-      let data: any = this.executeRequest({
-        method: "GET",
-        path: "/users",
-      }, {
-          id: id
-        }, (err, data) => {
-          if (err || !data) reject(err);
-          console.log(data);
-          let username = data.data[0].login;
-          resolve(username);
-        });
-    });
-  }
-
-  getVideoUrl(channel) {
-    return new Promise(async (resolve, reject) => {
-
-      // Get access_token required to read video data
-      let username = await this.getUserLoginFromId(channel.user_id)
-      console.log(username);
-
-      if (!username) reject();
-
-      let token_url = `https://api.twitch.tv/api/channels/${username}/access_token`;
-      request.get({ url: token_url, headers: { "Client-ID": config.client_id }, json: true }, (error, response, body) => {
-
-        if (error) reject();
-
-        // Setup video source url with the channel access_token
-        let base_url = `https://usher.ttvnw.net/api/channel/hls/${username}.m3u8?`;
-        // Params order matter for some reason
-        let qs = {
-          player: "twitchweb",
-          p: Math.round(Math.random() * 1e7),
-          type: "any",
-          allow_source: true,
-          allow_audio_only: true,
-          allow_spectre: false,
-          sig: body.sig,
-          token: body.token
-        };
-        let video_url = base_url + querystring.stringify(qs);
-        resolve(video_url);
+  async fetchMoreStreams(game?) {
+    let data = await this.executeRequest({
+      method: "GET",
+      path: "/streams"
+    },
+      {
+        game_id: game ? game.id : null,
+        after: this.streams_pagination.cursor,
+        first: 25
       });
-    });
+
+    return data.data;
+  }
+
+  async getUserLoginFromId(id: string) {
+    let data = await this.executeRequest({
+      method: "GET",
+      path: "/users",
+    }, {
+        id: id
+      });
+
+    let username = data.data[0].login;
+    return username;
+  }
+
+  async getVideoUrl(channel) {
+    // Get access_token required to read video data
+    let username = await this.getUserLoginFromId(channel.user_id)
+    console.log(username);
+
+    let token_url = `https://api.twitch.tv/api/channels/${username}/access_token`;
+    let body = await request.get({ url: token_url, headers: { "Client-ID": config.client_id }, json: true });
+
+    // Setup video source url with the channel access_token
+    let base_url = `https://usher.ttvnw.net/api/channel/hls/${username}.m3u8?`;
+    // Params order matter for some reason
+    let qs = {
+      player: "twitchweb",
+      p: Math.round(Math.random() * 1e7),
+      type: "any",
+      allow_source: true,
+      allow_audio_only: true,
+      allow_spectre: false,
+      sig: body.sig,
+      token: body.token
+    };
+    let video_url = base_url + querystring.stringify(qs);
+    return video_url
   }
 
   // Returns a promise that resolves to a list of stream objects that the authenticated user is following.

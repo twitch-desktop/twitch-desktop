@@ -89,6 +89,7 @@
     "material-icons": "^0.3.0",
     "moment": "^2.24.0",
     "normalize-scss": "^7.0.1",
-    "octicons": "^8.5.0"
+    "octicons": "^8.5.0",
+    "request-promise-native": "^1.0.7"
   }
 }
