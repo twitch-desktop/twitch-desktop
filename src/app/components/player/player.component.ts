@@ -8,9 +8,9 @@ import { TwitchService } from "../../providers/twitch.service";
 
 // Player component
 @Component({
-  template: require("./player.component.html"),
+  templateUrl: "./player.component.html",
   selector: "tw-player",
-  styles: [require("./player.component.scss")]
+  styleUrls: ["./player.component.scss"]
 })
 
 export class PlayerComponent implements OnInit, OnDestroy {

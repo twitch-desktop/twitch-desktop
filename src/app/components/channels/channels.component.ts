@@ -14,9 +14,9 @@ import {ChannelService} from "../../providers/channels.service";
 
 // List of streams component
 @Component({
-  template: require("./channels.component.html"),
+  templateUrl: "./channels.component.html",
   selector: "tw-channels",
-  styles: [require("./channels.component.scss")],
+  styleUrls: ["./channels.component.scss"],
 })
 
 export class ChannelsComponent implements OnInit {

@@ -12,9 +12,9 @@ export interface SubheaderValue {
 
 // Toolbar component
 @Component({
-  template: require("./toolbar.component.html"),
+  templateUrl: "./toolbar.component.html",
   selector: "tw-toolbar",
-  styles: [require("./toolbar.component.scss")]
+  styleUrls: ["./toolbar.component.scss"]
 })
 
 export class ToolbarComponent implements OnInit, SubheaderValue {
@@ -35,7 +35,7 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   player_logo: string = null;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private toolbarService: ToolbarService,
     private twitchService: TwitchService) {
 

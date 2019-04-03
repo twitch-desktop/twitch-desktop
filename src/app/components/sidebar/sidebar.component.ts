@@ -6,9 +6,9 @@ import {ChannelService} from "../../providers/channels.service";
 
 // Sidebar component
 @Component({
-  template: require("./sidebar.component.html"),
+  templateUrl: "./sidebar.component.html",
   selector: "tw-sidebar",
-  styles: [require("./sidebar.component.scss")]
+  styleUrls: ["./sidebar.component.scss"]
 })
 
 export class SidebarComponent implements OnInit {
@@ -17,7 +17,7 @@ export class SidebarComponent implements OnInit {
   logued: boolean = false;
 
   constructor (
-    private router: Router,
+    public router: Router,
     private twitchService: TwitchService,
     private channelService: ChannelService) {
 

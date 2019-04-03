@@ -11,9 +11,9 @@ import {GameService} from "../../providers/games.service";
 
 // Game list component
 @Component({
-  template: require("./games.component.html"),
+  templateUrl: "./games.component.html",
   selector: "tw-games",
-  styles: [require("./games.component.scss")]
+  styleUrls: ["./games.component.scss"]
 })
 
 export class GamesComponent implements OnInit {

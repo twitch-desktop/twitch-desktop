@@ -5,9 +5,9 @@ import {ToolbarService} from "../../../providers/toolbar.service";
 
 // Player component
 @Component({
-  template: require("./chat.component.html"),
+  templateUrl: "./chat.component.html",
   selector: "tw-chat",
-  styles: [require("./chat.component.scss")]
+  styleUrls: ["./chat.component.scss"]
 })
 
 export class ChatComponent implements OnInit, OnDestroy {

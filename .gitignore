@@ -4,3 +4,4 @@ npm-debug.log
 /app
 /dist
 /src/app/config.ts
+/release

@@ -12,8 +12,8 @@ import { WebviewHelper } from "../../directives/webviewhelper.directive";
 import config from "../../config";
 
 @Component({
-  template: require("./login.component.html"),
-  styles: [require("./login.component.scss")],
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"],
 })
 
 export class LoginComponent implements OnInit {

@@ -5,9 +5,9 @@ import {ErrorService} from "../../providers/errorhandler.service";
 
 // Error display component
 @Component({
-  template: require("./errorhandler.component.html"),
+  templateUrl: "./errorhandler.component.html",
   selector: "tw-error",
-  styles: [require("./errorhandler.component.scss")]
+  styleUrls: ["./errorhandler.component.scss"]
 })
 
 export class ErrorComponent implements OnInit {

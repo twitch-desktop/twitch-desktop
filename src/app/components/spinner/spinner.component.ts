@@ -5,9 +5,9 @@ import {SpinnerService} from "../../providers/spinner.service";
 
 // Spinner Component
 @Component({
-  template: require("./spinner.component.html"),
+  templateUrl: "./spinner.component.html",
   selector: "tw-spinner",
-  styles: [require("./spinner.component.scss")]
+  styleUrls: ["./spinner.component.scss"]
 })
 
 export class SpinnerComponent implements OnInit {
