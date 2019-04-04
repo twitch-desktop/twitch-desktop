@@ -34,16 +34,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this.channel = this.channelService.getChannel(params["channel"]);
       this.channel_name = this.channel.name;
-      console.log(this.channel);
     });
 
-    // Set dark mode in chat
-    let webview = this.element.nativeElement.lastElementChild.lastElementChild.firstElementChild;
-    webview.addEventListener("did-start-loading", (event) => {
-      webview.executeJavaScript(`localStorage.setItem('chatSettings','{"darkMode":true}');`, false);
-    });
-
-    this.chat_url = `https://www.twitch.tv/${this.channel_name}/chat`;
+    let username = await this.twitchService.getUserLoginFromId(this.channel.user_id);
+    this.chat_url = `https://www.twitch.tv/${username}/chat`;
 
     // Set toolbar title and logo
     this.toolbarService.setTitle(this.channel.title);
@@ -64,7 +58,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
       plugins: {
         core: [
           (<any>window).LevelSelector,
-          //            customPlugin,
         ]
       },
       parentId: "#player",
@@ -72,14 +65,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
       height: "100%",
       autoPlay: true,
       maxBufferLength: 20
-
-      /*chromecast: {
-        appId: '9DFB77C0',
-        media: {
-          type: "application/x-mpegURL",
-          title: 'ASDF',
-        }
-      }*/
     });
 
     this.player.on((<any>window).Clappr.Events.PLAYER_PLAY, () => {

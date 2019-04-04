@@ -1,7 +1,11 @@
 import {Component, ElementRef, OnInit, OnDestroy, Input} from "@angular/core";
 import {Router} from "@angular/router";
+import * as path from 'path';
 
 import {ToolbarService} from "../../../providers/toolbar.service";
+
+let betterttv = require("electron").remote.getGlobal("betterttv");
+
 
 // Player component
 @Component({
@@ -25,11 +29,16 @@ export class ChatComponent implements OnInit, OnDestroy {
     // Set dark mode in chat
     let webview = this.element.nativeElement.lastElementChild;
     webview.addEventListener("load-commit", (event) => {
-      webview.executeJavaScript(`localStorage.setItem('chatSettings','{"darkMode":true}');`, false);
+      webview.executeJavaScript(`localStorage.setItem('chatSettings','{"darkMode":true}');`);
+      webview.executeJavaScript(`localStorage.setItem('bttv_darkenedMode',true);`);
     });
 
     webview.addEventListener("did-finish-load", (event) => {
-      this.isLoading = false;
+      webview.executeJavaScript(betterttv,false,(result) => {
+        webview.openDevTools();
+        this.isLoading = false;
+        console.log('did-finish-load');
+      });
     });
   }
 

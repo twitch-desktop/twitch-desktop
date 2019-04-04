@@ -155,7 +155,6 @@ export class TwitchService {
   async getVideoUrl(channel) {
     // Get access_token required to read video data
     let username = await this.getUserLoginFromId(channel.user_id)
-    console.log(username);
 
     let token_url = `https://api.twitch.tv/api/channels/${username}/access_token`;
     let body = await request.get({ url: token_url, headers: { "Client-ID": config.client_id }, json: true });

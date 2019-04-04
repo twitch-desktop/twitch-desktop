@@ -1,12 +1,14 @@
 import { app, session, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import * as fs from 'fs';
+import * as request from "request-promise-native";
 
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
-function createWindow() {
+async function createWindow() {
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
@@ -39,11 +41,19 @@ function createWindow() {
   });
 
   if (serve) {
+    let betterttv = await request('http://localhost:4200/assets/betterttv.js');
+    (<any>global).betterttv = betterttv;
+
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
     win.loadURL('http://localhost:4200');
   } else {
+
+    let betterttv_dir = path.resolve(__dirname, 'assets/betterttv.js');
+    let betterttv = fs.readFileSync(betterttv_dir, 'utf8');
+    (<any>global).betterttv = betterttv;
+
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',
