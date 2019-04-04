@@ -112,6 +112,7 @@ export class TwitchService {
   // If game is null, get top streams of all games
   // https://dev.twitch.tv/docs/api/reference/#get-streams
   async getStreams(game?) {
+    if(game) console.log(game);
     let data = await this.executeRequest({
       method: "GET",
       path: "/streams"

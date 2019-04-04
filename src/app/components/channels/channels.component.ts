@@ -21,8 +21,7 @@ import {ChannelService} from "../../providers/channels.service";
 
 export class ChannelsComponent implements OnInit {
 
-  private game: string = null;
-  private game_obj: any;
+  private game: any = null;
   channels: Array<Object> = [];
   fetchingMore: Boolean = false;
 
@@ -43,15 +42,14 @@ export class ChannelsComponent implements OnInit {
 
       if (params["game"] === "top")  this.game = null;
       else {
-        this.game_obj = this.gameService.getGame(params["game"]);
-        this.game = this.game_obj.name;
+        this.game = this.gameService.getGame(params["game"]);
       }
 
       this.spinnerService.show();
     });
 
     // Set toolbar title
-    if (this.game) this.toolbarService.setTitle(this.game);
+    if (this.game) this.toolbarService.setTitle(this.game.name);
     else this.toolbarService.setTitle("All Games");
 
     // Set toolbar icon

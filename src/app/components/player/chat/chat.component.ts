@@ -35,9 +35,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     webview.addEventListener("did-finish-load", (event) => {
       webview.executeJavaScript(betterttv,false,(result) => {
-        webview.openDevTools();
         this.isLoading = false;
-        console.log('did-finish-load');
       });
     });
   }

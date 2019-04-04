@@ -51,6 +51,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     });
 
     let sourceUrl = await this.twitchService.getVideoUrl(this.channel);
+    console.log(sourceUrl);
 
     // Start the player with the video source url
     this.player = new (<any>window).Clappr.Player({

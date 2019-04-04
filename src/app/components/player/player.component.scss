@@ -2,6 +2,8 @@
   height: 100%;
   position: relative; 
   max-width: calc(100% - 300px);
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 #chat {
@@ -10,6 +12,8 @@
   position: relative;
   right: 0;
   border-top: 1px solid black;
+  padding-right: 0px;
+  padding-left: 0px;
 }
 
 #main-container {

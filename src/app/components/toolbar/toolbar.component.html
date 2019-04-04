@@ -27,7 +27,7 @@
 
 
       <span class="material-icons logo-icon" [hidden]="player_logo!==null">{{logo}}</span>
-      <img src="{{player_logo}}" class="player-logo" [hidden]="player_logo===null">
+      <img src="{{player_logo | twScaleImage:'48':'48'}}" class="player-logo" [hidden]="player_logo===null">
       <div layout="column" class="toolbar-title">
         <span class="toolbar-header">{{title}}</span>
         <span class="toolbar-subheader" [hidden]="player_username===null">
