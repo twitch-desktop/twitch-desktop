@@ -46,6 +46,12 @@ body {
   max-width: calc(100% - 250px);
 }
 
+.expanded {
+  left: 0px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 #sidebar i {
   color: #dad8de;
   margin-right: 10px;

@@ -5,11 +5,11 @@
 
   <div class="content row" (dragover)="false" (dragend)="false" (drop)="false">
 
-    <div id="sidebar" class="container">
+    <div id="sidebar" class="container" [hidden]="sidebarState==='hidden'">
       <tw-sidebar></tw-sidebar>
     </div>
 
-    <div id="main-content" class="container">
+    <div id="main-content" class="container" [ngClass]="[sidebarState==='hidden'?'expanded':'']">
       <tw-spinner></tw-spinner>
       <tw-error></tw-error>
       <router-outlet></router-outlet>

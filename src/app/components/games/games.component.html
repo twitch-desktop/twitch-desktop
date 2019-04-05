@@ -3,7 +3,7 @@
   <div class="game-item col-2" (mouseover)="game.hovered=true"(mouseout)="game.hovered=false" (click)="router.navigate(['/channels/'+game.id])" *ngFor="let game of games">
     <div class="game-content">
       <img class="game-cover" src="{{game.box_art_url | twScaleImage:'285':'380'}}">
-      <div class="game-viewers" [hidden]="!game.hovered"><span><span class="material-icons">people</span>N/A</span></div>
+      <div class="game-name" [hidden]="!game.hovered"><span>{{game.name}}</span></div>
     </div>
   </div>
 

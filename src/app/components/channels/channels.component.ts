@@ -59,7 +59,6 @@ export class ChannelsComponent implements OnInit {
     this.channelService.getStreams(this.game).then((streams: any) => {
       this.channels = streams;
       this.spinnerService.hide();
-      console.log(this.channels);
     }).catch((reason) => {
       this.spinnerService.hide();
       this.errorService.showError("Error fetching streams");
