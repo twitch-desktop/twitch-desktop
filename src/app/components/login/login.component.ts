@@ -7,7 +7,6 @@ let querystring = require("querystring");
 
 import { ToolbarService } from "../../providers/toolbar.service";
 import { TwitchService } from "../../providers/twitch.service";
-import { WebviewHelper } from "../../directives/webviewhelper.directive";
 
 import config from "../../config";
 
@@ -36,30 +35,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    /*
-      body#kraken_auth{
-        background: #221F2A !important;
-        color: #dad8de !important;
-      }
-      .authorize .wrap {
-        background: #17141f !important;
-        border-bottom: 1px solid #201c2b !important;
-        border-top: 1px solid #201c2b !important;
-      }
-
-      #header_logo svg path {
-        fill: white !important;
-      }
-
-      .authorize .signed_in .userinfo p {
-        color: white !important;
-      }
-
-      .authorize .app_permissions {
-        border-top: 1px solid #201c2b !important;
-      }
-    */
-
     // Clears toolbar title and logo
     this.toolbarService.setTitle("");
     this.toolbarService.setLogo("");
@@ -74,14 +49,26 @@ export class LoginComponent implements OnInit {
       force_verify: true
     };
 
-
     this.authUrl = base_url + querystring.stringify(params);
 
-
     let authWindow = new BrowserWindow({
-      show: false, webPreferences: {
-        nodeIntegration: false
+      show: false,
+      // FIXME: Remove autoHideMenuBar when this issue is fixed
+      // https://github.com/electron/electron/issues/15901
+      autoHideMenuBar: true,
+      width: 500,
+      height: 800,
+      webPreferences: {
+        nodeIntegration: false,
+        partition: "persist:twitch"
       }
+    });
+
+    authWindow.webContents.on('did-stop-loading', () => {
+      authWindow.webContents.insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
+      body>.authorize .wrap{background:#17141f!important;border-bottom:1px solid #201c2b!important}
+        #header_logo svg path{fill:#fff!important}
+        .authorize .signed_in .userinfo p{color:#fff!important}`);
     });
 
     authWindow.webContents.on('will-redirect', (event, newUrl) => {
@@ -90,8 +77,6 @@ export class LoginComponent implements OnInit {
 
     authWindow.loadURL(this.authUrl);
     authWindow.show();
-
-
   }
 
   // Emited from webview when loging process completed

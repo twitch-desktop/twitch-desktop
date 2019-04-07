@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
 
 let mainWindow = require("electron").remote.getGlobal("mainWindow");
+let auth_token = require("electron").remote.getGlobal("auth_token");
 
 
 @Component({
@@ -34,6 +35,11 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    if(auth_token) {
+      this.twitchService.getAuthenticatedUser(auth_token);
+    }
+
+
     // Browse games as start page
     this.router.navigate(["/games"]);
   }

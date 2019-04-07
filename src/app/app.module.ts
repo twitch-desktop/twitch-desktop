@@ -35,7 +35,11 @@ export class TimeSincePipe implements PipeTransform {
 })
 export class ScaleImagePipe implements PipeTransform {
   transform(url: string, width:string, height:string) {
-    return url.replace('{width}',width).replace('{height}',height);
+    if(url && url!='' && url.includes('{width}') && url.includes('{height}')) {
+      return url.replace('{width}',width).replace('{height}',height);
+    } else {
+      return url;
+    }
   }
 }
 

@@ -5,3 +5,6 @@ npm-debug.log
 /dist
 /src/app/config.ts
 /release
+/src/app/config.js
+**.js.map
+main.js
