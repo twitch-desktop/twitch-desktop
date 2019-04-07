@@ -8,17 +8,13 @@ let _ = require("lodash");
 export class GameService {
 
   private games: Array<any> = [];
-  private games_offset: Number = 0;
 
-  constructor(
-    private twitchService: TwitchService) {
-
-  }
+  constructor(private twitchService: TwitchService) {}
 
   async getTopGames() {
     let games = await this.twitchService.getTopGames();
     this.games = games;
-    return this.games;
+    return games;
   }
 
   async fetchMoreTopGames() {

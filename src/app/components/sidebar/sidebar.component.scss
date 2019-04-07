@@ -2,15 +2,21 @@
   cursor: pointer;
   min-height: 38px;
   height: 38px;
+  font-size: 18px;
   
   &:hover {
     background: #201c2b;
     cursor: pointer;
   }
+
+  span {
+    margin-right: 10px;
+  }
 }
 
 .sidebar-header {
   text-align: center;
+  display: inline-block;
 }
 
 hr {

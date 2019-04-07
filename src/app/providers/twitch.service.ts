@@ -63,7 +63,7 @@ export class TwitchService {
 
         this.access_token = access_token;
         this.authUserInfo = data.data[0];
-        this.loginChange.next(data.data[0]);
+        this.loginChange.next(this.authUserInfo);
         return data;
       }
     }
@@ -88,6 +88,7 @@ export class TwitchService {
         first: 25
       });
 
+    this.games_pagination=data.pagination;
     return data.data;
   }
 
@@ -102,6 +103,7 @@ export class TwitchService {
         after: this.games_pagination.cursor
       });
 
+    this.games_pagination=data.pagination;
     return data.data;
   }
 
@@ -120,6 +122,7 @@ export class TwitchService {
         first: 25
       });
 
+    this.streams_pagination = data.pagination;
     return data.data;
 
   }
@@ -137,6 +140,7 @@ export class TwitchService {
         first: 25
       });
 
+    this.streams_pagination=data.pagination;
     return data.data;
   }
 

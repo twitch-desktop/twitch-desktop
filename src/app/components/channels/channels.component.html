@@ -6,12 +6,14 @@
       <img class="channel-cover" src="{{ channel.thumbnail_url | twScaleImage:'320':'180' }}">
     </div>
     <div class="channel-info row">
-      <div class="channel-uptime col-6"><span><span class="material-icons">schedule</span>{{channel.created_at | twTimeSince}}</span></div>
-      <div class="channel-viewers col-6"><span><span class="material-icons">people</span>{{channel.viewers | number}}</span></div>
+      <div class="channel-uptime col-6"><span><span class="material-icons">schedule</span>{{channel.started_at | twTimeSince}}</span></div>
+      <div class="channel-viewers col-6"><span><span class="material-icons">people</span>{{channel.viewer_count | number}}</span></div>
     </div>
   </div>
 
   <div class="fetching-more" [hidden]="!fetchingMore">
-    <div clas="circle"></div>
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
 </div>

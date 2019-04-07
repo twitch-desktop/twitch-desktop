@@ -42,7 +42,6 @@ export class GamesComponent implements OnInit {
     this.gameService.getTopGames().then((games: any) => {
       this.games = _.concat(this.games, games);
       this.spinnerService.hide();
-      console.log(this.games);
     }).catch((reason) => {
       this.spinnerService.hide();
       this.errorService.showError("Failed fetching games");
