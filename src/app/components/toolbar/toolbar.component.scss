@@ -1,6 +1,6 @@
 .twitch-logo {
   fill: white;
-  margin-right: 66px;
+  margin-right: 115px;
   min-height: 32px;
   min-width: 94px;
 }
@@ -52,10 +52,12 @@
   width: 100%;
   overflow: hidden;
   margin-left: 10px;
+  text-align: left;
 }
 
 .toolbar-header{
   font-size: 18px;
+  font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -162,13 +164,13 @@
 }
 
 .player-username {
-  color: #7550b9;
-  margin-right: 6px;
+  color: #7550b9 !important;
+  margin-right: 6px !important;
 }
 
 .player-game {
-  color: #7550b9;
-  margin-left: 6px;
+  color: #7550b9 !important;
+  margin-left: 6px !important;
 }
 
 .player-viewers {

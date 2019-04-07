@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, OnDestroy } from "@angular/core";
-import { DecimalPipe } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { ToolbarService } from "../../providers/toolbar.service";
@@ -22,8 +21,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
   isLoading = true;
 
   constructor(
-    private element: ElementRef,
-    private router: Router,
     private route: ActivatedRoute,
     private toolbarService: ToolbarService,
     private channelService: ChannelService,
@@ -36,8 +33,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.channel_name = this.channel.name;
     });
 
-    let username = await this.twitchService.getUserLoginFromId(this.channel.user_id);
-    this.chat_url = `https://www.twitch.tv/${username}/chat`;
+    let user = await this.twitchService.getUserFromId(this.channel.user_id);
+    let game = await this.twitchService.getGameFromId(this.channel.game_id);
+    this.chat_url = `https://www.twitch.tv/${user.login}/chat`;
 
     // Set toolbar title and logo
     this.toolbarService.setTitle(this.channel.title);
@@ -45,13 +43,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
     // Set toolbar subheader info
     this.toolbarService.setSubheader({
-      player_username: this.channel.user_name,
-      player_game: this.channel.game_id,
-      player_logo: this.channel.thumbnail_url
+      player_username: user.display_name,
+      player_game: game.name,
+      player_logo: user.profile_image_url
     });
 
     let sourceUrl = await this.twitchService.getVideoUrl(this.channel);
-    console.log(sourceUrl);
 
     // Start the player with the video source url
     this.player = new (<any>window).Clappr.Player({

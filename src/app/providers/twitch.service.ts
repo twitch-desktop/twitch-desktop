@@ -62,7 +62,6 @@ export class TwitchService {
         });
 
         this.access_token = access_token;
-        console.log(data);
         this.authUserInfo = data.data[0];
         this.loginChange.next(data.data[0]);
         return data;
@@ -141,7 +140,7 @@ export class TwitchService {
     return data.data;
   }
 
-  async getUserLoginFromId(id: string) {
+  async getUserFromId(id: string) {
     let data = await this.executeRequest({
       method: "GET",
       path: "/users",
@@ -149,13 +148,23 @@ export class TwitchService {
         id: id
       });
 
-    let username = data.data[0].login;
-    return username;
+    return data.data[0];
   }
+  async getGameFromId(id: string) {
+    let data = await this.executeRequest({
+      method: "GET",
+      path: "/games",
+    }, {
+        id: id
+      });
+
+    return data.data[0];
+  }
+
 
   async getVideoUrl(channel) {
     // Get access_token required to read video data
-    let username = await this.getUserLoginFromId(channel.user_id)
+    let username = (await this.getUserFromId(channel.user_id)).login;
 
     let token_url = `https://api.twitch.tv/api/channels/${username}/access_token`;
     let body = await request.get({ url: token_url, headers: { "Client-ID": config.client_id }, json: true });
