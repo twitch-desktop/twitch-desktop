@@ -4,7 +4,7 @@ import * as url from 'url';
 import * as fs from 'fs';
 import * as request from "request-promise-native";
 import * as querystring from "querystring";
-import config from "./src/app/config";
+import config from "./config";
 
 let win, serve;
 const args = process.argv.slice(1);
@@ -35,14 +35,6 @@ async function createWindow() {
   // We set this to be able to acces the main window object inside angular application
   (<any>global).mainWindow = win;
 
-  const filter = {
-    urls: ["http://usher.twitch.tv/*"]
-  };
-
-  session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-    details.requestHeaders["Client-ID"] = "jzkbprff40iqj646a697cyrvl0zt2m6";
-    callback({ cancel: false, requestHeaders: details.requestHeaders });
-  });
 
   let base_url = "https://id.twitch.tv/oauth2/authorize?";
 
@@ -63,6 +55,8 @@ async function createWindow() {
     autoHideMenuBar: true,
     width: 500,
     height: 800,
+    title: "Twitch Desktop - Login",
+    backgroundColor: "#221F2A",
     webPreferences: {
       nodeIntegration: false,
       partition: "persist:twitch"

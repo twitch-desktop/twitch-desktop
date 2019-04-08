@@ -67,7 +67,6 @@ import {ChannelService} from "./providers/channels.service";
 
 //Directives
 import {WebviewDirective} from './directives/webview.directive';
-import {WebviewHelper} from './directives/webviewhelper.directive';
 import {InfiniteScroll} from './directives/infinitescroll.directive';
 
 // AoT requires an exported function for factories
@@ -91,7 +90,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
     //Directives
     WebviewDirective,
-    WebviewHelper,
     InfiniteScroll,
 
     //Pipes

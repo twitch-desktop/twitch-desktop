@@ -20,6 +20,7 @@
   },
   "include": [
     "main.ts",
+    "config.ts",
     "src/**/*"
   ],
   "exclude": [

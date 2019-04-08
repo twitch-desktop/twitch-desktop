@@ -8,7 +8,7 @@ let querystring = require("querystring");
 import { ToolbarService } from "../../providers/toolbar.service";
 import { TwitchService } from "../../providers/twitch.service";
 
-import config from "../../config";
+import config from "../../../../config";
 
 @Component({
   templateUrl: "./login.component.html",

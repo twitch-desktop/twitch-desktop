@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import * as request from "request-promise-native";
 let querystring = require("querystring");
 
-import config from "../config";
+import config from "../../../config";
 
 // Twitch API v3 Service
 // https://github.com/justintv/Twitch-API/blob/master/README.md
@@ -30,13 +30,17 @@ export class TwitchService {
   constructor() { }
 
   async executeRequest(options, parameters?) {
+
+    let authorization = options.accessToken? "Bearer " + options.accessToken : undefined;
+    if (!authorization && this.access_token) authorization = "Bearer " + this.access_token;
+
     let req = {
       method: options.method,
       url: this.baseUrl + options.path,
       qs: parameters,
       headers: {
-        "Authorization": options.accessToken ? "Bearer " + options.accessToken : undefined,
-        "Client-ID": config.client_id
+        "Authorization": authorization,
+        "Client-ID": authorization? undefined : config.client_id
       },
       body: options.body,
       json: true
