@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { Subject } from 'rxjs';
 
 import * as request from "request-promise-native";
+import * as _ from "lodash";
 let querystring = require("querystring");
 
 import config from "../../../config";
 
 // Twitch API v3 Service
-// https://github.com/justintv/Twitch-API/blob/master/README.md
+// https://dev.twitch.tv/docs/api/reference
 @Injectable()
 export class TwitchService {
 
@@ -18,7 +19,18 @@ export class TwitchService {
   followed_streams_offset = 0;
   authUrl: string;
   logued: boolean = false;
-  authUserInfo: any = null;
+  authUserInfo: {
+    id, string,
+    login: string,
+    display_name: string,
+    type: string,
+    broadcaster_type: string,
+    description: string,
+    profile_image_url: string,
+    offline_image_url: string,
+    view_count: number,
+    email: string
+  };
 
   baseUrl = "https://api.twitch.tv/helix";
 
@@ -31,7 +43,7 @@ export class TwitchService {
 
   async executeRequest(options, parameters?) {
 
-    let authorization = options.accessToken? "Bearer " + options.accessToken : undefined;
+    let authorization = options.accessToken ? "Bearer " + options.accessToken : undefined;
     if (!authorization && this.access_token) authorization = "Bearer " + this.access_token;
 
     let req = {
@@ -40,7 +52,7 @@ export class TwitchService {
       qs: parameters,
       headers: {
         "Authorization": authorization,
-        "Client-ID": authorization? undefined : config.client_id
+        "Client-ID": authorization ? undefined : config.client_id
       },
       body: options.body,
       json: true
@@ -92,7 +104,7 @@ export class TwitchService {
         first: 25
       });
 
-    this.games_pagination=data.pagination;
+    this.games_pagination = data.pagination;
     return data.data;
   }
 
@@ -107,7 +119,7 @@ export class TwitchService {
         after: this.games_pagination.cursor
       });
 
-    this.games_pagination=data.pagination;
+    this.games_pagination = data.pagination;
     return data.data;
   }
 
@@ -117,7 +129,7 @@ export class TwitchService {
   // If game is null, get top streams of all games
   // https://dev.twitch.tv/docs/api/reference/#get-streams
   async getStreams(game?) {
-    if(game) console.log(game);
+    if (game) console.log(game);
     let data = await this.executeRequest({
       method: "GET",
       path: "/streams"
@@ -144,7 +156,7 @@ export class TwitchService {
         first: 25
       });
 
-    this.streams_pagination=data.pagination;
+    this.streams_pagination = data.pagination;
     return data.data;
   }
 
@@ -194,28 +206,31 @@ export class TwitchService {
     return video_url
   }
 
-  // Returns a promise that resolves to a list of stream objects that the authenticated user is following.
-  // https://github.com/justintv/Twitch-API/blob/master/v3_resources/users.md#get-streamsfollowed
-  getFollowedStreams() {
-    return new Promise((resolve, reject) => {
-      resolve([]);
-      /* TODO
-      this.executeRequest({
-        method: "GET",
-        path: "/streams/followed",
-        accessToken: this.access_token
-      },
-        //params
-        {
-          limit: 25
-        }, (err, followedStreams) => {
-          if (err || !followedStreams) reject(err);
-          else {
-            this.followed_streams_offset = 1;
-            resolve(followedStreams);
-          }
-        });
-        */
-    });
+  // Returns a list of stream objects the authenticated user is following.
+  // https://dev.twitch.tv/docs/api/reference/#get-users-follows
+  async getFollowedStreams() {
+    let user_id = this.authUserInfo.id;
+
+    let data = await this.executeRequest({
+      method: "GET",
+      path: "/users/follows",
+    }, {
+        first: 100,
+        from_id: user_id
+      });
+
+    let ids = _.map(data.data,'to_id');
+
+    data = await this.executeRequest({
+      method: "GET",
+      path: "/streams"
+    }, {
+      user_id: ids,
+      first: 100
+      });
+    
+    console.log(data);
+
+    return data.data;
   }
 }

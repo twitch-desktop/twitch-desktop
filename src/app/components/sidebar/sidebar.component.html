@@ -8,7 +8,10 @@
       <span class="material-icons">videocam</span>Channels
     </div>
     <div class="sidebar-menu-item row align-items-center" [hidden]="!logued" (click)="router.navigate(['/channels/following'])">
-      <span class="material-icons">remove_red_eye</span>Following
+      <span class="material-icons">star</span>Following
+    </div>
+    <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/settings'])">
+      <span class="material-icons">settings</span>Settings
     </div>
   </div>
 </div>

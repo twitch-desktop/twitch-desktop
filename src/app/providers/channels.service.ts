@@ -16,7 +16,16 @@ export class ChannelService {
   }
 
   async getStreams(game?) {
-    let streams = await this.twitchService.getStreams(game);
+    let streams;
+
+    if (game === "top") game = undefined;
+
+    if (game === "following") {
+      streams = await this.twitchService.getFollowedStreams();
+    } else {
+      streams = await this.twitchService.getStreams(game);
+    }
+
     this.channels = streams;
     return this.channels;
   }

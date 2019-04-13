@@ -1,16 +1,16 @@
-import {Component, OnInit, Pipe, PipeTransform, NgZone} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, OnInit, Pipe, PipeTransform, NgZone } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 
-import {InfiniteScroll} from "../../directives/infinitescroll.directive";
+import { InfiniteScroll } from "../../directives/infinitescroll.directive";
 
 let _ = require("lodash");
 
-import {TwitchService} from "../../providers/twitch.service";
-import {ToolbarService} from "../../providers/toolbar.service";
-import {SpinnerService} from "../../providers/spinner.service";
-import {ErrorService} from "../../providers/errorhandler.service";
-import {GameService} from "../../providers/games.service";
-import {ChannelService} from "../../providers/channels.service";
+import { TwitchService } from "../../providers/twitch.service";
+import { ToolbarService } from "../../providers/toolbar.service";
+import { SpinnerService } from "../../providers/spinner.service";
+import { ErrorService } from "../../providers/errorhandler.service";
+import { GameService } from "../../providers/games.service";
+import { ChannelService } from "../../providers/channels.service";
 
 // List of streams component
 @Component({
@@ -34,35 +34,38 @@ export class ChannelsComponent implements OnInit {
     private errorService: ErrorService,
     private gameService: GameService,
     private channelService: ChannelService,
-    private zone: NgZone) {}
+    private zone: NgZone) { }
 
   ngOnInit() {
 
     this.route.params.subscribe(params => {
 
-      if (params["game"] === "top")  this.game = null;
+      if (params["game"] === "top") this.game = "top";
+      else if (params["game"] === "following") this.game = "following";
       else {
         this.game = this.gameService.getGame(params["game"]);
       }
 
       this.spinnerService.show();
-    });
 
-    // Set toolbar title
-    if (this.game) this.toolbarService.setTitle(this.game.name);
-    else this.toolbarService.setTitle("All Games");
+      // Set toolbar title
+      if (this.game === "top") this.toolbarService.setTitle("All Games");
+      else if (this.game === "following") this.toolbarService.setTitle("Following");
+      else if (this.game) this.toolbarService.setTitle(this.game.name);
 
-    // Set toolbar icon
-    this.toolbarService.setLogo("videocam");
+      // Set toolbar icon
+      this.toolbarService.setLogo("videocam");
 
-    // Load streams list and hide the spinner
-    this.channelService.getStreams(this.game).then((streams: any) => {
-      this.channels = streams;
-      this.spinnerService.hide();
-    }).catch((reason) => {
-      this.spinnerService.hide();
-      this.errorService.showError("Error fetching streams");
-      console.log(reason);
+      // Load streams list and hide the spinner
+      this.channelService.getStreams(this.game).then((streams: any) => {
+        this.channels = streams;
+        this.spinnerService.hide();
+      }).catch((reason) => {
+        this.spinnerService.hide();
+        this.errorService.showError("Error fetching streams");
+        console.log(reason);
+      });
+
     });
   }
 
@@ -73,17 +76,17 @@ export class ChannelsComponent implements OnInit {
     if (!this.fetchingMore) {
 
       this.fetchingMore = true;
-      this.zone.run(() => {});
+      this.zone.run(() => { });
 
       this.channelService.fetchMoreStreams(this.game).then((streams: any) => {
         this.channels = streams;
         this.fetchingMore = false;
-        this.zone.run(() => {});
+        this.zone.run(() => { });
       }).catch((reason) => {
         console.log("Failed fetching more games");
         console.log(reason);
         this.fetchingMore = false;
-        this.zone.run(() => {});
+        this.zone.run(() => { });
       });
     }
   }
