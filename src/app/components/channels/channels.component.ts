@@ -40,13 +40,13 @@ export class ChannelsComponent implements OnInit {
 
     this.route.params.subscribe(params => {
 
+      this.spinnerService.show();
+
       if (params["game"] === "top") this.game = "top";
       else if (params["game"] === "following") this.game = "following";
       else {
         this.game = this.gameService.getGame(params["game"]);
       }
-
-      this.spinnerService.show();
 
       // Set toolbar title
       if (this.game === "top") this.toolbarService.setTitle("All Games");

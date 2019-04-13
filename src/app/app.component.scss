@@ -23,9 +23,9 @@ body {
 }
 
 #sidebar {
-  width: 250px;
-  max-width: 250px;
-  min-width: 250px;
+  width: 70px;
+  max-width: 70px;
+  min-width: 70px;
   height: 100%;
   position: absolute;
   top: 70px;
@@ -33,17 +33,17 @@ body {
   overflow-y: auto;
   background: #17141f;
   color: #dad8de;
-  padding: 10px;
+  padding: 5px;
 }
 
 #main-content {
   position: absolute;
   top: 70px;
-  left: 250px;
+  left: 70px;
   max-height: calc(100% - 70px);
   height: calc(100% - 70px);
-  width: calc(100% - 250px);
-  max-width: calc(100% - 250px);
+  width: calc(100% - 70px);
+  max-width: calc(100% - 70px);
 }
 
 .expanded {

@@ -1,17 +1,14 @@
-<div class="row">
-  <div class="cotainer w-100">
-    <h4 class="sidebar-header row align-items-center">BROWSE</h4>
-    <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/games'])">
-      <span class="material-icons">games</span>Games
-    </div>
-    <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/channels/top'])">
-      <span class="material-icons">videocam</span>Channels
-    </div>
-    <div class="sidebar-menu-item row align-items-center" [hidden]="!logued" (click)="router.navigate(['/channels/following'])">
-      <span class="material-icons">star</span>Following
-    </div>
-    <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/settings'])">
-      <span class="material-icons">settings</span>Settings
-    </div>
+<div class="row sidebar-container">
+  <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/games'])">
+    <span class="material-icons menu-item-icon">games</span>
+  </div>
+  <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/channels/top'])">
+    <span class="material-icons menu-item-icon">videocam</span>
+  </div>
+  <div class="sidebar-menu-item row align-items-center" [hidden]="!logued" (click)="router.navigate(['/channels/following'])">
+    <span class="material-icons menu-item-icon">star</span>
+  </div>
+  <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/settings'])">
+    <span class="material-icons menu-item-icon">settings</span>
   </div>
 </div>
