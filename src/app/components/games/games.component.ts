@@ -35,7 +35,7 @@ export class GamesComponent implements OnInit {
     this.spinnerService.show();
 
     // Set toolbar tile and logo
-    this.toolbarService.setTitle("Games");
+    this.toolbarService.setTitle("Top Games");
     this.toolbarService.setLogo("games");
 
     // Load the list of top games and hide the spinner

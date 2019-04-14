@@ -80,7 +80,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
     });
 
     // Clear the player
-    this.player.stop();
-    this.player.destroy();
+    if(this.player) {
+      this.player.stop();
+      this.player.destroy();
+    }
   }
 }

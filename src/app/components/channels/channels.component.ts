@@ -49,8 +49,8 @@ export class ChannelsComponent implements OnInit {
       }
 
       // Set toolbar title
-      if (this.game === "top") this.toolbarService.setTitle("All Games");
-      else if (this.game === "following") this.toolbarService.setTitle("Following");
+      if (this.game === "top") this.toolbarService.setTitle("Top Streams");
+      else if (this.game === "following") this.toolbarService.setTitle("Followed Streams");
       else if (this.game) this.toolbarService.setTitle(this.game.name);
 
       // Set toolbar icon
