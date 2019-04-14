@@ -1,7 +1,6 @@
 <div class="toolbar">
 
   <div class="toolbar-topline">
-    <h1>Twitch Desktop</h1>
     <button class="window-control minimize-button" (click)="minimizeWindow()">
       <span class="material-icons">keyboard_arrow_down</span>
     </button>
@@ -16,23 +15,16 @@
   <div class="toolbar-content">
     <div class="d-flex h-100 w-100 align-items-center">
       <button class="toolbar-button menu-button" (click)="collapseSidebar()">
-        <span class="material-icons">menu</span>
+        <span class="material-icons">{{sidebar_collapsed? 'format_indent_increase':'format_indent_decrease'}}</span>
       </button>
-
-      <svg class="twitch-logo" height="32px" version="1.1" viewBox="0 0 94 32" width="94px" x="0px" y="0px">
-        <path clip-rule="evenodd"
-          d="M88,5h-6V0h-9l-6,5h-5.5L59,7.5V5h-5V0H36v5H16l-5-5H0v22l5,5.25L14,32h6v-1.5l3,1.5h12l2-3l1,3h7v-3l3,3h8l0.5-3l2.5,3h10l3-3v3h4l3-3v3h7l7-6V10L88,5z M13,13H8v6h5v6H6l-4-4V2h6v5h5V13z M36,21.5L32.5,25H15V7h6v12h2V7h6v12h2V7h5V21.5z M44,25h-6V7h6V25z M44,5h-6V2h6V5z M57,13h-5v6h5v6h-7l-4-4V2h6v5h5V13z M72,13h-7v6h7v6h-9l-4-4V11l4-4h9V13z M91,25h-6V13h-5v12h-6V2h6v5h7l4,4V25z"
-          fill-rule="evenodd"></path>
-      </svg>
-
 
       <span class="material-icons logo-icon" [hidden]="player_logo!==null">{{logo}}</span>
       <img src="{{player_logo | twScaleImage:'48':'48'}}" class="player-logo" [hidden]="player_logo===null">
       <div layout="column" class="toolbar-title">
-        <span class="toolbar-header">{{title}}</span>
-        <span class="toolbar-subheader" [hidden]="player_username===null">
-          <span class="player-username">{{player_username}}</span> playing <span
-            class="player-game">{{player_game}}</span>
+        <span class="toolbar-header" [ngClass]="player_username===null?undefined:'two-rows'">{{title}}</span>
+        <span class="toolbar-subheader two-rows" [hidden]="player_username===null">
+          <span class="player-username two-rows">{{player_username}}</span> playing <span
+            class="player-game two-rows">{{player_game}}</span>
         </span>
       </div>
 
@@ -40,13 +32,13 @@
         <div class="login-button-content">
           <span class="material-icons" [hidden]="!logued">person</span>
           <span class="material-icons" [hidden]="logued">person_outline</span>
-          {{username}}
+          <span class="login-username">{{username}}</span>
         </div>
       </div>
 
       <div class="toolbar-button" (click)="enterFullscreen()">
-        <i [hidden]="isFullscreen"></i>
-        <i [hidden]="!isFullscreen"></i>
+        <span class="material-icons" [hidden]="isFullscreen">fullscreen</span>
+        <span class="material-icons" [hidden]="!isFullscreen">fullscreen_exit</span>
       </div>
 
     </div>

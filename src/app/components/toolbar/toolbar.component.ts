@@ -33,6 +33,7 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   player_username: string = null;
   player_game: string = null;
   player_logo: string = null;
+  sidebar_collapsed = false;
 
   constructor(
     public router: Router,
@@ -98,6 +99,7 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   }
 
   collapseSidebar() {
+    this.sidebar_collapsed = !this.sidebar_collapsed;
     this.collapse.emit("event");
   }
 }

@@ -46,13 +46,14 @@
 
 .toolbar span {
   color: #dad8de;
+  font-size: 36px;
 }
 
 .toolbar-title {
-  width: 100%;
   overflow: hidden;
   margin-left: 10px;
   text-align: left;
+  margin-right: auto;
 }
 
 .toolbar-header{
@@ -63,17 +64,21 @@
   text-overflow: ellipsis;
 }
 
+.two-rows {
+  font-size:18px !important;
+}
+
 .toolbar-button {
   width: auto;
   cursor: pointer;
-  height: 34px;
+  height: 40px;
   align-items: center;
   justify-content: center;
   padding: 5px;
-  margin-right: 10px;
   transition: background 0.4s;
   border-width: 0px;
   background-color: transparent;
+  font-size: 24px;
 
   &:hover {
     background: #7550b9;
@@ -81,9 +86,16 @@
 }
 
 .menu-button {
-  width: 34px;
-  max-width: 34px;
-  min-width: 34px;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  min-height: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  span {
+    font-size: 36px;
+  }
 }
 
 .login-button {
@@ -107,6 +119,10 @@
   &:hover {
     background: #7550b9;
   }
+}
+
+.login-username {
+  font-size: 24px !important;
 }
 
 .window-control {
@@ -156,7 +172,7 @@
 }
 
 .logo-icon {
-  margin-left: 50px;
+  margin-left: auto;
 }
 
 .player-logo {
