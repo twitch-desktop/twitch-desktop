@@ -9,7 +9,6 @@ import {SpinnerService} from "../../providers/spinner.service";
 import {ErrorService} from "../../providers/errorhandler.service";
 import {GameService} from "../../providers/games.service";
 
-// Game list component
 @Component({
   templateUrl: "./games.component.html",
   selector: "tw-games",

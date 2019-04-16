@@ -12,7 +12,6 @@ import { ErrorService } from "../../providers/errorhandler.service";
 import { GameService } from "../../providers/games.service";
 import { ChannelService } from "../../providers/channels.service";
 
-// List of streams component
 @Component({
   templateUrl: "./channels.component.html",
   selector: "tw-channels",

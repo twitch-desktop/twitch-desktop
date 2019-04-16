@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, NgZone } from "@angular/core";
 import { ActivatedRoute, Router, UrlSegmentGroup } from "@angular/router";
 const { BrowserWindow } = require('electron').remote
 
-let request = require("request");
 let querystring = require("querystring");
 
 import { ToolbarService } from "../../providers/toolbar.service";

@@ -1,6 +1,9 @@
 import { Component, ElementRef, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
+import Clappr from 'clappr';
+import LevelSelector from 'level-selector';
+
 import { ToolbarService } from "../../providers/toolbar.service";
 import { ChannelService } from "../../providers/channels.service";
 import { TwitchService } from "../../providers/twitch.service";
@@ -51,11 +54,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
     let sourceUrl = await this.twitchService.getVideoUrl(this.channel);
 
     // Start the player with the video source url
-    this.player = new (<any>window).Clappr.Player({
+    this.player = new Clappr.Player({
       source: sourceUrl,
       plugins: {
         core: [
-          (<any>window).LevelSelector,
+          LevelSelector,
         ]
       },
       parentId: "#player",
@@ -65,7 +68,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       maxBufferLength: 20
     });
 
-    this.player.on((<any>window).Clappr.Events.PLAYER_PLAY, () => {
+    this.player.on(Clappr.Events.PLAYER_PLAY, () => {
       this.isLoading = false;
     });
   }

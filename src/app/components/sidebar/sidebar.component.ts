@@ -32,17 +32,10 @@ export class SidebarComponent implements OnInit {
     if (userInfo && userInfo.login) {
       // Fetch online followed streams
       this.logued = true;
-      this.twitchService.getFollowedStreams().then((followedStreams: any) => {
-        this.channelService.addFollowedChannels(followedStreams.streams);
-        this.onlineStreams = followedStreams.streams;
-      }).catch((reason) => {
-        // FIXME
-      });
     }
     // Logout
     else {
       this.logued = false;
-      this.onlineStreams = [];
     }
   }
 
