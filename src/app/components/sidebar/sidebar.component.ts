@@ -15,6 +15,14 @@ export class SidebarComponent implements OnInit {
 
   onlineStreams: Array<any>;
   logued: boolean = false;
+  items = [
+    { name: 'Games', route: '/games', icon: 'games', active: true },
+    { name: 'Channels', route: '/channels/top', icon: 'videocam', active: false },
+    { name: 'Following', route: '/channels/following', icon: 'star', active: false },
+    { name: 'Settings', route: '/settings', icon: 'settings', active: false }
+  ];
+
+  active_item = this.items[0];
 
   constructor(
     public router: Router,
@@ -39,7 +47,15 @@ export class SidebarComponent implements OnInit {
     }
   }
 
+  navigate(item) {
+    this.active_item.active = false;
+    item.active = true;
+    this.active_item = item;
+    this.router.navigate([item.route]);
+  }
+
   ngOnInit() {
+
   }
 
 }

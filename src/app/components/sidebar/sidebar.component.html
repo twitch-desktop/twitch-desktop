@@ -1,14 +1,8 @@
 <div class="row sidebar-container">
-  <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/games'])">
-    <span class="material-icons menu-item-icon">games</span>
-  </div>
-  <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/channels/top'])">
-    <span class="material-icons menu-item-icon">videocam</span>
-  </div>
-  <div class="sidebar-menu-item row align-items-center" [hidden]="!logued" (click)="router.navigate(['/channels/following'])">
-    <span class="material-icons menu-item-icon">star</span>
-  </div>
-  <div class="sidebar-menu-item row align-items-center" (click)="router.navigate(['/settings'])">
-    <span class="material-icons menu-item-icon">settings</span>
+  <div class="sidebar-menu-item row align-items-center" 
+  [ngClass]="{'active': item.active }"
+  (click)="navigate(item)" 
+  *ngFor="let item of items">
+    <span class="material-icons menu-item-icon">{{item.icon}}</span>
   </div>
 </div>
