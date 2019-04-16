@@ -7,7 +7,11 @@ $material-icons-font-path: '~material-icons/iconfont/';
 @import '~bootstrap-scss/bootstrap.scss';
 @import '~simplebar/dist/simplebar.css';
 
+$roboto-font-path: '~roboto-fontface/fonts/';
+@import '~roboto-fontface/css/roboto/sass/roboto-fontface-regular.scss';
+
 html, body {
+  font-family: 'Roboto';
   margin: 0;
   padding: 0;
   overflow: hidden;
