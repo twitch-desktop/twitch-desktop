@@ -73,7 +73,8 @@ export class ChannelsComponent implements OnInit {
   onScrolled() {
 
     // Load more items only if we are not already doing that
-    if (!this.fetchingMore) {
+    // Don't try to fetch more if we are on following page, as pagination there is not implemented yet
+    if (!this.fetchingMore && this.game !== "following") {
 
       this.fetchingMore = true;
       this.zone.run(() => { });

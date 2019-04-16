@@ -80,6 +80,7 @@
     "normalize-scss": "^7.0.1",
     "npm-run-all": "4.1.5",
     "octicons": "^8.5.0",
+    "roboto-fontface": "^0.10.0",
     "rxjs": "6.4.0",
     "simplebar": "^4.0.0-alpha.3",
     "spectron": "5.0.0",
