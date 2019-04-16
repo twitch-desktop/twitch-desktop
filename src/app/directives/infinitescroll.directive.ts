@@ -1,4 +1,5 @@
-import {Directive, ElementRef, OnInit, OnDestroy, Output, EventEmitter} from "@angular/core";
+import { Directive, ElementRef, Output, EventEmitter, NgZone } from "@angular/core";
+import SimpleBar from 'simplebar'
 
 // Infinite Scroll directive
 // Emits (scrolled) when a div is scrolled to the bottom
@@ -8,15 +9,26 @@ import {Directive, ElementRef, OnInit, OnDestroy, Output, EventEmitter} from "@a
 
 export class InfiniteScroll {
   @Output() scrolled = new EventEmitter();
+  private scrollbar;
 
-  constructor(private element: ElementRef) {
-    // We do this instead of setting the class method to preserve `this`
-    element.nativeElement.onscroll = () => this.onScroll();
+  constructor(
+    private element: ElementRef,
+    private ngZone: NgZone) {
+
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.scrollbar = new SimpleBar(this.element.nativeElement);
+        this.scrollbar.getScrollElement().addEventListener('scroll', () => {
+          this.onScroll();
+        });
+      });
+    });
   }
 
   onScroll() {
-    let nativeElement = this.element.nativeElement;
-    if (nativeElement.scrollTop === nativeElement.scrollHeight - nativeElement.offsetHeight) {
+
+    let scrollElement = this.scrollbar.getScrollElement();
+    if (scrollElement.scrollTop === scrollElement.scrollHeight - scrollElement.offsetHeight) {
       this.scrolled.next("event");
     }
   }

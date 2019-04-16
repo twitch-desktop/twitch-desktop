@@ -135,7 +135,7 @@ export class TwitchService {
       path: "/streams"
     }, {
         game_id: game ? game.id : undefined,
-        first: 25
+        first: 24
       });
 
     this.streams_pagination = data.pagination;
@@ -153,7 +153,7 @@ export class TwitchService {
       {
         game_id: game ? game.id : undefined,
         after: this.streams_pagination.cursor,
-        first: 25
+        first: 24
       });
 
     this.streams_pagination = data.pagination;

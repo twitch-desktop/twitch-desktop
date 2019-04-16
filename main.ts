@@ -90,7 +90,8 @@ async function createWindow() {
       win.loadURL('http://localhost:4200');
     } else {
 
-      let betterttv_dir = path.resolve(__dirname, 'assets/betterttv.js');
+      let betterttv_dir = path.resolve(__dirname, 'dist/assets/betterttv.js');
+      console.log(betterttv_dir);
       let betterttv = fs.readFileSync(betterttv_dir, 'utf8');
       (<any>global).betterttv = betterttv;
 

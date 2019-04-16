@@ -52,7 +52,7 @@ export class GamesComponent implements OnInit {
 
   // Triggered when list is scrolled to bottom (ininite-scroll)
   onScrolled() {
-
+    console.log('Scrolled!!');
     // Only fetch more if we are not already doing that
     if (!this.fetchingMore) {
       this.fetchingMore = true;

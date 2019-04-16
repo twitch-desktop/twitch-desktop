@@ -1,15 +1,16 @@
-<div infinite-scroll (scrolled)="onScrolled()" class="game-list row">
-
-  <div class="game-item col-2" (mouseover)="game.hovered=true"(mouseout)="game.hovered=false" (click)="router.navigate(['/channels/'+game.id])" *ngFor="let game of games">
-    <div class="game-content">
-      <img class="game-cover" src="{{game.box_art_url | twScaleImage:'285':'380'}}">
+<div infinite-scroll class="game-list-wrapper" (scrolled)="onScrolled()">
+  <div class="game-list">
+    <div class="game-item" (mouseover)="game.hovered=true"(mouseout)="game.hovered=false" (click)="router.navigate(['/channels/'+game.id])" *ngFor="let game of games">
+      <div class="game-content">
+        <img class="game-cover" src="{{game.box_art_url | twScaleImage:'285':'380'}}">
+      </div>
       <div class="game-name" [hidden]="!game.hovered"><span>{{game.name}}</span></div>
     </div>
-  </div>
 
-  <div class="fetching-more" [hidden]="!fetchingMore">
-    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-      <span class="sr-only">Loading...</span>
+    <div class="fetching-more" [hidden]="!fetchingMore">
+      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
     </div>
   </div>
 </div>
