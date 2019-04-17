@@ -1,4 +1,6 @@
-import { app, session, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
+import { autoUpdater } from 'electron-updater';
+import * as log from 'electron-log';
 import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs';
@@ -6,11 +8,16 @@ import * as request from "request-promise-native";
 import * as querystring from "querystring";
 import config from "./config";
 
-let win, serve;
+let win, update_window, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
-async function createWindow() {
+autoUpdater.logger = log;
+autoUpdater.autoDownload = false;
+
+log.info('App starting...');
+
+async function createMainWindow() {
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
@@ -46,7 +53,7 @@ async function createWindow() {
     force_verify: false
   };
 
-  this.authUrl = base_url + querystring.stringify(params);
+  let authUrl = base_url + querystring.stringify(params);
 
   let authWindow = new BrowserWindow({
     show: false,
@@ -108,10 +115,8 @@ async function createWindow() {
 
     // Emitted when the window is closed.
     win.on('closed', () => {
-      // Dereference the window object, usually you would store window
-      // in an array if your app supports multi windows, this is the time
-      // when you should delete the corresponding element.
       win = null;
+      app.quit();
     });
   });
 
@@ -123,7 +128,7 @@ async function createWindow() {
   });
 
   authWindow.setMenu(null);
-  authWindow.loadURL(this.authUrl);
+  authWindow.loadURL(authUrl);
 
   authWindow.show();
   if (serve) {
@@ -131,19 +136,77 @@ async function createWindow() {
   }
 }
 
+function sendStatusToWindow(text) {
+  log.info(text);
+  update_window.webContents.send('message', text);
+}
+
 try {
+  app.on('ready', () => {
+    if (serve) {
+      createMainWindow();
+    } else {
 
-  // This method will be called when Electron has finished
-  // initialization and is ready to create browser windows.
-  // Some APIs can only be used after this event occurs.
-  app.on('ready', createWindow);
+      update_window = new BrowserWindow({
+        frame: true,
+        width: 600,
+        height: 300,
+        show: false,
+        backgroundColor: "#221F2A",
+        webPreferences: {
+          nodeIntegration: true,
+          webSecurity: false
+        }
+      });
 
-  // Quit when all windows are closed.
-  app.on('window-all-closed', () => {
-    app.quit();
+      update_window.on('closed', () => {
+        autoUpdater.removeAllListeners();
+        createMainWindow();
+        update_window = null;
+      });
+
+      update_window.loadURL(url.format({
+        pathname: path.join(__dirname, `dist/update.html`),
+        protocol: 'file:',
+        slashes: true
+      }));
+
+      update_window.webContents.openDevTools();
+      autoUpdater.checkForUpdates();
+    }
   });
 
+  autoUpdater.on('checking-for-update', () => {
+    sendStatusToWindow('Checking for updates');
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    update_window.show();
+    sendStatusToWindow('New update avaliable.');
+    autoUpdater.downloadUpdate();
+  });
+
+  autoUpdater.on('update-not-available', (info) => {
+    update_window.close();
+  });
+
+  autoUpdater.on('error', (err) => {
+    sendStatusToWindow('Error in auto-updater. ' + err);
+  });
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    sendStatusToWindow(log_message);
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    sendStatusToWindow('Update downloaded');
+    setImmediate(() => autoUpdater.quitAndInstall());
+  });
 } catch (e) {
+  console.log(e);
   // Catch Error
   // throw e;
 }

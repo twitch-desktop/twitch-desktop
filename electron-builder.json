@@ -20,21 +20,31 @@
         "!tslint.json"
     ],
   "win": {
-    "icon": "dist",
+    "icon": "build",
     "target": [
+      "nsis-web",
+      "nsis",
       "portable"
     ]
   },
   "mac": {
-    "icon": "dist",
+    "icon": "build",
+    "category": "public.app-category.entertainment",
     "target": [
-      "dmg"
+      "dmg",
+      "zip"
     ]
   },
   "linux": {
-    "icon": "dist",
+    "icon": "build",
+    "category": "Video",
     "target": [
       "AppImage"
     ]
+  },
+  "publish": {
+    "provider": "github",
+    "repo": "twitch-desktop",
+    "owner": "hzeroo"
   }
 }
