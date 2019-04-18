@@ -1,0 +1,52 @@
+{
+  "productName": "Twitch Desktop",
+  "directories": {
+    "output": "release/"
+  },
+    "files": [
+        "**/*",
+        "!**/*.ts",
+        "!*.code-workspace",
+        "!LICENSE.md",
+        "!package.json",
+        "!package-lock.json",
+        "!src/",
+        "!e2e/",
+        "!hooks/",
+        "!angular.json",
+        "!_config.yml",
+        "!karma.conf.js",
+        "!tsconfig.json",
+        "!tslint.json"
+    ],
+  "win": {
+    "icon": "build/icon.ico",
+    "target": [
+      "nsis-web",
+      "nsis",
+      "portable"
+    ]
+  },
+  "mac": {
+    "icon": "build/icon.icns",
+    "category": "public.app-category.entertainment",
+    "target": [
+      "dmg",
+      "zip"
+    ]
+  },
+  "linux": {
+    "icon": "build/icon.icns",
+    "category": "Video",
+    "target": [
+      "AppImage",
+      "deb",
+      "pacman"
+    ]
+  },
+  "publish": {
+    "provider": "github",
+    "repo": "twitch-desktop",
+    "owner": "hzeroo"
+  }
+}

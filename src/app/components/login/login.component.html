@@ -1,0 +1,7 @@
+<div class="login-container h-100">
+  <div class="login-display" [hidden]="!logued">
+    <i md-icon class="login-logo">person</i>
+    <span>Logued in as {{username}}</span>
+    <button md-button class="logout-button" (click)="logout()">Logout</button>
+  </div>
+</div>

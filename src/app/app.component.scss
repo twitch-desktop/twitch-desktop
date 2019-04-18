@@ -1,0 +1,64 @@
+
+html {
+  background: #221F2A;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Roboto';
+  font-size: 14px;
+  line-height: 20px;
+  background: #221F2A;
+  height: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.dragzone {
+  border: 2px dotted #ccc;
+  margin: 10px;
+}
+
+#sidebar {
+  width: 70px;
+  max-width: 70px;
+  min-width: 70px;
+  height: 100%;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  overflow-y: auto;
+  background: #17141f;
+  color: #dad8de;
+  padding: 5px;
+}
+
+#main-content {
+  position: absolute;
+  top: 70px;
+  left: 70px;
+  max-height: calc(100% - 70px);
+  height: calc(100% - 70px);
+  width: calc(100% - 70px);
+  max-width: calc(100% - 70px);
+}
+
+.expanded {
+  left: 0px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+#sidebar i {
+  color: #dad8de;
+  margin-right: 10px;
+}
+
+.content {
+  max-height: calc(100% - 70px);
+  height: calc(100% - 70px);
+  background-color: #221F2A;
+}

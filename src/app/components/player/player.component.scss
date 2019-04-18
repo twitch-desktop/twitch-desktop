@@ -1,0 +1,40 @@
+#player {
+  height: 100%;
+  position: relative; 
+  display: flex;
+  flex: 1;
+}
+
+#chat {
+  height: 100%;
+  min-width: 300px;
+  width: 300px;
+  position: relative;
+  right: 0;
+}
+
+#main-container {
+  position: relative;
+}
+
+[data-player] {
+  display: block !important;
+  position: absolute !important;
+  height: 100% !important;
+  float: none !important;
+  width: 100% !important;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+#spinner-container {
+  position: relative;
+  background: #221F2A;
+  display: flex;
+  min-height: 100%;
+  min-width: 100%;
+  align-items: center;
+  justify-content: center;
+}

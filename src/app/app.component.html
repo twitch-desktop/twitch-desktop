@@ -1,17 +1,19 @@
-<div flex layout="column" layout-fill>
-  <tw-toolbar (close)="closeWindow()" (maximize)="maximizeWindow()" (minimize)="minimizeWindow()" (collapse)="toggleSidebar()" (fullscreen)="enterFullscreen()"></tw-toolbar>
+<div class="container-fluid h-100">
 
-  <md-content class="content" flex layout="row" (dragover)="false" (dragend)="false" (drop)="false">
+  <tw-toolbar class="row" (close)="closeWindow()" (maximize)="maximizeWindow()" (minimize)="minimizeWindow()"
+    (collapse)="toggleSidebar()" (fullscreen)="enterFullscreen()"></tw-toolbar>
 
-    <div flex="20" layout="column" id="sidebar" layout-fill @sbState="sidebarState">
+  <div class="content row" (dragover)="false" (dragend)="false" (drop)="false">
+
+    <div id="sidebar" class="container" [hidden]="sidebarState==='hidden'">
       <tw-sidebar></tw-sidebar>
     </div>
 
-    <div flex layout="column">
+    <div id="main-content" class="container" [ngClass]="[sidebarState==='hidden'?'expanded':'']">
       <tw-spinner></tw-spinner>
       <tw-error></tw-error>
       <router-outlet></router-outlet>
     </div>
 
-  </md-content>
+  </div>
 </div>

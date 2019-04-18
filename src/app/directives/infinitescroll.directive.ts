@@ -1,0 +1,35 @@
+import { Directive, ElementRef, Output, EventEmitter, NgZone } from "@angular/core";
+import SimpleBar from 'simplebar'
+
+// Infinite Scroll directive
+// Emits (scrolled) when a div is scrolled to the bottom
+@Directive({
+  selector: "[infinite-scroll]"
+})
+
+export class InfiniteScroll {
+  @Output() scrolled = new EventEmitter();
+  private scrollbar;
+
+  constructor(
+    private element: ElementRef,
+    private ngZone: NgZone) {
+
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.scrollbar = new SimpleBar(this.element.nativeElement);
+        this.scrollbar.getScrollElement().addEventListener('scroll', () => {
+          this.onScroll();
+        });
+      });
+    });
+  }
+
+  onScroll() {
+
+    let scrollElement = this.scrollbar.getScrollElement();
+    if (scrollElement.scrollTop === scrollElement.scrollHeight - scrollElement.offsetHeight) {
+      this.scrolled.next("event");
+    }
+  }
+}

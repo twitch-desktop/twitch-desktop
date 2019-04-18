@@ -1,0 +1,23 @@
+<div infinite-scroll class="channel-list-wrapper" (scrolled)="onScrolled()">
+
+  <div class="channel-list">
+    <div class="channel-item" (click)="router.navigate(['/play/'+channel.id])" *ngFor="let channel of channels">
+      <div class="channel-content">
+        <div class="channel-title"><span>{{channel.user_name}}</span></div>
+        <img class="channel-cover" src="{{ channel.thumbnail_url | twScaleImage:'320':'180' }}">
+        <div class="channel-info">
+          <div class="channel-uptime"><span><span
+                class="material-icons">schedule</span>{{channel.started_at | twTimeSince}}</span></div>
+          <div class="channel-viewers"><span><span
+                class="material-icons">people</span>{{channel.viewer_count | number}}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fetching-more" [hidden]="!fetchingMore">
+      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+</div>

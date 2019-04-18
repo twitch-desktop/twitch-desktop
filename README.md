@@ -1,21 +1,21 @@
 # Twitch Desktop Client (Unofficial)
 
-![gamelist](http://i.imgur.com/aujAPcP.png)
-![channellist](http://i.imgur.com/Gt2z37x.png)
-![player](http://i.imgur.com/c3RXF4U.png)
+![gamelist](https://i.imgur.com/FNIYpE5.jpg)
+![channellist](https://i.imgur.com/Kyv1cbo.jpg)
+![player](https://i.imgur.com/KRZ3KQa.jpg)
 
 ## Working right now
 + Browse games and live streams
 + Play live streams (without Flash!)
 + User login and current online streams list
 + Chat
++ Autoupdater
 
 ## Upcoming
 - Browse and play VODs
 - Ability to follow streams and games
 - Push notifications
 - Chromecast support
-- Autoupdater
 - Something more 
 
 ## Downloads
@@ -24,28 +24,35 @@
 
 ## Techs behind
 + [Electron](http://electron.atom.io/)
-+ [Angular 2](https://angular.io/)
-+ [Material 2](github.com/angular/material2)
++ [Angular](https://angular.io/)
++ [ng-Bootstrap](https://ng-bootstrap.github.io/)
 + [Typescript](https://www.typescriptlang.org/)
-+ [Webpack](https://webpack.github.io/)
++ [Electron Builder](https://www.electron.build/)
 
 ## Get it running from source
 
-To get started, clone the repo to your target directory. This app uses Webpack, and a few commands have been provided as scripts in `package.json`.
+To get started, clone the repo to your target directory. This app uses electron-builder, and a few commands have been provided as scripts in `package.json`.
+
+Yarn is strongly recommended instead of npm.
 
 ```bash
-npm install
-cd src && npm install && cd ..
+$ npm i -g yarn
+```
 
-mv src/app/config.example.ts src/app/config.ts
+```bash
+yarn install
+
+cp config.example.ts config.ts
 
 # Now you need to edit config.ts with a proper client_id from twitch
+# Just create a new app on twitch after sign up and fill the client_id field in config.ts
+# https://dev.twitch.tv/console/apps
 
-# To build only
-npm run build
+# Start the Electron app in developement mode
+yarn start
 
-# Start the Electron app
-npm run start
+# Refer to https://github.com/maximegris/angular-electron
+# for more commans included in package.json
 ```
 
 ## Issue Reporting

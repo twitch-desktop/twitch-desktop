@@ -1,0 +1,78 @@
+.game-list-wrapper {
+  overflow-y: auto;
+  max-height: 100%;
+  height: 100%;
+  display: flex;
+}
+.game-list {
+  background: #221F2A;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.game-item {
+  cursor:  pointer;
+  padding: 5px;
+  border-radius: 4px;
+  background: #221F2A;
+  transition: background-color 0.4s ease;
+  display: flex;
+  flex: 15%;
+  position: relative;
+
+  &:hover {
+    background: #7550b9;
+
+    .game-name {
+      background-color: #7550b9;
+    }
+  }
+}
+
+.game-cover {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.game-content {
+  height: 100%;
+}
+
+.game-name {
+  width: 100%;
+  color: #DAD8DE;
+  height: 22px;
+  transition: background-color 0.4s ease;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  display: flex;
+  justify-content: center;
+  
+  span {
+    display: flex;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+}
+
+.fetching-more {
+  background: #201C2B;
+  top: 0;
+  left: 0;
+  position: relative;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #DAD8DE;
+  border-top: 1px solid #2c2541;
+}
