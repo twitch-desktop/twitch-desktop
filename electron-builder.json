@@ -20,7 +20,7 @@
         "!tslint.json"
     ],
   "win": {
-    "icon": "build/icon.ico",
+    "icon": "build",
     "target": [
       "nsis-web",
       "nsis",
@@ -28,7 +28,7 @@
     ]
   },
   "mac": {
-    "icon": "build/icon.icns",
+    "icon": "build",
     "category": "public.app-category.entertainment",
     "target": [
       "dmg",
