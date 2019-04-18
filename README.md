@@ -33,8 +33,14 @@
 
 To get started, clone the repo to your target directory. This app uses electron-builder, and a few commands have been provided as scripts in `package.json`.
 
+Yarn is strongly recommended instead of npm.
+
 ```bash
-npm install
+$ npm i -g yarn
+```
+
+```bash
+yarn install
 
 cp config.example.ts config.ts
 
@@ -43,7 +49,7 @@ cp config.example.ts config.ts
 # https://dev.twitch.tv/console/apps
 
 # Start the Electron app in developement mode
-npm start
+yarn start
 
 # Refer to https://github.com/maximegris/angular-electron
 # for more commans included in package.json

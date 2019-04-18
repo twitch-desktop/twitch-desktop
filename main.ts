@@ -98,7 +98,6 @@ async function createMainWindow() {
     } else {
 
       let betterttv_dir = path.resolve(__dirname, 'dist/assets/betterttv.js');
-      console.log(betterttv_dir);
       let betterttv = fs.readFileSync(betterttv_dir, 'utf8');
       (<any>global).betterttv = betterttv;
 
@@ -171,7 +170,6 @@ try {
         slashes: true
       }));
 
-      update_window.webContents.openDevTools();
       autoUpdater.checkForUpdates();
     }
   });
@@ -206,7 +204,7 @@ try {
     setImmediate(() => autoUpdater.quitAndInstall());
   });
 } catch (e) {
-  console.log(e);
+  log.error(e);
   // Catch Error
   // throw e;
 }
