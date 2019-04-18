@@ -30,11 +30,12 @@
     "release:linux": "yarn build:prod && electron-builder build --linux",
     "release:windows": "yarn build:prod && electron-builder build --windows",
     "release:mac": "yarn build:prod && electron-builder build --mac",
+    "release:all": "yarn build:prod && electron-builder build --windows --linux --mac",
     "release": "yarn build:prod && electron-builder build -p never",
     "publish": "yarn build:prod && electron-builder build -p always",
     "publish:linux": "yarn build:prod && electron-builder build --linux -p always",
     "publish:windows": "yarn build:prod && electron-builder build --windows -p always",
-    "publish:all": "yarn build:prod && electron-builder build --windows --linux -p always",
+    "publish:all": "yarn build:prod && electron-builder build --windows --linux --mac -p always",
     "test": "yarn postinstall:web && ng test",
     "e2e": "yarn build:prod && mocha --timeout 300000 --require ts-node/register e2e/**/*.spec.ts",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"

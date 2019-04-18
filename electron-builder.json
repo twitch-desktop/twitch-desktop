@@ -20,7 +20,7 @@
         "!tslint.json"
     ],
   "win": {
-    "icon": "build",
+    "icon": "build/icon.ico",
     "target": [
       "nsis-web",
       "nsis",
@@ -28,7 +28,7 @@
     ]
   },
   "mac": {
-    "icon": "build",
+    "icon": "build/icon.icns",
     "category": "public.app-category.entertainment",
     "target": [
       "dmg",
@@ -39,7 +39,9 @@
     "icon": "build/icon.icns",
     "category": "Video",
     "target": [
-      "AppImage"
+      "AppImage",
+      "deb",
+      "pacman"
     ]
   },
   "publish": {

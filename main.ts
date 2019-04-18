@@ -190,6 +190,7 @@ try {
 
   autoUpdater.on('error', (err) => {
     sendStatusToWindow('Error in auto-updater. ' + err);
+    update_window.close();
   });
 
   autoUpdater.on('download-progress', (progressObj) => {
