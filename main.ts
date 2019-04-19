@@ -21,6 +21,7 @@ async function createMainWindow() {
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
+  let icon = path.join(__dirname, 'dist/assets/icon.png')
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -29,6 +30,7 @@ async function createMainWindow() {
     width: size.width,
     height: size.height,
     frame: false,
+    icon: icon,
     title: "Twitch Desktop",
     backgroundColor: "#221F2A",
     show: false,
@@ -61,6 +63,7 @@ async function createMainWindow() {
     // https://github.com/electron/electron/issues/15901
     autoHideMenuBar: true,
     width: 500,
+    icon: icon,
     height: 800,
     title: "Twitch Desktop - Login",
     backgroundColor: "#221F2A",
@@ -151,6 +154,7 @@ try {
 
       update_window = new BrowserWindow({
         frame: true,
+        icon: path.join(__dirname, 'dist/assets/icon.png'),
         width: 600,
         height: 300,
         show: true,
