@@ -81,7 +81,6 @@ async function createMainWindow() {
         auth_token = token_regex[1];
         (<any>global).auth_token = auth_token;
         authWindow.close();
-        win.show();
       }
     }
   });
@@ -95,6 +94,7 @@ async function createMainWindow() {
         electron: require(`${__dirname}/node_modules/electron`)
       });
       win.loadURL('http://localhost:4200');
+      win.show();
     } else {
 
       let betterttv_dir = path.resolve(__dirname, 'dist/assets/betterttv.js');
@@ -106,6 +106,7 @@ async function createMainWindow() {
         protocol: 'file:',
         slashes: true
       }));
+      win.show();
     }
 
     if (serve) {
@@ -143,14 +144,16 @@ function sendStatusToWindow(text) {
 try {
   app.on('ready', () => {
     if (serve) {
+
       createMainWindow();
+
     } else {
 
       update_window = new BrowserWindow({
         frame: true,
         width: 600,
         height: 300,
-        show: false,
+        show: true,
         backgroundColor: "#221F2A",
         webPreferences: {
           nodeIntegration: true,
@@ -179,7 +182,6 @@ try {
   });
 
   autoUpdater.on('update-available', (info) => {
-    update_window.show();
     sendStatusToWindow('New update avaliable.');
     autoUpdater.downloadUpdate();
   });
