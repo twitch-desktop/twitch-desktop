@@ -19,7 +19,7 @@ export class SidebarComponent implements OnInit {
     { name: 'Games', route: '/games', icon: 'games', visible: true, active: true },
     { name: 'Channels', route: '/channels/top', icon: 'videocam', visible: true, active: false },
     { name: 'Following', route: '/channels/following', icon: 'star', visible: false, active: false },
-    { name: 'Settings', route: '/settings', icon: 'settings', visible: true, active: false }
+    { name: 'Settings', route: '/settings', icon: 'settings', visible: false, active: false }
   ];
 
   active_item = this.items[0];
@@ -40,7 +40,6 @@ export class SidebarComponent implements OnInit {
     if (userInfo && userInfo.login) {
       // Fetch online followed streams
       this.logued = true;
-
       // Show Following button on user login
       this.items[2].visible = true;
     }
@@ -57,8 +56,5 @@ export class SidebarComponent implements OnInit {
     this.router.navigate([item.route]);
   }
 
-  ngOnInit() {
-
-  }
-
+  ngOnInit() {}
 }

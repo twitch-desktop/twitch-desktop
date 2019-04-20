@@ -2,8 +2,7 @@ import { Component, ElementRef, OnInit, NgZone } from "@angular/core";
 import { ActivatedRoute, Router, UrlSegmentGroup } from "@angular/router";
 const { BrowserWindow } = require('electron').remote
 
-let querystring = require("querystring");
-
+import * as querystring from "querystring";
 import { ToolbarService } from "../../providers/toolbar.service";
 import { TwitchService } from "../../providers/twitch.service";
 
