@@ -37,3 +37,31 @@ html, body {
   padding-right: 0px;
   padding-left: 0px;
 }
+
+.form-control {
+  background-color: #dad8de;
+}
+
+textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {   
+  border-color: rgba(117, 80, 185, 0.25); 
+  box-shadow: 0 1px 1px rgba(117, 80, 185, 0.25) inset, 0 0 8px rgba(117, 80, 185, 0.25); 
+  outline: 0 none;
+}
+
+.custom-control-label:before{
+  background-color:#dad8de;
+}
+
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before{
+  background-color:#7550b9;
+  border-color: #3A1F64;
+}
+
+.custom-control-input:active~.custom-control-label::before{
+  background-color:#7550b9;
+}
+
+/** focus shadow pinkish **/
+.custom-checkbox .custom-control-input:focus~.custom-control-label::before{
+  box-shadow: 0 0 0 1px #dad8de, 0 0 0 0.2rem rgba(117, 80, 185, 0.25); 
+}

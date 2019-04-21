@@ -20,33 +20,34 @@
         "!tslint.json"
     ],
   "win": {
-    "icon": "build/icon.ico",
+    "icon": "build",
     "target": [
       "nsis-web",
       "nsis",
       "portable"
-    ]
+    ],
+    "publish": ["github"]
   },
   "mac": {
-    "icon": "build/icon.icns",
+    "icon": "build",
     "category": "public.app-category.entertainment",
     "target": [
       "dmg",
       "zip"
-    ]
+    ],
+    "publish": ["github"]
   },
   "linux": {
     "icon": "build/icon.icns",
     "category": "Video",
     "target": [
       "AppImage",
-      "deb",
-      "pacman"
-    ]
+      "pacman",
+      "deb"
+    ],
+    "publish": ["github"]
   },
-  "publish": {
-    "provider": "github",
-    "repo": "twitch-desktop",
-    "owner": "hzeroo"
+  "pacman": {
+    "publish": ["github"]
   }
 }

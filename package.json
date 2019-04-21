@@ -1,6 +1,6 @@
 {
   "name": "twitch-desktop",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Twitch Desktop Client",
   "homepage": "https://github.com/hzeroo/twitch-desktop",
   "author": {
@@ -20,8 +20,8 @@
     "ng": "ng",
     "start": "yarn postinstall:electron && npm-run-all -p ng:serve electron:serve",
     "build": "yarn postinstall:electron && yarn electron:serve-tsc && ng build",
-    "build:dev": "yarn build -- -c dev",
-    "build:prod": "yarn build -- -c production",
+    "build:dev": "yarn build -c dev",
+    "build:prod": "yarn build -c production",
     "ng:serve": "ng serve",
     "ng:serve:web": "yarn postinstall:web && ng serve -o",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
@@ -99,6 +99,7 @@
   },
   "dependencies": {
     "electron-log": "^3.0.5",
+    "electron-store": "^3.2.0",
     "electron-updater": "^4.0.6",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"

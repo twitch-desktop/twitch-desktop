@@ -2,19 +2,13 @@ import 'reflect-metadata';
 import '../polyfills';
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Pipe, PipeTransform} from '@angular/core';
+import { NgModule, Pipe, PipeTransform } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
-let moment = require("moment");
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from "moment";
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
-
-// NG Translate
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -55,6 +49,7 @@ import {SpinnerComponent} from "./components/spinner/spinner.component";
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import {ErrorComponent} from "./components/error-handler/errorhandler.component";
 import {ChatComponent} from "./components/player/chat/chat.component";
+import {SettingsComponent} from "./components/settings/settings.component";
 
 // Services
 import {ElectronService} from './providers/electron.service';
@@ -64,6 +59,7 @@ import {TwitchService} from "./providers/twitch.service";
 import {ToolbarService} from "./providers/toolbar.service";
 import {GameService} from "./providers/games.service";
 import {ChannelService} from "./providers/channels.service";
+import {SettingsService} from "./providers/settings.service";
 
 //Directives
 import {WebviewDirective} from './directives/webview.directive';
@@ -87,6 +83,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SidebarComponent,
     ErrorComponent,
     ChatComponent,
+    SettingsComponent,
 
     //Directives
     WebviewDirective,
@@ -104,6 +101,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     AppRoutingModule,
     TranslateModule.forRoot({
+      //Pipes
+      // Transforms a time string into a string representing time since that moment
       loader: {
         provide: TranslateLoader,
         useFactory: (HttpLoaderFactory),
@@ -119,6 +118,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToolbarService,
     GameService,
     ChannelService,
+    SettingsService,
     TimeSincePipe,
     ScaleImagePipe
   ],

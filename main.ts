@@ -7,8 +7,14 @@ import * as fs from 'fs';
 import * as request from "request-promise-native";
 import * as querystring from "querystring";
 import config from "./config";
+import * as Store from 'electron-store';
 
-let win, update_window, serve;
+const schema: any = config.schema;
+const store = new Store({schema});
+
+let client_id = store.get('client_id')!=='' ? (<string>store.get('client_id')) : config.client_id;
+
+let win, aux_window, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
@@ -17,154 +23,41 @@ autoUpdater.autoDownload = false;
 
 log.info('App starting...');
 
-async function createMainWindow() {
+try {
+  app.on('ready', () => {
 
-  const electronScreen = screen;
-  const size = electronScreen.getPrimaryDisplay().workAreaSize;
-
-  // Create the browser window.
-  win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    width: size.width,
-    height: size.height,
-    frame: false,
-    title: "Twitch Desktop",
-    backgroundColor: "#221F2A",
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      webSecurity: false,
-      partition: "persist:twitch"
-    },
-  });
-
-  // We set this to be able to acces the main window object inside angular application
-  (<any>global).mainWindow = win;
-
-
-  let base_url = "https://id.twitch.tv/oauth2/authorize?";
-
-  let params = {
-    response_type: "token",
-    client_id: config.client_id,
-    redirect_uri: "http://localhost",
-    scope: ["user_read", "channel_read"].join(" "),
-    force_verify: false
-  };
-
-  let authUrl = base_url + querystring.stringify(params);
-
-  let authWindow = new BrowserWindow({
-    show: false,
-    // FIXME: Remove autoHideMenuBar when this issue is fixed
-    // https://github.com/electron/electron/issues/15901
-    autoHideMenuBar: true,
-    width: 500,
-    height: 800,
-    title: "Twitch Desktop - Login",
-    backgroundColor: "#221F2A",
-    webPreferences: {
-      nodeIntegration: false,
-      partition: "persist:twitch"
-    }
-  });
-
-  authWindow.webContents.on('will-redirect', (event, newUrl) => {
-    if (newUrl.includes('access_token')) {
-      // Get access_token from the redirect url
-      let token_regex = /localhost\/#access_token=([a-z0-9]{30})/.exec(newUrl);
-      let auth_token: string;
-      // If we found the token on the redirect url
-      if (token_regex && token_regex.length > 1 && token_regex[1]) {
-        // Show the spinner and get the token
-        auth_token = token_regex[1];
-        (<any>global).auth_token = auth_token;
-        authWindow.close();
-        win.show();
+    aux_window = new BrowserWindow({
+      frame: true,
+      icon: path.join(__dirname, 'dist/assets/icon.png'),
+      width: 600,
+      autoHideMenuBar: true,
+      height: 300,
+      show: true,
+      backgroundColor: "#221F2A",
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: false,
+        partition: "persist:twitch"
       }
-    }
-  });
+    });
 
-  authWindow.on('closed', async () => {
     if (serve) {
-      let betterttv = await request('http://localhost:4200/assets/betterttv.js');
-      (<any>global).betterttv = betterttv;
-
-      require('electron-reload')(__dirname, {
-        electron: require(`${__dirname}/node_modules/electron`)
-      });
-      win.loadURL('http://localhost:4200');
-    } else {
-
-      let betterttv_dir = path.resolve(__dirname, 'dist/assets/betterttv.js');
-      let betterttv = fs.readFileSync(betterttv_dir, 'utf8');
-      (<any>global).betterttv = betterttv;
-
-      win.loadURL(url.format({
-        pathname: path.join(__dirname, 'dist/index.html'),
+      aux_window.loadURL(url.format({
+        pathname: path.join(__dirname, `dist/login.html`),
         protocol: 'file:',
         slashes: true
       }));
-    }
-
-    if (serve) {
-      win.webContents.openDevTools();
-    }
-
-    // Emitted when the window is closed.
-    win.on('closed', () => {
-      win = null;
-      app.quit();
-    });
-  });
-
-  authWindow.webContents.on('did-stop-loading', () => {
-    authWindow.webContents.insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
-    body>.authorize .wrap{background:#17141f!important;border-bottom:1px solid #201c2b!important}
-      #header_logo svg path{fill:#fff!important}
-      .authorize .signed_in .userinfo p{color:#fff!important}`);
-  });
-
-  authWindow.setMenu(null);
-  authWindow.loadURL(authUrl);
-
-  authWindow.show();
-  if (serve) {
-    authWindow.webContents.openDevTools();
-  }
-}
-
-function sendStatusToWindow(text) {
-  log.info(text);
-  update_window.webContents.send('message', text);
-}
-
-try {
-  app.on('ready', () => {
-    if (serve) {
+      aux_window.show();
       createMainWindow();
     } else {
-
-      update_window = new BrowserWindow({
-        frame: true,
-        width: 600,
-        height: 300,
-        show: false,
-        backgroundColor: "#221F2A",
-        webPreferences: {
-          nodeIntegration: true,
-          webSecurity: false
-        }
-      });
-
-      update_window.on('closed', () => {
+      aux_window.on('close', (event) => {
         autoUpdater.removeAllListeners();
+        aux_window.removeAllListeners();
         createMainWindow();
-        update_window = null;
+        event.preventDefault();
       });
 
-      update_window.loadURL(url.format({
+      aux_window.loadURL(url.format({
         pathname: path.join(__dirname, `dist/update.html`),
         protocol: 'file:',
         slashes: true
@@ -179,18 +72,17 @@ try {
   });
 
   autoUpdater.on('update-available', (info) => {
-    update_window.show();
     sendStatusToWindow('New update avaliable.');
     autoUpdater.downloadUpdate();
   });
 
   autoUpdater.on('update-not-available', (info) => {
-    update_window.close();
+    aux_window.close();
   });
 
   autoUpdater.on('error', (err) => {
     sendStatusToWindow('Error in auto-updater. ' + err);
-    update_window.close();
+    aux_window.close();
   });
 
   autoUpdater.on('download-progress', (progressObj) => {
@@ -204,8 +96,128 @@ try {
     sendStatusToWindow('Update downloaded');
     setImmediate(() => autoUpdater.quitAndInstall());
   });
+
+
+
 } catch (e) {
   log.error(e);
-  // Catch Error
-  // throw e;
+}
+
+async function createMainWindow() {
+
+  async function onLoginRedirect(event, newUrl) {
+    if (newUrl.includes('access_token')) {
+      // Get access_token from the redirect url
+      let token_regex = /localhost\/#access_token=([a-z0-9]{30})/.exec(newUrl);
+      let auth_token: string;
+      // If we found the token on the redirect url
+      if (token_regex && token_regex.length > 1 && token_regex[1]) {
+        // Show the spinner and get the token
+        auth_token = token_regex[1];
+        (<any>global).auth_token = auth_token;
+        aux_window.close();
+      }
+    }
+  }
+
+  async function onAuxWindowClosed() {
+    if (serve) {
+      let betterttv = await request('http://localhost:4200/assets/betterttv.js');
+      (<any>global).betterttv = betterttv;
+  
+      require('electron-reload')(__dirname, {
+        electron: require(`${__dirname}/node_modules/electron`)
+      });
+      win.loadURL('http://localhost:4200');
+      win.show();
+    } else {
+  
+      let betterttv_dir = path.resolve(__dirname, 'dist/assets/betterttv.js');
+      let betterttv = fs.readFileSync(betterttv_dir, 'utf8');
+      (<any>global).betterttv = betterttv;
+  
+      win.loadURL(url.format({
+        pathname: path.join(__dirname, 'dist/index.html'),
+        protocol: 'file:',
+        slashes: true
+      }));
+      win.show();
+    }
+  
+    if (serve) {
+      win.webContents.openDevTools();
+    }
+  
+    // Emitted when the window is closed.
+    win.on('closed', () => {
+      win = null;
+      app.quit();
+    });
+  }
+
+  const electronScreen = screen;
+  const size = electronScreen.getPrimaryDisplay().workAreaSize;
+  let icon = path.join(__dirname, 'dist/assets/icon.png')
+
+  // Create the browser window.
+  win = new BrowserWindow({
+    x: 0,
+    y: 0,
+    width: size.width,
+    height: size.height,
+    frame: false,
+    icon: icon,
+    title: "Twitch Desktop",
+    backgroundColor: "#221F2A",
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      webSecurity: false,
+      partition: "persist:twitch"
+    },
+  });
+
+  // We set this to be able to acces the main window object inside angular application
+  (<any>global).mainWindow = win;
+
+  if(store.get('autologin')===true) {
+    let base_url = "https://id.twitch.tv/oauth2/authorize?";
+    let params = {
+      response_type: "token",
+      client_id: client_id,
+      redirect_uri: "http://localhost",
+      scope: ["user_read", "channel_read"].join(" "),
+      force_verify: false
+    };
+    let authUrl = base_url + querystring.stringify(params);
+  
+    aux_window.on('closed',onAuxWindowClosed);
+    aux_window.webContents.on('will-redirect',onLoginRedirect);
+  
+    aux_window.webContents.on('did-stop-loading', () => {
+      aux_window.webContents.insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
+      body>.authorize .wrap{background:#17141f!important;border-bottom:1px solid #201c2b!important}
+        #header_logo svg path{fill:#fff!important}
+        .authorize .signed_in .userinfo p{color:#fff!important}`);
+    });
+  
+    aux_window.setBounds({ width: 500, height: 800 });
+    aux_window.center();
+    aux_window.setTitle('Twitch Desktop - Login');
+    aux_window.loadURL(authUrl);
+  
+    if (serve) {
+      aux_window.webContents.openDevTools();
+    }
+  } else {
+    aux_window.close();
+    onAuxWindowClosed();
+  }
+
+
+}
+
+function sendStatusToWindow(text) {
+  log.info(text);
+  aux_window.webContents.send('message', text);
 }
