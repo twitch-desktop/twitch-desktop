@@ -10,7 +10,7 @@ import config from "./config";
 import * as Store from 'electron-store';
 
 const schema:any = {
-	beterttv: {
+	betterttv: {
 		type: 'boolean',
 		default: true
 	},

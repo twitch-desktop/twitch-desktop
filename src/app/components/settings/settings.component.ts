@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import * as Store from 'electron-store';
 
 const schema: any = {
-  beterttv: {
+  betterttv: {
     type: 'boolean',
     default: true
   },

@@ -38,7 +38,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
     let user = await this.twitchService.getUserFromId(this.channel.user_id);
     let game = await this.twitchService.getGameFromId(this.channel.game_id);
-    this.chat_url = `https://www.twitch.tv/${user.login}/chat`;
+    this.chat_url = `https://www.twitch.tv/embed/${user.login}/chat?darkpopout`;
 
     // Set toolbar title and logo
     this.toolbarService.setTitle(this.channel.title);

@@ -26,3 +26,21 @@
   width: 2rem !important;
   height: 2rem !important;
 }
+
+.custom-control-label:before{
+  background-color:#dad8de;
+}
+
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before{
+  background-color:#7550b9;
+  border-color: #3A1F64;
+}
+
+.custom-control-input:active~.custom-control-label::before{
+  background-color:#7550b9;
+}
+
+/** focus shadow pinkish **/
+.custom-checkbox .custom-control-input:focus~.custom-control-label::before{
+  box-shadow: 0 0 0 1px #dad8de, 0 0 0 0.2rem rgba(117, 80, 185, 0.25); 
+}
