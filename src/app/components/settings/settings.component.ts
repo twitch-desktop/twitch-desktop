@@ -10,7 +10,7 @@ import {SettingsService} from "../../providers/settings.service";
 
 export class SettingsComponent implements OnInit {
 
-  config = {}
+  config:any= {}
 
   constructor(
     private settings: SettingsService) {

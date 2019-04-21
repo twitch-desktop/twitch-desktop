@@ -42,7 +42,8 @@
     "category": "Video",
     "target": [
       "AppImage",
-      "pacman"
+      "pacman",
+      "deb"
     ],
     "publish": ["github"]
   },
