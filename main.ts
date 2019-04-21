@@ -7,6 +7,20 @@ import * as fs from 'fs';
 import * as request from "request-promise-native";
 import * as querystring from "querystring";
 import config from "./config";
+import * as Store from 'electron-store';
+
+const schema:any = {
+	beterttv: {
+		type: 'boolean',
+		default: true
+	},
+	autologin: {
+		type: 'boolean',
+		default: true
+	}
+};
+
+const store = new Store({schema});
 
 let win, aux_window, serve;
 const args = process.argv.slice(1);
@@ -174,34 +188,40 @@ async function createMainWindow() {
   // We set this to be able to acces the main window object inside angular application
   (<any>global).mainWindow = win;
 
-  let base_url = "https://id.twitch.tv/oauth2/authorize?";
-  let params = {
-    response_type: "token",
-    client_id: config.client_id,
-    redirect_uri: "http://localhost",
-    scope: ["user_read", "channel_read"].join(" "),
-    force_verify: false
-  };
-  let authUrl = base_url + querystring.stringify(params);
-
-  aux_window.on('closed',onAuxWindowClosed);
-  aux_window.webContents.on('will-redirect',onLoginRedirect);
-
-  aux_window.webContents.on('did-stop-loading', () => {
-    aux_window.webContents.insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
-    body>.authorize .wrap{background:#17141f!important;border-bottom:1px solid #201c2b!important}
-      #header_logo svg path{fill:#fff!important}
-      .authorize .signed_in .userinfo p{color:#fff!important}`);
-  });
-
-  aux_window.setBounds({ width: 500, height: 800 });
-  aux_window.center();
-  aux_window.setTitle('Twitch Desktop - Login');
-  aux_window.loadURL(authUrl);
-
-  if (serve) {
-    aux_window.webContents.openDevTools();
+  if(store.get('autologin')===true) {
+    let base_url = "https://id.twitch.tv/oauth2/authorize?";
+    let params = {
+      response_type: "token",
+      client_id: config.client_id,
+      redirect_uri: "http://localhost",
+      scope: ["user_read", "channel_read"].join(" "),
+      force_verify: false
+    };
+    let authUrl = base_url + querystring.stringify(params);
+  
+    aux_window.on('closed',onAuxWindowClosed);
+    aux_window.webContents.on('will-redirect',onLoginRedirect);
+  
+    aux_window.webContents.on('did-stop-loading', () => {
+      aux_window.webContents.insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
+      body>.authorize .wrap{background:#17141f!important;border-bottom:1px solid #201c2b!important}
+        #header_logo svg path{fill:#fff!important}
+        .authorize .signed_in .userinfo p{color:#fff!important}`);
+    });
+  
+    aux_window.setBounds({ width: 500, height: 800 });
+    aux_window.center();
+    aux_window.setTitle('Twitch Desktop - Login');
+    aux_window.loadURL(authUrl);
+  
+    if (serve) {
+      aux_window.webContents.openDevTools();
+    }
+  } else {
+    onAuxWindowClosed();
   }
+
+
 }
 
 function sendStatusToWindow(text) {
