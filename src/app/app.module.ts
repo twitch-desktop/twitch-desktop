@@ -59,6 +59,7 @@ import {TwitchService} from "./providers/twitch.service";
 import {ToolbarService} from "./providers/toolbar.service";
 import {GameService} from "./providers/games.service";
 import {ChannelService} from "./providers/channels.service";
+import {SettingsService} from "./providers/settings.service";
 
 //Directives
 import {WebviewDirective} from './directives/webview.directive';
@@ -117,6 +118,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToolbarService,
     GameService,
     ChannelService,
+    SettingsService,
     TimeSincePipe,
     ScaleImagePipe
   ],

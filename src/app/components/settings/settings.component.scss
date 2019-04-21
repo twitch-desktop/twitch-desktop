@@ -6,11 +6,23 @@
   padding: 20px;
 }
 
+#client-id {
+  max-width: 350px;
+}
+
 .custom-control {
   position: relative;
   display: flex;
   min-height: 1.5rem;
+  margin-bottom: 10px;
 }
+
+.custom-input {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0px !important;
+}
+
 .custom-control-label {
   position: relative;
   margin-bottom: 0;

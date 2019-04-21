@@ -9,18 +9,10 @@ import * as querystring from "querystring";
 import config from "./config";
 import * as Store from 'electron-store';
 
-const schema:any = {
-	betterttv: {
-		type: 'boolean',
-		default: true
-	},
-	autologin: {
-		type: 'boolean',
-		default: true
-	}
-};
-
+const schema: any = config.schema;
 const store = new Store({schema});
+
+let client_id = store.get('client_id')!=='' ? (<string>store.get('client_id')) : config.client_id;
 
 let win, aux_window, serve;
 const args = process.argv.slice(1);
@@ -192,7 +184,7 @@ async function createMainWindow() {
     let base_url = "https://id.twitch.tv/oauth2/authorize?";
     let params = {
       response_type: "token",
-      client_id: config.client_id,
+      client_id: client_id,
       redirect_uri: "http://localhost",
       scope: ["user_read", "channel_read"].join(" "),
       force_verify: false
@@ -218,6 +210,7 @@ async function createMainWindow() {
       aux_window.webContents.openDevTools();
     }
   } else {
+    aux_window.close();
     onAuxWindowClosed();
   }
 

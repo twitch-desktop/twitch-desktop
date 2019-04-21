@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Subject } from 'rxjs';
-
 import * as request from "request-promise-native";
 import * as _ from "lodash";
-let querystring = require("querystring");
+import * as querystring from "querystring";
+import { SettingsService } from "./settings.service";
 
 import config from "../../../config";
 
@@ -14,6 +14,7 @@ export class TwitchService {
 
   access_token = null;
   twitch = null;
+  client_id = '';
   games_pagination = { cursor: "" };
   streams_pagination = { cursor: "" };
   followed_streams_offset = 0;
@@ -39,7 +40,19 @@ export class TwitchService {
   private loginChange: Subject<Object> = new Subject<Object>();
   loginChange$ = this.loginChange.asObservable();
 
-  constructor() { }
+  constructor(private settings: SettingsService) {
+
+    let store = this.settings.getStore();
+
+    store.onDidChange('client_id', (newValue, oldValue) => {
+      console.log(newValue);
+      this.client_id = newValue !== '' ? newValue : config.client_id;
+    });
+
+    this.client_id = this.settings.getConfig().client_id !== '' ?
+      (<string>this.settings.getConfig().client_id) : config.client_id;
+
+  }
 
   async executeRequest(options, parameters?) {
 
@@ -52,7 +65,7 @@ export class TwitchService {
       qs: parameters,
       headers: {
         "Authorization": authorization,
-        "Client-ID": authorization ? undefined : config.client_id
+        "Client-ID": authorization ? undefined : this.client_id
       },
       body: options.body,
       json: true
@@ -129,7 +142,6 @@ export class TwitchService {
   // If game is null, get top streams of all games
   // https://dev.twitch.tv/docs/api/reference/#get-streams
   async getStreams(game?) {
-    if (game) console.log(game);
     let data = await this.executeRequest({
       method: "GET",
       path: "/streams"
@@ -187,7 +199,7 @@ export class TwitchService {
     let username = (await this.getUserFromId(channel.user_id)).login;
 
     let token_url = `https://api.twitch.tv/api/channels/${username}/access_token`;
-    let body = await request.get({ url: token_url, headers: { "Client-ID": config.client_id }, json: true });
+    let body = await request.get({ url: token_url, headers: { "Client-ID": this.client_id }, json: true });
 
     // Setup video source url with the channel access_token
     let base_url = `https://usher.ttvnw.net/api/channel/hls/${username}.m3u8?`;
@@ -219,17 +231,15 @@ export class TwitchService {
         from_id: user_id
       });
 
-    let ids = _.map(data.data,'to_id');
+    let ids = _.map(data.data, 'to_id');
 
     data = await this.executeRequest({
       method: "GET",
       path: "/streams"
     }, {
-      user_id: ids,
-      first: 100
+        user_id: ids,
+        first: 100
       });
-    
-    console.log(data);
 
     return data.data;
   }

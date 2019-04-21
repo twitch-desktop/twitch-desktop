@@ -1,17 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import * as Store from 'electron-store';
-
-const schema: any = {
-  betterttv: {
-    type: 'boolean',
-    default: true
-  },
-  autologin: {
-    type: 'boolean',
-    default: true
-  }
-};
+import {SettingsService} from "../../providers/settings.service";
 
 // Error display component
 @Component({
@@ -24,19 +12,15 @@ export class SettingsComponent implements OnInit {
 
   config = {}
 
-  store = null
-
   constructor(
-    private router: Router,
-    private route: ActivatedRoute) {
+    private settings: SettingsService) {
 
-    this.store = new Store({ schema });
-    this.config = this.store.store;
+    this.config = this.settings.getConfig();
   }
 
   ngOnInit() { }
 
   configChanged() {
-    this.store.store = this.config;
+    this.settings.setConfig(this.config);
   }
 }
