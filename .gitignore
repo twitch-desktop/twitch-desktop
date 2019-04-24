@@ -6,5 +6,4 @@ npm-debug.log
 /release
 **.js.map
 main.js
-config.ts
 config.js
