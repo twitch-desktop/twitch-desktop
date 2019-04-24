@@ -41,10 +41,9 @@
     "icon": "build/icon.icns",
     "category": "Video",
     "target": [
-      "AppImage",
-      "pacman",
-      "deb"
+      "AppImage"
     ],
+    "artifactName": "${productName}.${ext}",
     "publish": ["github"]
   }
 }
