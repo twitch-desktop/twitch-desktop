@@ -19,8 +19,8 @@ export default {
       default: ''
     },
     buffer_length: {
-      type: 'string',
-      default: '10'
+      type: 'number',
+      default: 10
     }
   }
 }
