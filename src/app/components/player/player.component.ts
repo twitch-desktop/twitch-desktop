@@ -7,6 +7,7 @@ import LevelSelector from 'level-selector';
 import { ToolbarService } from "../../providers/toolbar.service";
 import { ChannelService } from "../../providers/channels.service";
 import { TwitchService } from "../../providers/twitch.service";
+import { SettingsService } from "../../providers/settings.service";
 
 // Player component
 @Component({
@@ -22,12 +23,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
   chat_url: string;
   player: any;
   isLoading = true;
+  player_source_resolution = 0;
 
   constructor(
     private route: ActivatedRoute,
     private toolbarService: ToolbarService,
     private channelService: ChannelService,
-    private twitchService: TwitchService) { }
+    private twitchService: TwitchService,
+    private settingsService: SettingsService) { }
 
   async ngOnInit() {
 
@@ -38,6 +41,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
     let user = await this.twitchService.getUserFromId(this.channel.user_id);
     let game = await this.twitchService.getGameFromId(this.channel.game_id);
+    if(!game) console.log(this.channel.game_id);
     this.chat_url = `https://www.twitch.tv/embed/${user.login}/chat?darkpopout`;
 
     // Set toolbar title and logo
@@ -61,12 +65,26 @@ export class PlayerComponent implements OnInit, OnDestroy {
           LevelSelector,
         ]
       },
+      levelSelectorConfig: {
+        title: 'Quality',
+        labelCallback: function(playbackLevel, customLabel) {
+          return playbackLevel.level.height+'p'+` (${(playbackLevel.level.bitrate/1024).toFixed(0)}kbps)`;
+        }
+      },
       parentId: "#player",
       width: "100%",
       height: "100%",
       autoPlay: true,
-      maxBufferLength: 20
+
+      playback: {
+        hlsjsConfig: {
+          maxMaxBufferLength: this.settingsService.getConfig().buffer_length,
+          liveSyncDurationCount: 1,
+          liveMaxLatencyDurationCount: 2,
+        }
+      }
     });
+
 
     this.player.on(Clappr.Events.PLAYER_PLAY, () => {
       this.isLoading = false;
@@ -83,7 +101,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     });
 
     // Clear the player
-    if(this.player) {
+    if (this.player) {
       this.player.stop();
       this.player.destroy();
     }

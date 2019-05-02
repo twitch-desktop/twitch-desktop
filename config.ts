@@ -17,6 +17,10 @@ export default {
     client_id: {
       type: 'string',
       default: ''
+    },
+    buffer_length: {
+      type: 'string',
+      default: '10'
     }
   }
 }
