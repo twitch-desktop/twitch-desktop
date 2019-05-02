@@ -4,9 +4,13 @@ export default {
   schema: {
     betterttv: {
       type: 'boolean',
-      default: true
+      default: false
     },
     autologin: {
+      type: 'boolean',
+      default: true
+    },
+    openlinks: {
       type: 'boolean',
       default: true
     },

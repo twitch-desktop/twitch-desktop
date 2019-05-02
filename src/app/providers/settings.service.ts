@@ -1,11 +1,10 @@
 import { Injectable } from "@angular/core";
 import * as Store from 'electron-store';
-import config from "../../../config";
+import config from "~/../../config";
+import { Scheduler } from "rxjs";
 
 const schema: any = config.schema;
 
-// Service that allows components to display the error component from any 
-// component displayed in router-outlet
 @Injectable()
 export class SettingsService {
 

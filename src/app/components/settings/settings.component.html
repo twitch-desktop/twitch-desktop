@@ -1,17 +1,24 @@
 <div id="main-container" class="h-100 w-100">
-
     <div class="custom-control custom-input">
         <label class="input-label" for="client-id">Twitch client-id:</label>
         <input type="text" [(ngModel)]="config.client_id" (ngModelChange)="configChanged()" class="form-control" id="client-id" placeholder="Default">
     </div>
+    
     <div class="custom-control form-control-lg custom-checkbox">
         <input type="checkbox" [(ngModel)]="config.autologin" (ngModelChange)="configChanged()"
             class="custom-control-input" id="checkbox-autologin">
         <label class="custom-control-label" for="checkbox-autologin">Enable autologin at start</label>
     </div>
+
     <div class="custom-control form-control-lg custom-checkbox">
         <input type="checkbox" [(ngModel)]="config.betterttv" (ngModelChange)="configChanged()"
             class="custom-control-input" id="checkbox-ttv">
         <label class="custom-control-label" for="checkbox-ttv">Enable BetterTTV in chat</label>
+    </div>
+
+    <div class="custom-control form-control-lg custom-checkbox">
+        <input type="checkbox" [(ngModel)]="config.openlinks" (ngModelChange)="configChanged()"
+            class="custom-control-input" id="checkbox-openlinks">
+        <label class="custom-control-label" for="checkbox-openlinks">Allow to open Twitch Chat urls in browser</label>
     </div>
 </div>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import {SettingsService} from "../../providers/settings.service";
 
-// Error display component
 @Component({
   templateUrl: "./settings.component.html",
   selector: "tw-settings",
