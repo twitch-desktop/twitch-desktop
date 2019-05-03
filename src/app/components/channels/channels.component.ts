@@ -61,7 +61,7 @@ export class ChannelsComponent implements OnInit {
         this.spinnerService.hide();
       }).catch((reason) => {
         this.spinnerService.hide();
-        this.errorService.showError("Error fetching streams");
+        this.errorService.showError(`Error fetching streams`,reason);
         console.log(reason);
       });
 

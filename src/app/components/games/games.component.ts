@@ -43,8 +43,7 @@ export class GamesComponent implements OnInit {
       this.spinnerService.hide();
     }).catch((reason) => {
       this.spinnerService.hide();
-      this.errorService.showError("Failed fetching games");
-      console.log("Failed fetching games");
+      this.errorService.showError("Failed fetching games",reason);
       console.log(reason);
     });
   }
@@ -62,7 +61,6 @@ export class GamesComponent implements OnInit {
         this.fetchingMore = false;
         this.zone.run(() => {});
       }).catch((reason) => {
-        console.log("Failed fetching more games");
         console.log(reason);
         this.fetchingMore = false;
         this.zone.run(() => {});
