@@ -42,12 +42,6 @@ $ npm i -g yarn
 ```bash
 yarn install
 
-cp config.example.ts config.ts
-
-# Now you need to edit config.ts with a proper client_id from twitch
-# Just create a new app on twitch after sign up and fill the client_id field in config.ts
-# https://dev.twitch.tv/console/apps
-
 # Start the Electron app in developement mode
 yarn start
 
