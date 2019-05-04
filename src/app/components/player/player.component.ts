@@ -79,8 +79,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
       playback: {
         hlsjsConfig: {
           maxMaxBufferLength: this.settingsService.getConfig().buffer_length,
-          liveSyncDurationCount: 1,
-          liveMaxLatencyDurationCount: 2,
+          liveSyncDurationCount: 2,
+          liveMaxLatencyDurationCount: 3,
         }
       }
     });

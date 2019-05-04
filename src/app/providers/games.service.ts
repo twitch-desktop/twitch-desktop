@@ -1,26 +1,66 @@
 import { Injectable } from "@angular/core";
 
 import { TwitchService } from "./twitch.service";
-let _ = require("lodash");
+import * as  _ from "lodash";
+import { getTopGamesGQL, Response, GQLGame } from "./twitch-graphql.service";
+
+export interface Game {
+  id: string,
+  name: string,
+  cover: string,
+  viewersCount: number
+}
 
 // Service that allows components to get game list information
 @Injectable()
 export class GameService {
 
-  private games: Array<any> = [];
+  private games: Game[] = [];
+  private cursor: string = '';
 
-  constructor(private twitchService: TwitchService) {}
+  constructor(
+    private twitchService: TwitchService,
+    private gamesGQL: getTopGamesGQL
+  ) { }
 
   async getTopGames() {
-    let games = await this.twitchService.getTopGames();
-    this.games = games;
-    return games;
+    return new Promise((resolve, reject) => {
+      this.gamesGQL.fetch().subscribe(result => {
+        if (result.data) {
+          this.cursor = result.data.games.edges.slice(-1)[0].cursor;
+          this.games = _.map(result.data.games.edges, (e: GQLGame) => {
+            return {
+              id: e.node.id,
+              name: e.node.name,
+              cover: e.node.boxArtURL,
+              viewers: e.node.viewersCount
+            };
+          });
+
+          resolve(this.games)
+        } else reject();
+      });
+    });
   }
 
   async fetchMoreTopGames() {
-    let games = await this.twitchService.fetchMoreTopGames();
-    this.games = _.concat(this.games, games);
-    return this.games;
+    return new Promise((resolve, reject) => {
+      this.gamesGQL.fetch({ cursor: this.cursor }).subscribe(result => {
+        if (result.data) {
+          this.cursor = result.data.games.edges.slice(-1)[0].cursor;
+          this.games = _.uniqBy(_.concat(this.games, _.map(result.data.games.edges, (e: GQLGame) => {
+            return {
+              id: e.node.id,
+              name: e.node.name,
+              cover: e.node.boxArtURL,
+              viewers: e.node.viewersCount
+            };
+          })), 'id');
+
+          resolve(this.games)
+        } else reject();
+      });
+    });
   }
 
   getGame(id: string) {

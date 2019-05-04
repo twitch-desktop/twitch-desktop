@@ -12,14 +12,16 @@ import config from "../../../config";
 @Injectable()
 export class TwitchService {
 
+  baseUrl = "https://api.twitch.tv/helix";
+
   access_token = null;
   twitch = null;
   client_id = '';
   games_pagination = { cursor: "" };
   streams_pagination = { cursor: "" };
-  followed_streams_offset = 0;
   authUrl: string;
   logued: boolean = false;
+
   authUserInfo: {
     id, string,
     login: string,
@@ -31,9 +33,11 @@ export class TwitchService {
     offline_image_url: string,
     view_count: number,
     email: string
-  };
+  } = null;
 
-  baseUrl = "https://api.twitch.tv/helix";
+  followedIds = [];
+  followedStreams = [];
+
 
   // Observable that tell login status changes
   // loginChange.next(null) for logout
@@ -41,17 +45,16 @@ export class TwitchService {
   loginChange$ = this.loginChange.asObservable();
 
   constructor(private settings: SettingsService) {
-
     let store = this.settings.getStore();
 
+    // Change client-id used when it is changed in settings
     store.onDidChange('client_id', (newValue, oldValue) => {
-      console.log(newValue);
       this.client_id = newValue !== '' ? newValue : config.client_id;
     });
 
+    // On init, use user setted client-id. If not set, use default client-id
     this.client_id = this.settings.getConfig().client_id !== '' ?
       (<string>this.settings.getConfig().client_id) : config.client_id;
-
   }
 
   async executeRequest(options, parameters?) {
@@ -231,16 +234,36 @@ export class TwitchService {
         from_id: user_id
       });
 
-    let ids = _.map(data.data, 'to_id');
+    this.followedIds = _.map(data.data, 'to_id');
 
     data = await this.executeRequest({
       method: "GET",
       path: "/streams"
     }, {
-        user_id: ids,
+        user_id: this.followedIds,
         first: 100
       });
 
+    this.followedStreams = data.data;
+
     return data.data;
+  }
+
+  async refreshFollowedStreams() {
+
+    console.log('refreshing streams');
+
+    let data = await this.executeRequest({
+      method: 'GET',
+      path: '/streams'
+    },{
+      user_id: this.followedIds,
+      first: 100
+    });
+
+    let refreshedStreams = data.data;
+
+    _.each(refreshedStreams)
+
   }
 }

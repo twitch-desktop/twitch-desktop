@@ -11,7 +11,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+import { GraphQLModule } from './graphql.module';
 
 //Pipes
 // Transforms a time string into a string representing time since that moment
@@ -108,7 +108,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: (HttpLoaderFactory),
         deps: [HttpClient]
       }
-    })
+    }),
+    GraphQLModule
   ],
   providers: [
     ElectronService,
