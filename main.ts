@@ -1,34 +1,36 @@
-import { app, BrowserWindow, screen } from 'electron';
-import { autoUpdater } from 'electron-updater';
-import * as log from 'electron-log';
-import * as path from 'path';
-import * as url from 'url';
-import * as fs from 'fs';
+import { app, BrowserWindow, screen } from "electron";
+import { autoUpdater } from "electron-updater";
+import * as log from "electron-log";
+import * as path from "path";
+import * as url from "url";
+import * as fs from "fs";
 import * as request from "request-promise-native";
 import * as querystring from "querystring";
 import config from "./config";
-import * as Store from 'electron-store';
+import * as Store from "electron-store";
 
 const schema: any = config.schema;
-const store = new Store({schema});
+const store = new Store({ schema });
 
-let client_id = store.get('client_id')!=='' ? (<string>store.get('client_id')) : config.client_id;
+let client_id =
+  store.get("client_id") !== ""
+    ? <string>store.get("client_id")
+    : config.client_id;
 
 let win, aux_window, serve;
 const args = process.argv.slice(1);
-serve = args.some(val => val === '--serve');
+serve = args.some(val => val === "--serve");
 
 autoUpdater.logger = log;
 autoUpdater.autoDownload = false;
 
-log.info('App starting...');
+log.info("App starting...");
 
 try {
-  app.on('ready', () => {
-
+  app.on("ready", () => {
     aux_window = new BrowserWindow({
       frame: true,
-      icon: path.join(__dirname, 'dist/assets/icon.png'),
+      icon: path.join(__dirname, "dist/assets/icon.png"),
       width: 600,
       autoHideMenuBar: true,
       height: 300,
@@ -42,71 +44,77 @@ try {
     });
 
     if (serve) {
-      aux_window.loadURL(url.format({
-        pathname: path.join(__dirname, `dist/login.html`),
-        protocol: 'file:',
-        slashes: true
-      }));
+      aux_window.loadURL(
+        url.format({
+          pathname: path.join(__dirname, `dist/login.html`),
+          protocol: "file:",
+          slashes: true
+        })
+      );
       aux_window.show();
       createMainWindow();
     } else {
-      aux_window.on('close', (event) => {
+      aux_window.on("close", event => {
         autoUpdater.removeAllListeners();
         aux_window.removeAllListeners();
         createMainWindow();
         event.preventDefault();
       });
 
-      aux_window.loadURL(url.format({
-        pathname: path.join(__dirname, `dist/update.html`),
-        protocol: 'file:',
-        slashes: true
-      }));
+      aux_window.loadURL(
+        url.format({
+          pathname: path.join(__dirname, `dist/update.html`),
+          protocol: "file:",
+          slashes: true
+        })
+      );
 
       autoUpdater.checkForUpdates();
     }
   });
 
-  autoUpdater.on('checking-for-update', () => {
-    sendStatusToWindow('Checking for updates');
+  autoUpdater.on("checking-for-update", () => {
+    sendStatusToWindow("Checking for updates");
   });
 
-  autoUpdater.on('update-available', (info) => {
-    sendStatusToWindow('New update avaliable.');
+  autoUpdater.on("update-available", info => {
+    sendStatusToWindow("New update avaliable.");
     autoUpdater.downloadUpdate();
   });
 
-  autoUpdater.on('update-not-available', (info) => {
+  autoUpdater.on("update-not-available", info => {
     aux_window.close();
   });
 
-  autoUpdater.on('error', (err) => {
-    sendStatusToWindow('Error in auto-updater. ' + err);
+  autoUpdater.on("error", err => {
+    sendStatusToWindow("Error in auto-updater. " + err);
     aux_window.close();
   });
 
-  autoUpdater.on('download-progress', (progressObj) => {
+  autoUpdater.on("download-progress", progressObj => {
     let log_message = "Download speed: " + progressObj.bytesPerSecond;
-    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    log_message = log_message + " - Downloaded " + progressObj.percent + "%";
+    log_message =
+      log_message +
+      " (" +
+      progressObj.transferred +
+      "/" +
+      progressObj.total +
+      ")";
     sendStatusToWindow(log_message);
   });
 
-  autoUpdater.on('update-downloaded', (info) => {
-    sendStatusToWindow('Update downloaded');
+  autoUpdater.on("update-downloaded", info => {
+    sendStatusToWindow("Update downloaded");
     setImmediate(() => autoUpdater.quitAndInstall());
   });
-
-
-
 } catch (e) {
   log.error(e);
 }
 
 async function createMainWindow() {
-
   async function onLoginRedirect(event, newUrl) {
-    if (newUrl.includes('access_token')) {
+    if (newUrl.includes("access_token")) {
       // Get access_token from the redirect url
       let token_regex = /localhost\/#access_token=([a-z0-9]{30})/.exec(newUrl);
       let auth_token: string;
@@ -122,34 +130,37 @@ async function createMainWindow() {
 
   async function onAuxWindowClosed() {
     if (serve) {
-      let betterttv = await request('http://localhost:4200/assets/betterttv.js');
+      let betterttv = await request(
+        "http://localhost:4200/assets/betterttv.js"
+      );
       (<any>global).betterttv = betterttv;
-  
-      require('electron-reload')(__dirname, {
+
+      require("electron-reload")(__dirname, {
         electron: require(`${__dirname}/node_modules/electron`)
       });
-      win.loadURL('http://localhost:4200');
+      win.loadURL("http://localhost:4200");
       win.show();
     } else {
-  
-      let betterttv_dir = path.resolve(__dirname, 'dist/assets/betterttv.js');
-      let betterttv = fs.readFileSync(betterttv_dir, 'utf8');
+      let betterttv_dir = path.resolve(__dirname, "dist/assets/betterttv.js");
+      let betterttv = fs.readFileSync(betterttv_dir, "utf8");
       (<any>global).betterttv = betterttv;
-  
-      win.loadURL(url.format({
-        pathname: path.join(__dirname, 'dist/index.html'),
-        protocol: 'file:',
-        slashes: true
-      }));
+
+      win.loadURL(
+        url.format({
+          pathname: path.join(__dirname, "dist/index.html"),
+          protocol: "file:",
+          slashes: true
+        })
+      );
       win.show();
     }
-  
+
     if (serve) {
       win.webContents.openDevTools();
     }
-  
+
     // Emitted when the window is closed.
-    win.on('closed', () => {
+    win.on("closed", () => {
       win = null;
       app.quit();
     });
@@ -157,7 +168,7 @@ async function createMainWindow() {
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
-  let icon = path.join(__dirname, 'dist/assets/icon.png')
+  let icon = path.join(__dirname, "dist/assets/icon.png");
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -174,13 +185,13 @@ async function createMainWindow() {
       nodeIntegration: true,
       webSecurity: false,
       partition: "persist:twitch"
-    },
+    }
   });
 
   // We set this to be able to acces the main window object inside angular application
   (<any>global).mainWindow = win;
 
-  if(store.get('autologin')===true) {
+  if (store.get("autologin") === true) {
     let base_url = "https://id.twitch.tv/oauth2/authorize?";
     let params = {
       response_type: "token",
@@ -190,22 +201,23 @@ async function createMainWindow() {
       force_verify: false
     };
     let authUrl = base_url + querystring.stringify(params);
-  
-    aux_window.on('closed',onAuxWindowClosed);
-    aux_window.webContents.on('will-redirect',onLoginRedirect);
-  
-    aux_window.webContents.on('did-stop-loading', () => {
-      aux_window.webContents.insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
+
+    aux_window.on("closed", onAuxWindowClosed);
+    aux_window.webContents.on("will-redirect", onLoginRedirect);
+
+    aux_window.webContents.on("did-stop-loading", () => {
+      aux_window.webContents
+        .insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
       body>.authorize .wrap{background:#17141f!important;border-bottom:1px solid #201c2b!important}
         #header_logo svg path{fill:#fff!important}
         .authorize .signed_in .userinfo p{color:#fff!important}`);
     });
-  
+
     aux_window.setBounds({ width: 500, height: 800 });
     aux_window.center();
-    aux_window.setTitle('Twitch Desktop - Login');
+    aux_window.setTitle("Twitch Desktop - Login");
     aux_window.loadURL(authUrl);
-  
+
     if (serve) {
       aux_window.webContents.openDevTools();
     }
@@ -213,11 +225,9 @@ async function createMainWindow() {
     aux_window.close();
     onAuxWindowClosed();
   }
-
-
 }
 
 function sendStatusToWindow(text) {
   log.info(text);
-  aux_window.webContents.send('message', text);
+  aux_window.webContents.send("message", text);
 }

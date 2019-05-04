@@ -3,24 +3,24 @@ export default {
 
   schema: {
     betterttv: {
-      type: 'boolean',
+      type: "boolean",
       default: false
     },
     autologin: {
-      type: 'boolean',
+      type: "boolean",
       default: true
     },
     openlinks: {
-      type: 'boolean',
+      type: "boolean",
       default: true
     },
     client_id: {
-      type: 'string',
-      default: ''
+      type: "string",
+      default: ""
     },
     buffer_length: {
-      type: 'number',
+      type: "number",
       default: 10
     }
   }
-}
+};

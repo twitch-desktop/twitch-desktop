@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import Clappr from 'clappr';
-import LevelSelector from 'level-selector';
+import Clappr from "clappr";
+import LevelSelector from "level-selector";
 
 import { ToolbarService } from "../../providers/toolbar.service";
 import { ChannelService } from "../../providers/channels.service";
@@ -15,9 +15,7 @@ import { SettingsService } from "../../providers/settings.service";
   selector: "tw-player",
   styleUrls: ["./player.component.scss"]
 })
-
 export class PlayerComponent implements OnInit, OnDestroy {
-
   channel: any;
   channel_name: string;
   chat_url: string;
@@ -30,10 +28,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private toolbarService: ToolbarService,
     private channelService: ChannelService,
     private twitchService: TwitchService,
-    private settingsService: SettingsService) { }
+    private settingsService: SettingsService
+  ) {}
 
   async ngOnInit() {
-
     this.route.params.subscribe(params => {
       this.channel = this.channelService.getChannel(params["channel"]);
       this.channel_name = this.channel.name;
@@ -41,7 +39,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
     let user = await this.twitchService.getUserFromId(this.channel.user_id);
     let game = await this.twitchService.getGameFromId(this.channel.game_id);
-    if(!game) console.log(this.channel.game_id);
+    if (!game) console.log(this.channel.game_id);
     this.chat_url = `https://www.twitch.tv/embed/${user.login}/chat?darkpopout`;
 
     // Set toolbar title and logo
@@ -61,14 +59,16 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.player = new Clappr.Player({
       source: sourceUrl,
       plugins: {
-        core: [
-          LevelSelector,
-        ]
+        core: [LevelSelector]
       },
       levelSelectorConfig: {
-        title: 'Quality',
+        title: "Quality",
         labelCallback: function(playbackLevel, customLabel) {
-          return playbackLevel.level.height+'p'+` (${(playbackLevel.level.bitrate/1024).toFixed(0)}kbps)`;
+          return (
+            playbackLevel.level.height +
+            "p" +
+            ` (${(playbackLevel.level.bitrate / 1024).toFixed(0)}kbps)`
+          );
         }
       },
       parentId: "#player",
@@ -80,11 +80,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
         hlsjsConfig: {
           maxMaxBufferLength: this.settingsService.getConfig().buffer_length,
           liveSyncDurationCount: 2,
-          liveMaxLatencyDurationCount: 3,
+          liveMaxLatencyDurationCount: 3
         }
       }
     });
-
 
     this.player.on(Clappr.Events.PLAYER_PLAY, () => {
       this.isLoading = false;
@@ -92,7 +91,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
     // Hide the toolbar subheader on component destroy
     this.toolbarService.setSubheader({
       player_username: null,

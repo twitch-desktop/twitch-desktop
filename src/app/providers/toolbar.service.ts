@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Subject } from 'rxjs';
+import { Subject } from "rxjs";
 
 export interface SubheaderValue {
-    player_username: string;
-    player_game: string;
-    player_logo: string;
-};
+  player_username: string;
+  player_game: string;
+  player_logo: string;
+}
 
 // Toolbar Service
 // Allows components to change Toolbar values
@@ -32,7 +32,9 @@ export class ToolbarService implements SubheaderValue {
   closeRequest$ = this.closeRequest.asObservable();
 
   // Subheader change observable
-  private subheaderChange: Subject<SubheaderValue> = new Subject<SubheaderValue>();
+  private subheaderChange: Subject<SubheaderValue> = new Subject<
+    SubheaderValue
+  >();
   subheaderChange$ = this.subheaderChange.asObservable();
 
   setTitle(title: string) {
@@ -50,8 +52,7 @@ export class ToolbarService implements SubheaderValue {
       this.player_username = null;
       this.player_game = null;
       this.subheaderChange.next(null);
-    }
-    else {
+    } else {
       this.player_username = subHeader.player_username;
       this.player_game = subHeader.player_game;
       this.player_logo = subHeader.player_logo;

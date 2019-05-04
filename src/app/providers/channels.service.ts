@@ -6,14 +6,10 @@ let _ = require("lodash");
 // Service that allows components to get channel list information
 @Injectable()
 export class ChannelService {
-
   private channels: Array<any> = [];
   private channels_offset: Number = 0;
 
-  constructor(
-    private twitchService: TwitchService) {
-
-  }
+  constructor(private twitchService: TwitchService) {}
 
   async getStreams(game?) {
     let streams;
@@ -37,7 +33,7 @@ export class ChannelService {
   }
 
   getChannel(id: string) {
-    return _.find(this.channels, (channel) => {
+    return _.find(this.channels, channel => {
       return channel.id === id;
     });
   }

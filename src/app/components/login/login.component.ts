@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, NgZone } from "@angular/core";
 import { ActivatedRoute, Router, UrlSegmentGroup } from "@angular/router";
-const { BrowserWindow } = require('electron').remote
+const { BrowserWindow } = require("electron").remote;
 
 import * as querystring from "querystring";
 import { ToolbarService } from "../../providers/toolbar.service";
@@ -10,25 +10,24 @@ import config from "../../../../config";
 
 @Component({
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
+  styleUrls: ["./login.component.scss"]
 })
-
 export class LoginComponent implements OnInit {
-
   authUrl: string;
   logued: Boolean = false;
   username: string;
   userInfo: {
-    id, string,
-    login: string,
-    display_name: string,
-    type: string,
-    broadcaster_type: string,
-    description: string,
-    profile_image_url: string,
-    offline_image_url: string,
-    view_count: number,
-    email: string
+    id;
+    string;
+    login: string;
+    display_name: string;
+    type: string;
+    broadcaster_type: string;
+    description: string;
+    profile_image_url: string;
+    offline_image_url: string;
+    view_count: number;
+    email: string;
   };
 
   constructor(
@@ -36,8 +35,8 @@ export class LoginComponent implements OnInit {
     private element: ElementRef,
     private toolbarService: ToolbarService,
     private twitchService: TwitchService,
-    private zone: NgZone) {
-  }
+    private zone: NgZone
+  ) {}
 
   ngOnInit() {
     // Clears toolbar title and logo
@@ -69,15 +68,16 @@ export class LoginComponent implements OnInit {
       }
     });
 
-    authWindow.webContents.on('did-stop-loading', () => {
-      authWindow.webContents.insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
+    authWindow.webContents.on("did-stop-loading", () => {
+      authWindow.webContents
+        .insertCSS(`body{background:#221F2A!important;color:#dad8de!important}
       body>.authorize .wrap{background:#17141f!important;border-bottom:1px solid #201c2b!important}
         #header_logo svg path{fill:#fff!important}
         .authorize .signed_in .userinfo p{color:#fff!important}`);
     });
 
-    authWindow.webContents.on('will-redirect', (event, newUrl) => {
-      this.getAuthToken(authWindow,newUrl);
+    authWindow.webContents.on("will-redirect", (event, newUrl) => {
+      this.getAuthToken(authWindow, newUrl);
     });
 
     authWindow.loadURL(this.authUrl);
@@ -91,26 +91,28 @@ export class LoginComponent implements OnInit {
     this.logued = true;
   }
 
-  getAuthToken(authWindow : Electron.BrowserWindow, authUrl: string) {
-    if (authUrl.includes('access_token')) {
+  getAuthToken(authWindow: Electron.BrowserWindow, authUrl: string) {
+    if (authUrl.includes("access_token")) {
       // Get access_token from the redirect url
       let token_regex = /localhost\/#access_token=([a-z0-9]{30})/.exec(authUrl);
       let auth_token: string;
       // If we found the token on the redirect url
       if (token_regex && token_regex.length > 1 && token_regex[1]) {
-
         // Show the spinner and get the token
         auth_token = token_regex[1];
 
         // Set user as authenticated and fetch user information
-        this.twitchService.getAuthenticatedUser(auth_token).then((userInfo) => {
-          console.log(userInfo);
-          // Trigger (logued) event to login.component
-          this.onLogued();
-          authWindow.close();
-        }).catch((reason) => {
-          console.log(reason);
-        });
+        this.twitchService
+          .getAuthenticatedUser(auth_token)
+          .then(userInfo => {
+            console.log(userInfo);
+            // Trigger (logued) event to login.component
+            this.onLogued();
+            authWindow.close();
+          })
+          .catch(reason => {
+            console.log(reason);
+          });
       }
     }
   }

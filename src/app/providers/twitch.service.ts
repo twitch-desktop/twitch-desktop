@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject } from 'rxjs';
+import { Subject } from "rxjs";
 import * as request from "request-promise-native";
 import * as _ from "lodash";
 import * as querystring from "querystring";
@@ -11,33 +11,32 @@ import config from "../../../config";
 // https://dev.twitch.tv/docs/api/reference
 @Injectable()
 export class TwitchService {
-
   baseUrl = "https://api.twitch.tv/helix";
 
   access_token = null;
   twitch = null;
-  client_id = '';
+  client_id = "";
   games_pagination = { cursor: "" };
   streams_pagination = { cursor: "" };
   authUrl: string;
   logued: boolean = false;
 
   authUserInfo: {
-    id, string,
-    login: string,
-    display_name: string,
-    type: string,
-    broadcaster_type: string,
-    description: string,
-    profile_image_url: string,
-    offline_image_url: string,
-    view_count: number,
-    email: string
+    id;
+    string;
+    login: string;
+    display_name: string;
+    type: string;
+    broadcaster_type: string;
+    description: string;
+    profile_image_url: string;
+    offline_image_url: string;
+    view_count: number;
+    email: string;
   } = null;
 
   followedIds = [];
   followedStreams = [];
-
 
   // Observable that tell login status changes
   // loginChange.next(null) for logout
@@ -48,26 +47,30 @@ export class TwitchService {
     let store = this.settings.getStore();
 
     // Change client-id used when it is changed in settings
-    store.onDidChange('client_id', (newValue, oldValue) => {
-      this.client_id = newValue !== '' ? newValue : config.client_id;
+    store.onDidChange("client_id", (newValue, oldValue) => {
+      this.client_id = newValue !== "" ? newValue : config.client_id;
     });
 
     // On init, use user setted client-id. If not set, use default client-id
-    this.client_id = this.settings.getConfig().client_id !== '' ?
-      (<string>this.settings.getConfig().client_id) : config.client_id;
+    this.client_id =
+      this.settings.getConfig().client_id !== ""
+        ? <string>this.settings.getConfig().client_id
+        : config.client_id;
   }
 
   async executeRequest(options, parameters?) {
-
-    let authorization = options.accessToken ? "Bearer " + options.accessToken : undefined;
-    if (!authorization && this.access_token) authorization = "Bearer " + this.access_token;
+    let authorization = options.accessToken
+      ? "Bearer " + options.accessToken
+      : undefined;
+    if (!authorization && this.access_token)
+      authorization = "Bearer " + this.access_token;
 
     let req = {
       method: options.method,
       url: this.baseUrl + options.path,
       qs: parameters,
       headers: {
-        "Authorization": authorization,
+        Authorization: authorization,
         "Client-ID": authorization ? undefined : this.client_id
       },
       body: options.body,
@@ -81,12 +84,10 @@ export class TwitchService {
   // Return Authenticated User Info
   // https://dev.twitch.tv/docs/api/reference/#get-users
   async getAuthenticatedUser(access_token: string) {
-
     if (access_token) {
       if (this.authUserInfo !== null && this.access_token === access_token) {
         return Promise.resolve(this.authUserInfo);
-      }
-      else {
+      } else {
         let data = await this.executeRequest({
           method: "GET",
           path: "/users",
@@ -109,16 +110,19 @@ export class TwitchService {
     this.loginChange.next(null);
   }
 
-  // Returns a promise that resolves to a list of games objects sorted by number 
+  // Returns a promise that resolves to a list of games objects sorted by number
   // of current viewers on Twitch, most popular first.
   // https://dev.twitch.tv/docs/api/reference/#get-top-games
   async getTopGames() {
-    let data = await this.executeRequest({
-      method: "GET",
-      path: "/games/top"
-    }, {
+    let data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/games/top"
+      },
+      {
         first: 25
-      });
+      }
+    );
 
     this.games_pagination = data.pagination;
     return data.data;
@@ -127,82 +131,98 @@ export class TwitchService {
   // Fetch next page of top games
   // https://dev.twitch.tv/docs/api/reference/#get-top-games
   async fetchMoreTopGames() {
-    let data = await this.executeRequest({
-      method: "GET",
-      path: "/games/top"
-    }, {
+    let data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/games/top"
+      },
+      {
         first: 25,
         after: this.games_pagination.cursor
-      });
+      }
+    );
 
     this.games_pagination = data.pagination;
     return data.data;
   }
 
-  // Returns a promise that resovles to a list of stream objects that are queried by a 
+  // Returns a promise that resovles to a list of stream objects that are queried by a
   // number of parameters sorted by number of viewers.
   // If game specified, filters by game
   // If game is null, get top streams of all games
   // https://dev.twitch.tv/docs/api/reference/#get-streams
   async getStreams(game?) {
-    let data = await this.executeRequest({
-      method: "GET",
-      path: "/streams"
-    }, {
+    let data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/streams"
+      },
+      {
         game_id: game ? game.id : undefined,
         first: 24
-      });
+      }
+    );
 
     this.streams_pagination = data.pagination;
     return data.data;
-
   }
 
   // Fetch next page of streams, using this.streams_offset as offset param
   // https://dev.twitch.tv/docs/api/reference/#get-streams
   async fetchMoreStreams(game?) {
-    let data = await this.executeRequest({
-      method: "GET",
-      path: "/streams"
-    },
+    let data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/streams"
+      },
       {
         game_id: game ? game.id : undefined,
         after: this.streams_pagination.cursor,
         first: 24
-      });
+      }
+    );
 
     this.streams_pagination = data.pagination;
     return data.data;
   }
 
   async getUserFromId(id: string) {
-    let data = await this.executeRequest({
-      method: "GET",
-      path: "/users",
-    }, {
+    let data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/users"
+      },
+      {
         id: id
-      });
+      }
+    );
 
     return data.data[0];
   }
   async getGameFromId(id: string) {
-    let data = await this.executeRequest({
-      method: "GET",
-      path: "/games",
-    }, {
+    let data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/games"
+      },
+      {
         id: id
-      });
+      }
+    );
 
     return data.data[0];
   }
-
 
   async getVideoUrl(channel) {
     // Get access_token required to read video data
     let username = (await this.getUserFromId(channel.user_id)).login;
 
     let token_url = `https://api.twitch.tv/api/channels/${username}/access_token`;
-    let body = await request.get({ url: token_url, headers: { "Client-ID": this.client_id }, json: true });
+    let body = await request.get({
+      url: token_url,
+      headers: { "Client-ID": this.client_id },
+      json: true
+    });
 
     // Setup video source url with the channel access_token
     let base_url = `https://usher.ttvnw.net/api/channel/hls/${username}.m3u8?`;
@@ -218,7 +238,7 @@ export class TwitchService {
       token: body.token
     };
     let video_url = base_url + querystring.stringify(qs);
-    return video_url
+    return video_url;
   }
 
   // Returns a list of stream objects the authenticated user is following.
@@ -226,23 +246,29 @@ export class TwitchService {
   async getFollowedStreams() {
     let user_id = this.authUserInfo.id;
 
-    let data = await this.executeRequest({
-      method: "GET",
-      path: "/users/follows",
-    }, {
+    let data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/users/follows"
+      },
+      {
         first: 100,
         from_id: user_id
-      });
+      }
+    );
 
-    this.followedIds = _.map(data.data, 'to_id');
+    this.followedIds = _.map(data.data, "to_id");
 
-    data = await this.executeRequest({
-      method: "GET",
-      path: "/streams"
-    }, {
+    data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/streams"
+      },
+      {
         user_id: this.followedIds,
         first: 100
-      });
+      }
+    );
 
     this.followedStreams = data.data;
 
@@ -250,20 +276,21 @@ export class TwitchService {
   }
 
   async refreshFollowedStreams() {
+    console.log("refreshing streams");
 
-    console.log('refreshing streams');
-
-    let data = await this.executeRequest({
-      method: 'GET',
-      path: '/streams'
-    },{
-      user_id: this.followedIds,
-      first: 100
-    });
+    let data = await this.executeRequest(
+      {
+        method: "GET",
+        path: "/streams"
+      },
+      {
+        user_id: this.followedIds,
+        first: 100
+      }
+    );
 
     let refreshedStreams = data.data;
 
-    _.each(refreshedStreams)
-
+    _.each(refreshedStreams);
   }
 }

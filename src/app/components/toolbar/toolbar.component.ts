@@ -1,14 +1,14 @@
-import {Component, OnInit, Output, EventEmitter} from "@angular/core";
-import {Router} from "@angular/router";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Router } from "@angular/router";
 
-import {TwitchService} from "../../providers/twitch.service";
-import {ToolbarService} from "../../providers/toolbar.service";
+import { TwitchService } from "../../providers/twitch.service";
+import { ToolbarService } from "../../providers/toolbar.service";
 
 export interface SubheaderValue {
-    player_username: string;
-    player_game: string;
-    player_logo: string;
-};
+  player_username: string;
+  player_game: string;
+  player_logo: string;
+}
 
 // Toolbar component
 @Component({
@@ -16,7 +16,6 @@ export interface SubheaderValue {
   selector: "tw-toolbar",
   styleUrls: ["./toolbar.component.scss"]
 })
-
 export class ToolbarComponent implements OnInit, SubheaderValue {
   // Toolbar button events
   @Output() close = new EventEmitter();
@@ -38,38 +37,36 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   constructor(
     public router: Router,
     private toolbarService: ToolbarService,
-    private twitchService: TwitchService) {
-
+    private twitchService: TwitchService
+  ) {
     // Subscribe to login changes
     twitchService.loginChange$.subscribe((userInfo: any) => {
       if (userInfo) {
         this.username = userInfo.display_name;
         this.logued = true;
-      }
-      else {
+      } else {
         this.username = "Guest";
         this.logued = false;
       }
     });
 
     // Subscribe to title changes
-    toolbarService.titleChange$.subscribe((title) => {
+    toolbarService.titleChange$.subscribe(title => {
       this.title = title;
     });
 
     // Subscribe to logo changes
-    toolbarService.logoChange$.subscribe((logo) => {
+    toolbarService.logoChange$.subscribe(logo => {
       this.logo = logo;
     });
 
     // Subscribe to subheader change
-    toolbarService.subheaderChange$.subscribe((subHeader) => {
+    toolbarService.subheaderChange$.subscribe(subHeader => {
       if (!subHeader) {
         this.player_username = null;
         this.player_game = null;
         this.player_logo = null;
-      }
-      else {
+      } else {
         this.player_username = subHeader.player_username;
         this.player_game = subHeader.player_game;
         this.player_logo = subHeader.player_logo;
@@ -77,9 +74,7 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
     });
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   closeWindow() {
     this.close.emit("event");
