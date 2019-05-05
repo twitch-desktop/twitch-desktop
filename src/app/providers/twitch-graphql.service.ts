@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Query } from "apollo-angular";
+import { ApolloQueryResult } from "apollo-client";
 import gql from "graphql-tag";
+import { Subject } from "rxjs";
 
 /***
  *
@@ -8,6 +10,25 @@ import gql from "graphql-tag";
  * https://github.com/mauricew/twitch-graphql-api
  *
  ***/
+
+
+export interface UserInfoResponse {
+    currentUser: {
+      displayName: string
+    }
+}
+@Injectable({
+  providedIn: "root"
+})
+export class GetUserInfoGQL extends Query<UserInfoResponse> {
+  document = gql`
+  query {
+    currentUser {
+      displayName
+    }
+  }
+  `;
+}
 
 export interface TopGamesResponse {
   games: {
@@ -119,7 +140,7 @@ export class GetTopStreamsGQL extends Query<TopStreamsResponse> {
 })
 export class GetGameStreamsGQL extends Query<GameStreamsResponse> {
   document = gql`
-  query getGameStreams ($name: String!, $cursor: Cursor!){
+  query ($name: String!, $cursor: Cursor!){
     game(name: $name) {
       id
       name
@@ -150,3 +171,5 @@ export class GetGameStreamsGQL extends Query<GameStreamsResponse> {
   }
   `;
 }
+
+

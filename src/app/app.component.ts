@@ -1,12 +1,14 @@
 import { Component } from "@angular/core";
 import { ElectronService } from "./providers/electron.service";
-import { TwitchService } from "./providers/twitch.service";
+import { TwitchAuthService } from "./providers/twitch-auth-graphql.service"
+import { SettingsService } from "./providers/settings.service";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import { AppConfig } from "../environments/environment";
 
+
 let mainWindow = require("electron").remote.getGlobal("mainWindow");
-let auth_token = require("electron").remote.getGlobal("auth_token");
+let auth_token = localStorage.getItem('auth_token');
 
 @Component({
   selector: "app-root",
@@ -20,7 +22,8 @@ export class AppComponent {
     public electronService: ElectronService,
     private translate: TranslateService,
     private router: Router,
-    private twitchService: TwitchService
+    private twitchAuthService: TwitchAuthService,
+    private settingsService: SettingsService
   ) {
     translate.setDefaultLang("en");
     console.log("AppConfig", AppConfig);
@@ -35,8 +38,10 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    if (auth_token) {
-      this.twitchService.getAuthenticatedUser(auth_token);
+    if (auth_token && this.settingsService.getConfig().autologin) {
+      this.twitchAuthService.setAuthToken(auth_token);
+    } else {
+      localStorage.removeItem('auth_token');
     }
 
     // Browse games as start page

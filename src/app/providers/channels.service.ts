@@ -37,6 +37,7 @@ export class ChannelService {
 
   private streams_list_type: StreamListType;
   private cursor = "";
+  private game: Game ;
 
   constructor(private twitchService: TwitchService,
     private getGameStreamsGQL: GetGameStreamsGQL,
@@ -62,10 +63,9 @@ export class ChannelService {
 
   async getGameStreams(game: Game) {
     return new Promise((resolve, reject) => {
-      console.log(game.name);
-      this.getGameStreamsGQL.fetch({ game: game.name }).subscribe((result: ApolloQueryResult<GameStreamsResponse>) => {
+      this.getGameStreamsGQL.fetch({ name: game.name }).subscribe((result: ApolloQueryResult<GameStreamsResponse>) => {
         if (result.data) {
-          console.log(result.data);
+          this.game = game;
           this.streams_list_type = StreamListType.GameStreams;
           this.cursor = result.data.game.streams.edges.slice(-1)[0].cursor;
           this.streams = map(result.data.game.streams.edges, (e) => {
@@ -80,14 +80,14 @@ export class ChannelService {
     });
   }
 
-  async fetchMoreStreams(game?: Game) {
+  async fetchMoreStreams() {
     switch (this.streams_list_type) {
       case StreamListType.TopStreams:
         return this.fetchMoreTopStreams();
         break;
 
       case StreamListType.GameStreams:
-        return this.fetchMoreGameStreams(game);
+        return this.fetchMoreGameStreams(this.game);
         break;
 
       case StreamListType.FollowingStreams:
@@ -118,7 +118,7 @@ export class ChannelService {
 
   private async fetchMoreGameStreams(game: Game) {
     return new Promise((resolve, reject) => {
-      this.getGameStreamsGQL.fetch({ game: game.name, cursor: this.cursor }).subscribe((result: ApolloQueryResult<GameStreamsResponse>) => {
+      this.getGameStreamsGQL.fetch({ name: game.name, cursor: this.cursor }).subscribe((result: ApolloQueryResult<GameStreamsResponse>) => {
         if (result.data) {
           this.cursor = result.data.game.streams.edges.slice(-1)[0].cursor;
           this.streams = uniqBy(

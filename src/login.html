@@ -11,13 +11,20 @@
       max-height: 100%;
       max-width: 100%;
       margin: 0px;
-      font-family: Helvetica Neue,Helvetica,Arial,sans-serif; 
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     }
   </style>
 </head>
 
 <body>
-  <div id="title">Login in...</div>
+  <div class="content">
+
+    <form action="/login" method="get">
+      <input type="text" name="username" class="username">
+      <input type="password" name="password" class="password">
+      <input type="submit" value="Login" name="Submit" id="submit">
+    </form>
+  </div>
 </body>
 
 </html>

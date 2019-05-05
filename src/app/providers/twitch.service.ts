@@ -95,6 +95,7 @@ export class TwitchService {
         });
 
         this.access_token = access_token;
+        console.log('Bearer: '+this.access_token);
         this.authUserInfo = data.data[0];
         this.loginChange.next(this.authUserInfo);
         return data;

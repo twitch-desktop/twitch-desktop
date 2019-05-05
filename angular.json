@@ -18,6 +18,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/update.html",
+              "src/login.html",
               "src/assets",
               "src/favicon.ico",
               "src/favicon.png",

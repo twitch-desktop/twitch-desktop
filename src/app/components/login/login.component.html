@@ -1,7 +1,18 @@
 <div class="login-container h-100">
-  <div class="login-display" [hidden]="!logued">
-    <i md-icon class="login-logo">person</i>
-    <span>Logued in as {{username}}</span>
-    <button md-button class="logout-button" (click)="logout()">Logout</button>
+  <div class="login-display" [hidden]="!login.logued">
+    <span class="material-icons">person</span>
+    <span>Logued in as {{login.username}}</span>
+    <button class="logout-button" (click)="logOut()">Logout</button>
+  </div>
+  <div class="login-form" [hidden]="login.logued">
+    <div class="custom-control custom-input">
+      <label class="input-label" for="username">Username</label>
+      <input type="text" [(ngModel)]="login_form.username" class="form-control" id="username" placeholder="">
+  </div>
+  <div class="custom-control custom-input">
+    <label class="input-label" for="password">Password</label>
+    <input type="text" [(ngModel)]="login_form.password" class="form-control" id="password" placeholder="">
+    <button class="login-button" (click)="logIn()">Login</button>
+</div>
   </div>
 </div>
