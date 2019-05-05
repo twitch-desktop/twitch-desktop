@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import * as request from "request-promise-native";
-import * as _ from "lodash";
+import { map, each } from "lodash";
 import * as querystring from "querystring";
 import { SettingsService } from "./settings.service";
 
@@ -19,7 +19,7 @@ export class TwitchService {
   games_pagination = { cursor: "" };
   streams_pagination = { cursor: "" };
   authUrl: string;
-  logued: boolean = false;
+  logued = false;
 
   authUserInfo: {
     id;
@@ -44,7 +44,7 @@ export class TwitchService {
   loginChange$ = this.loginChange.asObservable();
 
   constructor(private settings: SettingsService) {
-    let store = this.settings.getStore();
+    const store = this.settings.getStore();
 
     // Change client-id used when it is changed in settings
     store.onDidChange("client_id", (newValue, oldValue) => {
@@ -62,10 +62,11 @@ export class TwitchService {
     let authorization = options.accessToken
       ? "Bearer " + options.accessToken
       : undefined;
-    if (!authorization && this.access_token)
+    if (!authorization && this.access_token) {
       authorization = "Bearer " + this.access_token;
+    }
 
-    let req = {
+    const req = {
       method: options.method,
       url: this.baseUrl + options.path,
       qs: parameters,
@@ -77,8 +78,7 @@ export class TwitchService {
       json: true
     };
 
-    let body = await request(req);
-    return body;
+    return await request(req);
   }
 
   // Return Authenticated User Info
@@ -257,7 +257,7 @@ export class TwitchService {
       }
     );
 
-    this.followedIds = _.map(data.data, "to_id");
+    this.followedIds = map(data.data, "to_id");
 
     data = await this.executeRequest(
       {
@@ -276,21 +276,6 @@ export class TwitchService {
   }
 
   async refreshFollowedStreams() {
-    console.log("refreshing streams");
 
-    let data = await this.executeRequest(
-      {
-        method: "GET",
-        path: "/streams"
-      },
-      {
-        user_id: this.followedIds,
-        first: 100
-      }
-    );
-
-    let refreshedStreams = data.data;
-
-    _.each(refreshedStreams);
   }
 }

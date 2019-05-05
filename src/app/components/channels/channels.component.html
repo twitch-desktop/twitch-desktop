@@ -1,15 +1,15 @@
 <div infinite-scroll class="channel-list-wrapper" (scrolled)="onScrolled()">
 
   <div class="channel-list">
-    <div class="channel-item" (click)="router.navigate(['/play/'+channel.id])" *ngFor="let channel of channels">
+    <div class="channel-item" (click)="router.navigate(['/play/'+stream.id])" *ngFor="let stream of streams">
       <div class="channel-content">
-        <div class="channel-title"><span>{{channel.user_name}}</span></div>
-        <img class="channel-cover" src="{{ channel.thumbnail_url | twScaleImage:'320':'180' }}">
+        <div class="channel-title"><span>{{stream.broadcaster.displayName}}</span></div>
+        <img class="channel-cover" src="{{ stream.previewImageURL | twScaleImage:'320':'180' }}">
         <div class="channel-info">
           <div class="channel-uptime"><span><span
-                class="material-icons">schedule</span>{{channel.started_at | twTimeSince}}</span></div>
+                class="material-icons">schedule</span>{{stream.createdAt | twTimeSince}}</span></div>
           <div class="channel-viewers"><span><span
-                class="material-icons">people</span>{{channel.viewer_count | number}}</span></div>
+                class="material-icons">people</span>{{stream.viewersCount | number}}</span></div>
         </div>
       </div>
     </div>

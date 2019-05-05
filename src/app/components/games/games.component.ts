@@ -1,7 +1,6 @@
 import { Component, OnInit, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-
-let _ = require("lodash");
+import { concat } from "lodash";
 
 import { TwitchService } from "../../providers/twitch.service";
 import { ToolbarService } from "../../providers/toolbar.service";
@@ -27,7 +26,7 @@ export class GamesComponent implements OnInit {
     private errorService: ErrorService,
     private gameService: GameService,
     private zone: NgZone
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.spinnerService.show();
@@ -40,7 +39,7 @@ export class GamesComponent implements OnInit {
     this.gameService
       .getTopGames()
       .then((games: any) => {
-        this.games = _.concat(this.games, games);
+        this.games = concat(this.games, games);
         this.spinnerService.hide();
       })
       .catch(reason => {
@@ -55,19 +54,19 @@ export class GamesComponent implements OnInit {
     // Only fetch more if we are not already doing that
     if (!this.fetchingMore) {
       this.fetchingMore = true;
-      this.zone.run(() => {});
+      this.zone.run(() => { });
 
       this.gameService
         .fetchMoreTopGames()
         .then((games: any) => {
           this.games = games;
           this.fetchingMore = false;
-          this.zone.run(() => {});
+          this.zone.run(() => { });
         })
         .catch(reason => {
           console.log(reason);
           this.fetchingMore = false;
-          this.zone.run(() => {});
+          this.zone.run(() => { });
         });
     }
   }
