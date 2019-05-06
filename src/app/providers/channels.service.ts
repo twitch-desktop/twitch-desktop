@@ -1,7 +1,13 @@
 import { Injectable } from "@angular/core";
 import { ApolloQueryResult } from "apollo-client";
 import { TwitchService } from "./twitch.service";
-import { GetGameStreamsGQL, GetTopStreamsGQL, TopStreamsResponse, GameStreamsResponse } from "./twitch-graphql.service";
+import { 
+  GetGameStreamsGQL,
+  GetTopStreamsGQL,
+  GetCurrentUserOnlineFollowsGQL,
+  TopStreamsResponse,
+  GameStreamsResponse,
+  FollowsResponse } from "./twitch-graphql.service";
 import { Game } from "./games.service";
 import { map, find, union, concat, uniqBy } from "lodash";
 
@@ -41,7 +47,8 @@ export class ChannelService {
 
   constructor(private twitchService: TwitchService,
     private getGameStreamsGQL: GetGameStreamsGQL,
-    private getTopStreamsGQL: GetTopStreamsGQL) { }
+    private getTopStreamsGQL: GetTopStreamsGQL,
+    private getOnlineFollowsGQL: GetCurrentUserOnlineFollowsGQL) { }
 
   async getTopStreams() {
     return new Promise((resolve, reject) => {
@@ -80,6 +87,24 @@ export class ChannelService {
     });
   }
 
+  async getFollowedStreams() {
+    return new Promise((resolve, reject) => {
+      this.getOnlineFollowsGQL.fetch().subscribe((result: ApolloQueryResult<FollowsResponse>) => {
+        if (result.data) {
+          this.streams_list_type = StreamListType.FollowingStreams;
+          this.cursor = result.data.currentUser.followedLiveUsers.edges.slice(-1)[0].cursor;
+          this.streams = map(result.data.currentUser.followedLiveUsers.edges, (e) => {
+            return e.node.stream;
+          });
+
+          resolve(this.streams);
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
   async fetchMoreStreams() {
     switch (this.streams_list_type) {
       case StreamListType.TopStreams:
@@ -91,6 +116,7 @@ export class ChannelService {
         break;
 
       case StreamListType.FollowingStreams:
+        return this.fetchMoreFollowedStreams();
         break;
     }
   }
@@ -125,6 +151,27 @@ export class ChannelService {
             concat(
               this.streams,
               map(result.data.game.streams.edges, (e) => e.node)
+            ),
+            "id"
+          );
+
+          resolve(this.streams);
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
+  private async fetchMoreFollowedStreams() {
+    return new Promise((resolve, reject) => {
+      this.getOnlineFollowsGQL.fetch({ cursor: this.cursor }).subscribe((result: ApolloQueryResult<FollowsResponse>) => {
+        if (result.data) {
+          this.cursor = result.data.currentUser.followedLiveUsers.edges.slice(-1)[0].cursor;
+          this.streams = uniqBy(
+            concat(
+              this.streams,
+              map(result.data.currentUser.followedLiveUsers.edges, (e) => e.node.stream)
             ),
             "id"
           );

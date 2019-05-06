@@ -13,9 +13,9 @@ import { Subject } from "rxjs";
 
 
 export interface UserInfoResponse {
-    currentUser: {
-      displayName: string
-    }
+  currentUser: {
+    displayName: string
+  }
 }
 @Injectable({
   providedIn: "root"
@@ -44,39 +44,44 @@ export interface TopGamesResponse {
   };
 }
 
-interface Streams {
-  edges: [{
-    node: {
-      id: string;
-      broadcaster: {
+interface Stream {
+  id: string;
+  broadcaster: {
+    id: string;
+    displayName: string;
+    login: string;
+    broadcastSettings: {
+      title: string
+      game: {
         id: string;
-        displayName: string;
-        login: string;
-        broadcastSettings: {
-          title: string
-          game: {
-            id: string;
-            name: string
-          }
-        }
+        name: string
       }
-      previewImageURL: string;
-      viewersCount: number
-      createdAt: Date
-    };
-    cursor: string;
-  }];
+    }
+  }
+  previewImageURL: string;
+  viewersCount: number
+  createdAt: Date
 }
 
 export interface TopStreamsResponse {
-  streams: Streams;
+  streams: {
+    edges: [{
+      node: Stream
+      cursor: string;
+    }]
+  }
 }
 
 export interface GameStreamsResponse {
   game: {
     id: string;
     name: string;
-    streams: Streams
+    streams: {
+      edges: [{
+        node: Stream
+        cursor: string;
+      }]
+    }
   };
 }
 
@@ -163,6 +168,57 @@ export class GetGameStreamsGQL extends Query<GameStreamsResponse> {
             previewImageURL
             viewersCount
             createdAt
+          }
+          cursor
+        }
+      }
+    }
+  }
+  `;
+}
+export interface FollowsResponse {
+  currentUser: {
+    displayName: string
+    followedLiveUsers: {
+      edges: [{
+        node: {
+          stream: Stream
+        }
+        cursor: string;
+      }]
+    }
+  }
+}
+
+@Injectable({
+  providedIn: "root"
+})
+export class GetCurrentUserOnlineFollowsGQL extends Query<FollowsResponse> {
+  document = gql`
+  query ($cursor: Cursor!) {
+    currentUser {
+      displayName
+      followedLiveUsers(first: 25 after: $cursor) {
+        edges {
+          node {
+            stream {
+              id
+              broadcaster {
+                id
+                displayName
+                login
+                broadcastSettings {
+                  title
+                  game {
+                    id
+                    name
+                  }
+                }
+              }
+              previewImageURL
+              viewersCount
+              createdAt
+            }
           }
           cursor
         }
