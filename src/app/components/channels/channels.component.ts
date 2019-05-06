@@ -29,7 +29,6 @@ export class ChannelsComponent implements OnInit {
     private errorService: ErrorService,
     private gameService: GameService,
     private channelService: ChannelService,
-    private zone: NgZone
   ) { }
 
   ngOnInit() {
@@ -70,6 +69,11 @@ export class ChannelsComponent implements OnInit {
       // Set toolbar icon
       this.toolbarService.setLogo("videocam");
     });
+  }
+
+  itemClicked(stream: Stream) {
+    this.channelService.currentStream = stream;
+    this.router.navigate(["/play/" + stream.id]);
   }
 
   // Triggered when stream list is scrolled to the bottom (infinite-scroll)

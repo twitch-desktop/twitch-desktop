@@ -4,6 +4,7 @@ import * as request from "request-promise-native";
 import { map, each } from "lodash";
 import * as querystring from "querystring";
 import { SettingsService } from "./settings.service";
+import { Stream } from "./channels.service";
 
 import config from "../../../config";
 
@@ -95,7 +96,7 @@ export class TwitchService {
         });
 
         this.access_token = access_token;
-        console.log('Bearer: '+this.access_token);
+        console.log('Bearer: ' + this.access_token);
         this.authUserInfo = data.data[0];
         this.loginChange.next(this.authUserInfo);
         return data;
@@ -211,19 +212,32 @@ export class TwitchService {
       }
     );
 
+    console.log(data);
     return data.data[0];
   }
 
-  async getVideoUrl(channel) {
+  async getVideoUrl(stream: Stream) {
     // Get access_token required to read video data
-    let username = (await this.getUserFromId(channel.user_id)).login;
-
+    let username = stream.broadcaster.login;
     let token_url = `https://api.twitch.tv/api/channels/${username}/access_token`;
-    let body = await request.get({
+    let body = await request({
+      method: "GET",
       url: token_url,
-      headers: { "Client-ID": this.client_id },
+      headers: {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0",
+        "Client-ID": "jzkbprff40iqj646a697cyrvl0zt2m6"
+      },
+      body: {
+        "need_https": true,
+        "oauth_token": undefined, // FIXME: Optional
+        "platform": "web",
+        "player_backend": "mediaplayer",
+        "player_type": "site"
+      },
       json: true
     });
+
+    console.log(body);
 
     // Setup video source url with the channel access_token
     let base_url = `https://usher.ttvnw.net/api/channel/hls/${username}.m3u8?`;
@@ -239,6 +253,9 @@ export class TwitchService {
       token: body.token
     };
     let video_url = base_url + querystring.stringify(qs);
+
+    console.log(video_url);
+
     return video_url;
   }
 

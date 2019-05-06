@@ -1,7 +1,7 @@
 <div infinite-scroll class="channel-list-wrapper" (scrolled)="onScrolled()">
 
   <div class="channel-list">
-    <div class="channel-item" (click)="router.navigate(['/play/'+stream.id])" *ngFor="let stream of streams">
+    <div class="channel-item" (click)="itemClicked(stream)" *ngFor="let stream of streams">
       <div class="channel-content">
         <div class="channel-title"><span>{{stream.broadcaster.displayName}}</span></div>
         <img class="channel-cover" src="{{ stream.previewImageURL | twScaleImage:'320':'180' }}">

@@ -5,7 +5,7 @@ import Clappr from "clappr";
 import LevelSelector from "level-selector";
 
 import { ToolbarService } from "../../providers/toolbar.service";
-import { ChannelService } from "../../providers/channels.service";
+import { ChannelService, Stream } from "../../providers/channels.service";
 import { TwitchService } from "../../providers/twitch.service";
 import { SettingsService } from "../../providers/settings.service";
 
@@ -16,8 +16,7 @@ import { SettingsService } from "../../providers/settings.service";
   styleUrls: ["./player.component.scss"]
 })
 export class PlayerComponent implements OnInit, OnDestroy {
-  channel: any;
-  channel_name: string;
+  stream: Stream;
   chat_url: string;
   player: any;
   isLoading = true;
@@ -29,31 +28,28 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private channelService: ChannelService,
     private twitchService: TwitchService,
     private settingsService: SettingsService
-  ) {}
+  ) { }
 
   async ngOnInit() {
+
     this.route.params.subscribe(params => {
-      this.channel = this.channelService.getChannel(params["channel"]);
-      this.channel_name = this.channel.name;
+      this.stream = this.channelService.currentStream;
     });
 
-    let user = await this.twitchService.getUserFromId(this.channel.user_id);
-    let game = await this.twitchService.getGameFromId(this.channel.game_id);
-    if (!game) console.log(this.channel.game_id);
-    this.chat_url = `https://www.twitch.tv/embed/${user.login}/chat?darkpopout`;
+    this.chat_url = `https://www.twitch.tv/embed/${this.stream.broadcaster.login}/chat?darkpopout`;
 
     // Set toolbar title and logo
-    this.toolbarService.setTitle(this.channel.title);
+    this.toolbarService.setTitle(this.stream.broadcaster.broadcastSettings.title);
     this.toolbarService.setLogo("");
 
     // Set toolbar subheader info
     this.toolbarService.setSubheader({
-      player_username: user.display_name,
-      player_game: game.name,
-      player_logo: user.profile_image_url
+      player_username: this.stream.broadcaster.displayName,
+      player_game: this.stream.broadcaster.broadcastSettings.game.name,
+      player_logo: "" // FIXME
     });
 
-    let sourceUrl = await this.twitchService.getVideoUrl(this.channel);
+    let sourceUrl = await this.twitchService.getVideoUrl(this.stream);
 
     // Start the player with the video source url
     this.player = new Clappr.Player({
@@ -63,7 +59,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       },
       levelSelectorConfig: {
         title: "Quality",
-        labelCallback: function(playbackLevel, customLabel) {
+        labelCallback: function (playbackLevel, customLabel) {
           return (
             playbackLevel.level.height +
             "p" +

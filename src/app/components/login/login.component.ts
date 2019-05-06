@@ -46,8 +46,7 @@ export class LoginComponent implements OnInit {
       method: 'POST',
       url: url,
       headers: {
-        'content-type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:66.0) Gecko/20100101 Firefox/66.0',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0',
       },
       body: {
         username: this.login_form.username,
@@ -57,9 +56,9 @@ export class LoginComponent implements OnInit {
       json: true,
       jar: j
     };
-    
+
     request(options).then((data) => {
-      if(data.access_token) {
+      if (data.access_token) {
         //console.log(j.getCookieString(url));
         this.twitchAuthService.setAuthToken(data.access_token);
       }
