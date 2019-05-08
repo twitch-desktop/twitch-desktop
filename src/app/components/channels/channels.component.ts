@@ -1,8 +1,6 @@
 import { Component, OnInit, Pipe, PipeTransform, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-
 import { InfiniteScroll } from "../../directives/infinitescroll.directive";
-
 
 import { TwitchService } from "../../providers/twitch.service";
 import { ToolbarService } from "../../providers/toolbar.service";
@@ -29,6 +27,7 @@ export class ChannelsComponent implements OnInit {
     private errorService: ErrorService,
     private gameService: GameService,
     private channelService: ChannelService,
+    private zone: NgZone
   ) { }
 
   ngOnInit() {
@@ -81,9 +80,15 @@ export class ChannelsComponent implements OnInit {
     // Load more items only if we are not already doing that
     if (!this.fetchingMore) {
       this.fetchingMore = true;
+      this.zone.run(() => { });
       this.channelService.fetchMoreStreams().then((streams: Stream[]) => {
         this.streams = streams;
         this.fetchingMore = false;
+        this.zone.run(() => { });
+      }).catch((reason) => {
+        console.log(reason);
+        this.fetchingMore = false;
+        this.zone.run(() => { });
       });
     }
   }

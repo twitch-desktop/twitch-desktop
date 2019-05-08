@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import Clappr from "clappr";
 import LevelSelector from "level-selector";
-
+import { ErrorService } from "../../providers/errorhandler.service";
 import { ToolbarService } from "../../providers/toolbar.service";
 import { ChannelService, Stream } from "../../providers/channels.service";
 import { TwitchService } from "../../providers/twitch.service";
@@ -27,7 +27,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private toolbarService: ToolbarService,
     private channelService: ChannelService,
     private twitchService: TwitchService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private errorService: ErrorService
   ) { }
 
   async ngOnInit() {
@@ -49,7 +50,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
       player_logo: "" // FIXME
     });
 
-    let sourceUrl = await this.twitchService.getVideoUrl(this.stream);
+    let sourceUrl;
+    try {
+      sourceUrl = await this.twitchService.getVideoUrl(this.stream);
+    } catch (e) {
+      return this.errorService.showError("Error getting video source", e);
+    }
 
     // Start the player with the video source url
     this.player = new Clappr.Player({

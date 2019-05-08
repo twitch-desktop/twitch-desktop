@@ -1,18 +1,20 @@
 <div class="login-container h-100">
   <div class="login-display" [hidden]="!login.logued">
-    <span class="material-icons">person</span>
-    <span>Logued in as {{login.username}}</span>
+    <span class="material-icons logo">person</span>
+    <span class="login-message">Logued in as {{login.username}}</span>
     <button class="logout-button" (click)="logOut()">Logout</button>
   </div>
   <div class="login-form" [hidden]="login.logued">
+    <span class="material-icons logo">person_outline</span>
     <div class="custom-control custom-input">
-      <label class="input-label" for="username">Username</label>
-      <input type="text" [(ngModel)]="login_form.username" class="form-control" id="username" placeholder="">
-  </div>
-  <div class="custom-control custom-input">
-    <label class="input-label" for="password">Password</label>
-    <input type="text" [(ngModel)]="login_form.password" class="form-control" id="password" placeholder="">
-    <button class="login-button" (click)="logIn()">Login</button>
-</div>
+      <label class="input-label" for="username">Username:</label>
+      <input autofocus type="text" [(ngModel)]="login_form.username" class="form-control" id="username" placeholder="">
+    </div>
+    <div class="custom-control custom-input">
+      <label class="input-label" for="password">Password:</label>
+      <input type="password" [(ngModel)]="login_form.password" class="form-control" id="password" placeholder="">
+    </div>
+    <button class="login-button" (click)="logIn()" (keyup.enter)="logIn()">Login</button>
+    <span class="error-message" [hidden]="error===''">{{error}}</span>
   </div>
 </div>

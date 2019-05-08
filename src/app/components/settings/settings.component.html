@@ -1,9 +1,4 @@
 <div id="main-container" class="h-100 w-100">
-    <div class="custom-control custom-input">
-        <label class="input-label" for="client-id">Twitch client-id:</label>
-        <input type="text" [(ngModel)]="config.client_id" (ngModelChange)="configChanged()" class="form-control" id="client-id" placeholder="Default">
-    </div>
-    
     <div class="custom-control form-control-lg custom-checkbox">
         <input type="checkbox" [(ngModel)]="config.autologin" (ngModelChange)="configChanged()"
             class="custom-control-input" id="checkbox-autologin">
@@ -24,7 +19,8 @@
 
     <div class="custom-control custom-input">
         <label class="input-label" for="buffer-length">Max buffer length (seconds):</label>
-        <input type="number" [(ngModel)]="config.buffer_length" (ngModelChange)="configChanged()" class="form-control" id="buffer-length" placeholder="10">
+        <input type="number" [(ngModel)]="config.buffer_length" (ngModelChange)="configChanged()" class="form-control"
+            id="buffer-length" placeholder="10">
     </div>
 
 </div>

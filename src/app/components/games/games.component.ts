@@ -10,7 +10,6 @@ import { GameService } from "../../providers/games.service";
 
 @Component({
   templateUrl: "./games.component.html",
-  selector: "tw-games",
   styleUrls: ["./games.component.scss"]
 })
 export class GamesComponent implements OnInit {

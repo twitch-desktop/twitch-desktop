@@ -5,7 +5,6 @@ import * as path from "path";
 import * as url from "url";
 import * as fs from "fs";
 import * as request from "request-promise-native";
-import * as querystring from "querystring";
 
 let win, aux_window, serve;
 const args = process.argv.slice(1);
@@ -34,14 +33,6 @@ try {
     });
 
     if (serve) {
-      aux_window.loadURL(
-        url.format({
-          pathname: path.join(__dirname, `dist/login.html`),
-          protocol: "file:",
-          slashes: true
-        })
-      );
-      aux_window.show();
       createMainWindow();
     } else {
       aux_window.on("close", event => {
@@ -103,63 +94,6 @@ try {
 }
 
 async function createMainWindow() {
-  async function onLoginRedirect(event, newUrl) {
-    if (newUrl.includes("access_token")) {
-      // Get access_token from the redirect url
-      let token_regex = /localhost\/#access_token=([a-z0-9]{30})/.exec(newUrl);
-      let auth_token: string;
-      // If we found the token on the redirect url
-      if (token_regex && token_regex.length > 1 && token_regex[1]) {
-        // Show the spinner and get the token
-        auth_token = token_regex[1];
-        (<any>global).auth_token = auth_token;
-        aux_window.close();
-      }
-    }
-  }
-
-  async function onAuxWindowClosed() {
-    if (serve) {
-      
-      (<any>global).betterttv = await request("http://localhost:4200/assets/betterttv.js");
-      (<any>global).loginhtml = "http://localhost:4200/login.html";
-
-      require("electron-reload")(__dirname, {
-        electron: require(`${__dirname}/node_modules/electron`)
-      });
-      
-      win.loadURL("http://localhost:4200");
-      win.show();
-    } else {
-
-      (<any>global).betterttv = fs.readFileSync(path.resolve(__dirname, "dist/assets/betterttv.js"), "utf8");
-      (<any>global).loginhtml = url.format({
-        pathname: path.resolve(__dirname, "dist/login.html"),
-        protocol: "file:",
-        slashes: true
-      });
-
-      win.loadURL(
-        url.format({
-          pathname: path.join(__dirname, "dist/index.html"),
-          protocol: "file:",
-          slashes: true
-        })
-      );
-      win.show();
-    }
-
-    if (serve) {
-      win.webContents.openDevTools();
-    }
-
-    // Emitted when the window is closed.
-    win.on("closed", () => {
-      win = null;
-      app.quit();
-    });
-  }
-
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
   let icon = path.join(__dirname, "dist/assets/icon.png");
@@ -185,8 +119,36 @@ async function createMainWindow() {
   // We set this to be able to acces the main window object inside angular application
   (<any>global).mainWindow = win;
 
-    aux_window.close();
-    onAuxWindowClosed();
+  aux_window.close();
+
+  if (serve) {
+    (<any>global).betterttv = await request("http://localhost:4200/assets/betterttv.js");
+    require("electron-reload")(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
+    win.loadURL("http://localhost:4200");
+    win.show();
+  } else {
+    (<any>global).betterttv = fs.readFileSync(path.resolve(__dirname, "dist/assets/betterttv.js"), "utf8");
+    win.loadURL(
+      url.format({
+        pathname: path.join(__dirname, "dist/index.html"),
+        protocol: "file:",
+        slashes: true
+      })
+    );
+    win.show();
+  }
+
+  if (serve) {
+    win.webContents.openDevTools();
+  }
+
+  // Emitted when the window is closed.
+  win.on("closed", () => {
+    win = null;
+    app.quit();
+  });
 }
 
 function sendStatusToWindow(text) {
