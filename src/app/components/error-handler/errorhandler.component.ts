@@ -1,7 +1,7 @@
-import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute, Router, NavigationStart} from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
 
-import {ErrorService} from "../../providers/errorhandler.service";
+import { ErrorService, ErrorValue } from "../../providers/errorhandler.service";
 
 // Error display component
 @Component({
@@ -9,28 +9,28 @@ import {ErrorService} from "../../providers/errorhandler.service";
   selector: "tw-error",
   styleUrls: ["./errorhandler.component.scss"]
 })
-
 export class ErrorComponent implements OnInit {
-
   displayError: boolean = false;
   error: string;
+  reason = null;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private errorService: ErrorService) {
-
+    private errorService: ErrorService
+  ) {
     // Subscribe to the onError event of the service to show or hide
     // the component bassed on its value
-    errorService.onError$.subscribe((err) => {
-      if (err) {
-        this.error = err;
+    errorService.onError$.subscribe((error_value: ErrorValue) => {
+      if (error_value.error) {
+        this.error = error_value.error;
+        this.reason = error_value.reason;
         this.displayError = true;
-      }
-      else {
+      } else {
         // `null` is used as the hide value
         this.displayError = false;
         this.error = "";
+        this.reason = null;
       }
     });
 
@@ -39,15 +39,14 @@ export class ErrorComponent implements OnInit {
       if (event instanceof NavigationStart) {
         this.displayError = false;
         this.error = "";
+        this.reason = null;
       }
     });
   }
 
-  ngOnInit() {
+  ngOnInit() {}
 
-  }
-
-  retry () {
+  retry() {
     this.displayError = false;
     this.error = "";
 

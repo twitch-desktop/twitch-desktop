@@ -39,29 +39,63 @@ html, body {
 }
 
 .form-control {
-  background-color: #dad8de;
+  background-color: #dad8de !important;
 }
 
 textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {   
-  border-color: rgba(117, 80, 185, 0.25); 
-  box-shadow: 0 1px 1px rgba(117, 80, 185, 0.25) inset, 0 0 8px rgba(117, 80, 185, 0.25); 
-  outline: 0 none;
+  border-color: rgba(117, 80, 185, 0.25) !important; 
+  box-shadow: 0 1px 1px rgba(117, 80, 185, 0.25) inset, 0 0 8px rgba(117, 80, 185, 0.25) !important; 
+  outline: 0 none !important;
 }
 
 .custom-control-label:before{
-  background-color:#dad8de;
+  background-color:#dad8de !important;
 }
 
 .custom-checkbox .custom-control-input:checked~.custom-control-label::before{
-  background-color:#7550b9;
-  border-color: #3A1F64;
+  background-color:#7550b9 !important;
+  border-color: #3A1F64 !important;
 }
 
 .custom-control-input:active~.custom-control-label::before{
-  background-color:#7550b9;
+  background-color:#7550b9 !important;
 }
 
 /** focus shadow pinkish **/
 .custom-checkbox .custom-control-input:focus~.custom-control-label::before{
-  box-shadow: 0 0 0 1px #dad8de, 0 0 0 0.2rem rgba(117, 80, 185, 0.25); 
+  box-shadow: 0 0 0 1px #dad8de, 0 0 0 0.2rem rgba(117, 80, 185, 0.25) !important; 
+}
+.custom-control {
+  position: relative !important;
+  display: flex !important;
+  min-height: 1.5rem !important;
+  margin-bottom: 20px !important;
+}
+
+.custom-input {
+  display: flex !important;
+  flex-direction: column !important;
+  padding-left: 0px !important;
+}
+
+.input-label {
+  text-align: left !important;
+  font-size: 25px !important;
+  margin-bottom: 0px !important;
+}
+
+.custom-control-label {
+  position: relative !important;
+  margin-bottom: 0 !important;
+  vertical-align: top !important;
+  font-size: 25px !important;
+  padding-left: 0.75em !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.custom-control-label::before, .custom-control-label::after {
+  top: 0 !important;
+  width: 2rem !important;
+  height: 2rem !important;
 }

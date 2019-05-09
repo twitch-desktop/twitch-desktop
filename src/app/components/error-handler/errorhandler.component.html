@@ -1,4 +1,5 @@
 <div id="main-container" class="h-100 w-100" [hidden]="!displayError">
     <span class="error-display">{{ error }}</span>
+    <span class="error-display">{{ reason? reason.message:'' }}</span>
     <!-- <button md-button class="retry-button" (click)="retry()">Try Again</button> -->
 </div>

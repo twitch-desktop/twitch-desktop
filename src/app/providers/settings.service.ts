@@ -1,29 +1,37 @@
 import { Injectable } from "@angular/core";
-import * as Store from 'electron-store';
-import config from "../../../config";
+import * as Store from "electron-store";
 
-const schema: any = config.schema;
+interface ConfigType {
+  betterttv: boolean;
+  autologin: boolean;
+  openlinks: boolean;
+  buffer_length: number;
+}
 
-// Service that allows components to display the error component from any 
-// component displayed in router-outlet
+const defaults: ConfigType = {
+  betterttv: false,
+  autologin: true,
+  openlinks: true,
+  buffer_length: 10
+};
+
 @Injectable()
 export class SettingsService {
+  store = null;
 
-    store = null;
+  constructor() {
+    this.store = new Store<ConfigType>({ defaults: { defaults } });
+  }
 
-    constructor() {
-        this.store = new Store({ schema });
-    }
+  getConfig(): ConfigType {
+    return this.store.store;
+  }
 
-    getConfig() {
-        return this.store.store;
-    }
+  setConfig(config) {
+    this.store.store = config;
+  }
 
-    setConfig(config) {
-        this.store.store = config;
-    }
-
-    getStore() {
-      return this.store;
-    }
+  getStore() {
+    return this.store;
+  }
 }

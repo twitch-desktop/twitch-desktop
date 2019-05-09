@@ -50,12 +50,12 @@
   <div id="messages"></div>
   <script>
     const { ipcRenderer } = require('electron');
-    ipcRenderer.on('message', function (event, text) {
+    ipcRenderer.on('message', (event, text) => {
       var container = document.getElementById('messages');
       var message = document.createElement('div');
       message.innerHTML = text;
       container.appendChild(message);
-    })
+    });
   </script>
 </body>
 

@@ -1,11 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Subject } from 'rxjs';
+import { Subject } from "rxjs";
 
 // Spinner service
 // Allows router-outlet components to show or hide the spinner while they init
 @Injectable()
 export class SpinnerService {
-
   isLoading: boolean = false;
 
   // Loading observable to allow spinner component show/hide

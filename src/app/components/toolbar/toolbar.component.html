@@ -31,15 +31,13 @@
 
       <div class="toolbar-button login-button" (click)="router.navigate(['/login'])">
         <div class="login-button-content">
-          <span class="material-icons" [hidden]="!logued">person</span>
-          <span class="material-icons" [hidden]="logued">person_outline</span>
-          <span class="login-username">{{username}}</span>
+          <span class="material-icons">{{ login.logued? 'person': 'person_outline'}}</span>
+          <span class="login-username">{{login.username}}</span>
         </div>
       </div>
 
       <div class="toolbar-button" (click)="enterFullscreen()">
-        <span class="material-icons" [hidden]="isFullscreen">fullscreen</span>
-        <span class="material-icons" [hidden]="!isFullscreen">fullscreen_exit</span>
+        <span class="material-icons">{{ isFullscreen? 'fullscreen_exit':'fullscreen'}}</span>
       </div>
 
     </div>

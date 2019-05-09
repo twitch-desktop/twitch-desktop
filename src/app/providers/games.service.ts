@@ -1,31 +1,59 @@
 import { Injectable } from "@angular/core";
+import { map, uniqBy, concat, find } from "lodash";
+import { GetTopGamesGQL, TopGamesResponse } from "./twitch-graphql.service";
+import { ApolloQueryResult } from "apollo-client";
 
-import { TwitchService } from "./twitch.service";
-let _ = require("lodash");
+export interface Game {
+  id: string;
+  name: string;
+  boxArtURL: string;
+  viewersCount: number;
+}
 
 // Service that allows components to get game list information
 @Injectable()
 export class GameService {
+  private games: Game[] = [];
+  private cursor = "";
 
-  private games: Array<any> = [];
-
-  constructor(private twitchService: TwitchService) {}
+  constructor(private getTopGamesGQL: GetTopGamesGQL) { }
 
   async getTopGames() {
-    let games = await this.twitchService.getTopGames();
-    this.games = games;
-    return games;
+    return new Promise((resolve, reject) => {
+      this.getTopGamesGQL.fetch().subscribe((result: ApolloQueryResult<TopGamesResponse>) => {
+        if (result.data) {
+          this.cursor = result.data.games.edges.slice(-1)[0].cursor;
+          this.games = map(result.data.games.edges, (e) => e.node);
+          resolve(this.games);
+        } else {
+          reject();
+        }
+      });
+    });
   }
 
   async fetchMoreTopGames() {
-    let games = await this.twitchService.fetchMoreTopGames();
-    this.games = _.concat(this.games, games);
-    return this.games;
+    return new Promise((resolve, reject) => {
+      this.getTopGamesGQL.fetch({ cursor: this.cursor }).subscribe((result: ApolloQueryResult<TopGamesResponse>) => {
+        if (result.data) {
+          this.cursor = result.data.games.edges.slice(-1)[0].cursor;
+          this.games = uniqBy(
+            concat(
+              this.games,
+              map(result.data.games.edges, (e) => e.node)
+            ),
+            "id"
+          );
+
+          resolve(this.games);
+        } else {
+          reject();
+        }
+      });
+    });
   }
 
   getGame(id: string) {
-    return _.find(this.games, (game) => {
-      return game.id === id;
-    });
+    return find(this.games, game => game.id === id);
   }
 }

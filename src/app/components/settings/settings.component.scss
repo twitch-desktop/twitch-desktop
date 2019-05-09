@@ -6,40 +6,7 @@
   padding: 20px;
 }
 
-#client-id {
+#buffer-length {
   max-width: 350px;
 }
 
-.custom-control {
-  position: relative;
-  display: flex;
-  min-height: 1.5rem;
-  margin-bottom: 20px;
-}
-
-.custom-input {
-  display: flex;
-  flex-direction: column;
-  padding-left: 0px !important;
-}
-
-.input-label {
-  text-align: left;
-  font-size: 25px;
-}
-
-.custom-control-label {
-  position: relative;
-  margin-bottom: 0;
-  vertical-align: top;
-  font-size: 25px;
-  padding-left: 0.75em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.custom-control-label::before, .custom-control-label::after {
-  top: 0 !important;
-  width: 2rem !important;
-  height: 2rem !important;
-}
