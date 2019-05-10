@@ -24,14 +24,26 @@ export function createApollo(httpLink: HttpLink) {
     }
   });
 
-return {
-  link: ApolloLink.from([
-    new RetryLink(),
-    authMiddleware,
-    httpLink.create({ uri })
-  ]),
-  cache: new InMemoryCache()
-};
+  const defaultOptions = {
+    watchQuery: {
+      fetchPolicy: 'network-only',
+      errorPolicy: 'ignore',
+    },
+    query: {
+      fetchPolicy: 'network-only',
+      errorPolicy: 'all',
+    },
+  }
+
+  return {
+    link: ApolloLink.from([
+      new RetryLink(),
+      authMiddleware,
+      httpLink.create({ uri })
+    ]),
+    cache: new InMemoryCache(),
+    defaultOptions: defaultOptions
+  };
 }
 
 @NgModule({
