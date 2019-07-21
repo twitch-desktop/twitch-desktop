@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Query } from "apollo-angular";
-import { ApolloQueryResult } from "apollo-client";
 import gql from "graphql-tag";
-import { Subject } from "rxjs";
 
 /***
  *
@@ -15,7 +13,7 @@ import { Subject } from "rxjs";
 export interface UserInfoResponse {
   currentUser: {
     displayName: string
-  }
+  };
 }
 @Injectable({
   providedIn: "root"
@@ -57,10 +55,10 @@ interface Stream {
         name: string
       }
     }
-  }
+  };
   previewImageURL: string;
-  viewersCount: number
-  createdAt: Date
+  viewersCount: number;
+  createdAt: Date;
 }
 
 export interface TopStreamsResponse {
@@ -69,7 +67,7 @@ export interface TopStreamsResponse {
       node: Stream
       cursor: string;
     }]
-  }
+  };
 }
 
 export interface GameStreamsResponse {
@@ -187,7 +185,7 @@ export interface FollowsResponse {
         cursor: string;
       }]
     }
-  }
+  };
 }
 
 @Injectable({

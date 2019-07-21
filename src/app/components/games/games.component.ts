@@ -18,8 +18,6 @@ export class GamesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
-    private twitchService: TwitchService,
     private toolbarService: ToolbarService,
     private spinnerService: SpinnerService,
     private errorService: ErrorService,

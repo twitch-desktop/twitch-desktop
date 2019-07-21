@@ -1,11 +1,24 @@
 import { Injectable } from "@angular/core";
-import * as request from "request-promise-native";
-import * as querystring from "querystring";
+import request from "request-promise-native";
+import querystring from "querystring";
 import { Stream } from "./channels.service";
+import { interval } from "rxjs/internal/observable/interval";
+import { startWith, switchMap } from "rxjs/operators";
+import { ApolloQueryResult } from "apollo-client";
+import { GetCurrentUserOnlineFollowsGQL, FollowsResponse } from "./twitch-graphql.service";
+import { map, difference } from "lodash";
+import { Router } from "@angular/router";
 
 
 @Injectable()
 export class TwitchService {
+
+  private followedOnlineStreams = [];
+  private pullingSubscription = null;
+
+  constructor(
+    private router: Router,
+    private getOnlineFollowsGQL: GetCurrentUserOnlineFollowsGQL) { }
 
   async getVideoUrl(stream: Stream) {
     // Get access_token required to read video data
@@ -50,6 +63,34 @@ export class TwitchService {
     let video_url = base_url + querystring.stringify(qs);
 
     return video_url;
+  }
+
+  subscribeToFollowsOnline() {
+    this.pullingSubscription = interval(30000)
+      .pipe(
+        startWith(0),
+        switchMap(() => this.getOnlineFollowsGQL.fetch())
+      )
+      .subscribe((result: ApolloQueryResult<FollowsResponse>) => {
+        let oldOnlineStreams = this.followedOnlineStreams;
+        this.followedOnlineStreams = map(result.data.currentUser.followedLiveUsers.edges, e => e.node.stream.broadcaster.displayName);
+
+        let newOnlineStrems = difference(this.followedOnlineStreams, oldOnlineStreams);
+
+        newOnlineStrems.forEach((displayName) => {
+          let myNotification = new Notification(`${displayName}`, {
+            body: `${displayName} stream just went online`
+          });
+
+          myNotification.onclick = () => {
+            this.router.navigate(["/channels/following"]);
+          };
+        });
+      });
+  }
+
+  unsubscribeToFollowsOnline() {
+    this.pullingSubscription.unsubscribe();
   }
 
 }

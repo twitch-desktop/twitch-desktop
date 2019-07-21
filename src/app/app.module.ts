@@ -6,14 +6,14 @@ import { NgModule, Pipe, PipeTransform } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import * as moment from "moment";
+import moment from "moment";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { GraphQLModule } from "./graphql.module";
 
-//Pipes
+// Pipes
 // Transforms a time string into a string representing time since that moment
 @Pipe({
   name: "twTimeSince"
@@ -31,7 +31,7 @@ export class ScaleImagePipe implements PipeTransform {
   transform(url: string, width: string, height: string) {
     if (
       url &&
-      url != "" &&
+      url !== "" &&
       url.includes("{width}") &&
       url.includes("{height}")
     ) {
@@ -65,7 +65,7 @@ import { GameService } from "./providers/games.service";
 import { ChannelService } from "./providers/channels.service";
 import { SettingsService } from "./providers/settings.service";
 
-//Directives
+// Directives
 import { WebviewDirective } from "./directives/webview.directive";
 import { InfiniteScroll } from "./directives/infinitescroll.directive";
 
@@ -89,11 +89,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     ChatComponent,
     SettingsComponent,
 
-    //Directives
+    // Directives
     WebviewDirective,
     InfiniteScroll,
 
-    //Pipes
+    // Pipes
     TimeSincePipe,
     ScaleImagePipe
   ],
@@ -105,7 +105,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     AppRoutingModule,
     TranslateModule.forRoot({
-      //Pipes
+      // Pipes
       // Transforms a time string into a string representing time since that moment
       loader: {
         provide: TranslateLoader,
@@ -130,4 +130,4 @@ export function HttpLoaderFactory(http: HttpClient) {
 
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

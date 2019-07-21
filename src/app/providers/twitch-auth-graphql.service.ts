@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { ApolloQueryResult } from "apollo-client";
-import * as request from "request-promise-native";
+import request from "request-promise-native";
 import { GetUserInfoGQL, UserInfoResponse } from "./twitch-graphql.service";
-
+import { TwitchService } from "./twitch.service";
+import { SettingsService } from "./settings.service";
 
 export interface Login {
     logued?: boolean;
@@ -23,7 +24,10 @@ export class TwitchAuthService {
         error: ""
     };
 
-    constructor(private getUserInfoGQL: GetUserInfoGQL) { }
+    constructor(
+        private getUserInfoGQL: GetUserInfoGQL,
+        private twitchService: TwitchService,
+        private settingsService: SettingsService) { }
 
     private loginChange: Subject<Login> = new Subject<Login>();
     loginChange$ = this.loginChange.asObservable();
@@ -36,6 +40,18 @@ export class TwitchAuthService {
         this.getUserInfoGQL.fetch().subscribe((result: ApolloQueryResult<UserInfoResponse>) => {
             this.login.username = result.data.currentUser.displayName;
             this.loginChange.next(this.login);
+
+            if (this.settingsService.getConfig().notifications) {
+                this.twitchService.subscribeToFollowsOnline();
+            }
+
+            this.settingsService.getStore().onDidChange("notifications", (newValue, oldValue) => {
+                if (newValue === false) {
+                    this.twitchService.unsubscribeToFollowsOnline();
+                } else {
+                    this.twitchService.subscribeToFollowsOnline();
+                }
+            });
         });
     }
 

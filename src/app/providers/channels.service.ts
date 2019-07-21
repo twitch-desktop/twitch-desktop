@@ -10,7 +10,7 @@ import {
   FollowsResponse
 } from "./twitch-graphql.service";
 import { Game } from "./games.service";
-import { map, find, union, concat, uniqBy } from "lodash";
+import { map, concat, uniqBy } from "lodash";
 
 export interface Stream {
   id: string;
@@ -106,6 +106,7 @@ export class ChannelService {
             return e.node.stream;
           });
 
+          console.log(this.streams);
           resolve(this.streams);
         } else {
           reject();

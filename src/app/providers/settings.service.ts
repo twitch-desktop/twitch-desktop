@@ -1,18 +1,20 @@
 import { Injectable } from "@angular/core";
-import * as Store from "electron-store";
+import Store from "electron-store";
 
 interface ConfigType {
   betterttv: boolean;
   autologin: boolean;
   openlinks: boolean;
   buffer_length: number;
+  notifications: boolean;
 }
 
 const defaults: ConfigType = {
   betterttv: false,
   autologin: true,
   openlinks: true,
-  buffer_length: 10
+  buffer_length: 10,
+  notifications: false
 };
 
 @Injectable()

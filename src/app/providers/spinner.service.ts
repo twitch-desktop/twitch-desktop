@@ -5,7 +5,7 @@ import { Subject } from "rxjs";
 // Allows router-outlet components to show or hide the spinner while they init
 @Injectable()
 export class SpinnerService {
-  isLoading: boolean = false;
+  isLoading = false;
 
   // Loading observable to allow spinner component show/hide
   private loadingChange: Subject<boolean> = new Subject<boolean>();

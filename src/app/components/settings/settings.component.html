@@ -23,4 +23,10 @@
             id="buffer-length" placeholder="10">
     </div>
 
+    <div class="custom-control form-control-lg custom-checkbox">
+        <input type="checkbox" [(ngModel)]="config.notifications" (ngModelChange)="configChanged()"
+            class="custom-control-input" id="checkbox-notifications">
+        <label class="custom-control-label" for="checkbox-notifications">Enable notifications</label>
+    </div>
+
 </div>
