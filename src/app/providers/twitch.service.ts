@@ -6,7 +6,7 @@ import { interval, pipe } from "rxjs";
 import { startWith, switchMap } from "rxjs/operators";
 import { ApolloQueryResult } from "apollo-client";
 import { GetCurrentUserOnlineFollowsGQL, FollowsResponse } from "./twitch-graphql.service";
-import { difference, map } from "lodash";
+import { difference as _difference, map as _map } from "lodash";
 import { Router } from "@angular/router";
 
 
@@ -74,9 +74,9 @@ export class TwitchService {
       )
       .subscribe((result: ApolloQueryResult<FollowsResponse>) => {
         let oldOnlineStreams = this.followedOnlineStreams;
-        this.followedOnlineStreams = map(result.data.currentUser.followedLiveUsers.edges, e => e.node.stream.broadcaster.displayName);
+        this.followedOnlineStreams = _map(result.data.currentUser.followedLiveUsers.edges, e => e.node.stream.broadcaster.displayName);
 
-        let newOnlineStrems = difference(this.followedOnlineStreams, oldOnlineStreams);
+        let newOnlineStrems = _difference(this.followedOnlineStreams, oldOnlineStreams);
 
         newOnlineStrems.forEach((displayName) => {
           let myNotification = new Notification(`${displayName}`, {
