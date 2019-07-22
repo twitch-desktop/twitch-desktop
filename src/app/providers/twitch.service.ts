@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import request from "request-promise-native";
 import querystring from "querystring";
 import { Stream } from "./channels.service";
-import { interval } from "rxjs/internal/observable/interval";
+import { interval, pipe } from "rxjs";
 import { startWith, switchMap } from "rxjs/operators";
 import { ApolloQueryResult } from "apollo-client";
 import { GetCurrentUserOnlineFollowsGQL, FollowsResponse } from "./twitch-graphql.service";
-import { map, difference } from "lodash";
+import { difference, map } from "lodash";
 import { Router } from "@angular/router";
 
 
@@ -17,6 +17,7 @@ export class TwitchService {
   private pullingSubscription = null;
 
   constructor(
+    private ngZone: NgZone,
     private router: Router,
     private getOnlineFollowsGQL: GetCurrentUserOnlineFollowsGQL) { }
 
@@ -29,7 +30,7 @@ export class TwitchService {
       url: token_url,
       headers: {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0",
-        "Client-ID": "jzkbprff40iqj646a697cyrvl0zt2m6"
+        "Client-ID": "jzkbprff40iqj646a697cyrvl0zt2m6" // Token used by twitch web
       },
       body: {
         "need_https": true,
@@ -83,7 +84,7 @@ export class TwitchService {
           });
 
           myNotification.onclick = () => {
-            this.router.navigate(["/channels/following"]);
+            this.ngZone.run(() => this.router.navigate(["/channels/following"]));
           };
         });
       });
