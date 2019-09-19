@@ -22,7 +22,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private router: Router,
     private toolbarService: ToolbarService,
     private settings: SettingsService
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Set dark mode in chat
@@ -50,5 +50,5 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 }

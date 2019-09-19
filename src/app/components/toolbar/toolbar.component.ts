@@ -27,7 +27,7 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   title: string = null;
   logo: string = null;
   login: Login;
-  isFullscreen: boolean = false;
+  isFullscreen = false;
   player_username: string = null;
   player_game: string = null;
   player_logo: string = null;
@@ -37,10 +37,10 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
     public router: Router,
     private toolbarService: ToolbarService,
     private twitchAuthService: TwitchAuthService) {
-      this.login = this.twitchAuthService.getLogin();
-      if(this.login.username=="") {
-        this.login.username = "Guest"
-      }
+    this.login = this.twitchAuthService.getLogin();
+    if (this.login.username === "") {
+      this.login.username = "Guest";
+    }
   }
 
   ngOnInit() {

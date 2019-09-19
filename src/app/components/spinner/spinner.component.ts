@@ -10,7 +10,7 @@ import { SpinnerService } from "../../providers/spinner.service";
   styleUrls: ["./spinner.component.scss"]
 })
 export class SpinnerComponent implements OnInit {
-  isLoading: boolean = false;
+  isLoading = false;
 
   constructor(private router: Router, private spinnerService: SpinnerService) {
     // Subscribe to loading change component to show or hide the spinner
@@ -19,5 +19,5 @@ export class SpinnerComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

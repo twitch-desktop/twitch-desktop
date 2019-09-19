@@ -1,10 +1,10 @@
 import { app, BrowserWindow, screen } from "electron";
 import { autoUpdater } from "electron-updater";
-import * as log from "electron-log";
-import * as path from "path";
-import * as url from "url";
-import * as fs from "fs";
-import * as request from "request-promise-native";
+import log from "electron-log";
+const path = require("path");
+const url = require("url");
+const fs = require("fs");
+const request = require("request-promise-native");
 
 let win, aux_window, serve;
 const args = process.argv.slice(1);

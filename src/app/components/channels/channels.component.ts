@@ -1,8 +1,5 @@
-import { Component, OnInit, Pipe, PipeTransform, NgZone } from "@angular/core";
+import { Component, OnInit, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InfiniteScroll } from "../../directives/infinitescroll.directive";
-
-import { TwitchService } from "../../providers/twitch.service";
 import { ToolbarService } from "../../providers/toolbar.service";
 import { SpinnerService } from "../../providers/spinner.service";
 import { ErrorService } from "../../providers/errorhandler.service";

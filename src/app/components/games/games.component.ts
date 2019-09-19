@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concat } from "lodash";
+import { concat as _concat } from "lodash";
 
 import { TwitchService } from "../../providers/twitch.service";
 import { ToolbarService } from "../../providers/toolbar.service";
@@ -18,8 +18,6 @@ export class GamesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
-    private twitchService: TwitchService,
     private toolbarService: ToolbarService,
     private spinnerService: SpinnerService,
     private errorService: ErrorService,
@@ -38,7 +36,7 @@ export class GamesComponent implements OnInit {
     this.gameService
       .getTopGames()
       .then((games: any) => {
-        this.games = concat(this.games, games);
+        this.games = _concat(this.games, games);
         this.spinnerService.hide();
       })
       .catch(reason => {

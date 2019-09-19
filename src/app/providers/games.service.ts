@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { map, uniqBy, concat, find } from "lodash";
+import { map as _map, uniqBy as _uniqBy, concat as _concat, find as _find } from "lodash";
 import { GetTopGamesGQL, TopGamesResponse } from "./twitch-graphql.service";
 import { ApolloQueryResult } from "apollo-client";
 
@@ -23,7 +23,7 @@ export class GameService {
       this.getTopGamesGQL.fetch().subscribe((result: ApolloQueryResult<TopGamesResponse>) => {
         if (result.data) {
           this.cursor = result.data.games.edges.slice(-1)[0].cursor;
-          this.games = map(result.data.games.edges, (e) => e.node);
+          this.games = _map(result.data.games.edges, (e) => e.node);
           resolve(this.games);
         } else {
           reject();
@@ -37,10 +37,10 @@ export class GameService {
       this.getTopGamesGQL.fetch({ cursor: this.cursor }).subscribe((result: ApolloQueryResult<TopGamesResponse>) => {
         if (result.data) {
           this.cursor = result.data.games.edges.slice(-1)[0].cursor;
-          this.games = uniqBy(
-            concat(
+          this.games = _uniqBy(
+            _concat(
               this.games,
-              map(result.data.games.edges, (e) => e.node)
+              _map(result.data.games.edges, (e) => e.node)
             ),
             "id"
           );
@@ -54,6 +54,6 @@ export class GameService {
   }
 
   getGame(id: string) {
-    return find(this.games, game => game.id === id);
+    return _find(this.games, game => game.id === id);
   }
 }

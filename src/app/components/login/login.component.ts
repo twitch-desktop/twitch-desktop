@@ -1,5 +1,4 @@
-import { Component, ElementRef, OnInit, NgZone } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
 import { ToolbarService } from "../../providers/toolbar.service";
 import { TwitchAuthService, Login } from "../../providers/twitch-auth-graphql.service";
 import { SpinnerService } from "../../providers/spinner.service";

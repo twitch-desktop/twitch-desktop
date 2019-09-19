@@ -153,14 +153,19 @@
   right: 0px;
 }
 
-.maximize-button {
+.fullscreen-button {
   top: 0px;
   right: 40px;
 }
 
-.minimize-button {
+.maximize-button {
   top: 0px;
   right: 80px;
+}
+
+.minimize-button {
+  top: 0px;
+  right: 120px;
   border-bottom-left-radius: 4px;
 }
 
