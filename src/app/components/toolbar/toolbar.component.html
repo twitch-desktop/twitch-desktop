@@ -5,6 +5,9 @@
     <button class="window-control minimize-button" (click)="minimizeWindow()">
       <span class="material-icons">keyboard_arrow_down</span>
     </button>
+    <button class="window-control fullscreen-button" (click)="enterFullscreen()">
+      <span class="material-icons">{{ isFullscreen? 'fullscreen_exit':'fullscreen'}}</span>
+    </button>
     <button class="window-control maximize-button" (click)="maximizeWindow()">
       <span class="material-icons">keyboard_arrow_up</span>
     </button>
@@ -34,10 +37,6 @@
           <span class="material-icons">{{ login.logued? 'person': 'person_outline'}}</span>
           <span class="login-username">{{login.username}}</span>
         </div>
-      </div>
-
-      <div class="toolbar-button" (click)="enterFullscreen()">
-        <span class="material-icons">{{ isFullscreen? 'fullscreen_exit':'fullscreen'}}</span>
       </div>
 
     </div>
