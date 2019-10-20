@@ -22,7 +22,7 @@ export class SettingsService {
   store = null;
 
   constructor() {
-    this.store = new Store<ConfigType>({ defaults: { defaults } });
+    this.store = new Store<ConfigType>({ defaults: defaults });
   }
 
   getConfig(): ConfigType {

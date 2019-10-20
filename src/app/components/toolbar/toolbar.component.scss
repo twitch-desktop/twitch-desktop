@@ -10,9 +10,9 @@
   max-height: 70px;
   height: 70px;
   width: 100%;
-  background: #201c2b;
+  background: rgb(24, 24, 27);
   color: #dad8de;
-  border-bottom: 1px solid #2c2541;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px;
 }
 
 .toolbar-content {
@@ -26,9 +26,8 @@
   min-height: 20px;
   height: 20px;
   width: 100%;
-  background: #201c2b;
+  background: rgb(24, 24, 27);
   min-height: 20px;
-  border-bottom: 1px solid #2c2541;
   cursor: move;
   
   h1 {
@@ -46,7 +45,7 @@
 
 .toolbar span {
   color: #dad8de;
-  font-size: 36px;
+  font-size: 25px;
 }
 
 .toolbar-title {
@@ -75,13 +74,15 @@
   align-items: center;
   justify-content: center;
   padding: 5px;
-  transition: background 0.4s;
+  transition: color 0.4s;
   border-width: 0px;
   background-color: transparent;
   font-size: 24px;
 
   &:hover {
-    background: #7550b9;
+    span {
+      color: #bf94ff !important;
+    }
   }
 }
 
@@ -103,7 +104,6 @@
   width: auto;
   color: #DAD8DE;
   cursor: pointer;
-  transition: background 0.4s;
   margin-right: 10px;
   padding: 5px;
   padding-right: 10px;
@@ -115,27 +115,35 @@
     justify-content: center;
   }
 
+  span {
+    transition: color 0.4s;
+  }
+
   &:hover {
-    background: #7550b9;
+    span {
+      color: #bf94ff;
+    }
   }
 }
 
 .login-username {
-  font-size: 24px !important;
+  font-size: 20px !important;
 }
 
 .window-control {
   position: absolute;
   height: 20px;
-  border-radius: 0px;
   padding: 0px;
   margin: 0px;
-  background: #3A1F64;
   min-width: 40px;
   border-width: 0px;
+  background: rgb(24, 24, 27);
+
   
   &:hover {
-    background: #7550b9;
+    span {
+      color: #bf94ff;
+    }
   }
 }
 
@@ -166,7 +174,6 @@
 .minimize-button {
   top: 0px;
   right: 120px;
-  border-bottom-left-radius: 4px;
 }
 
 .toolbar-subheader {
@@ -184,12 +191,12 @@
 }
 
 .player-username {
-  color: #7550b9 !important;
+  color: #bf94ff !important;
   margin-right: 6px !important;
 }
 
 .player-game {
-  color: #7550b9 !important;
+  color: #bf94ff !important;
   margin-left: 6px !important;
 }
 

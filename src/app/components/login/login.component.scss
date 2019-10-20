@@ -1,5 +1,5 @@
 .login-container {
-  background: #221F2A;
+  background: black;
   padding-top: 100px;
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@
   min-width: 450px;
   max-width: 450px;
   padding: 30px;
-  border: 1px solid #2c2541;
+  border: 1px solid rgb(24, 24, 27);
 }
 
 .login-display {
@@ -22,7 +22,7 @@
   min-width: 450px;
   max-width: 450px;
   padding: 30px;
-  border: 1px solid #2c2541;
+  border: 1px solid rgb(24, 24, 27);
 }
 
 .logo {
@@ -44,16 +44,16 @@ button {
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 25px;
-  border: 1px solid #3A1F64;
-  background: #7550b9;
+  background: rgb(24, 24, 27);
   border-radius: 5px;
   transition: background-color 0.4s;
   min-width: 100%;
   display: flex;
   justify-content: center;
+  border: none;
   
   &:hover {
-    background: #3A1F64;
+    color: #bf94ff;
   }
 }
 

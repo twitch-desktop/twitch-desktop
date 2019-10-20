@@ -3,13 +3,28 @@
   <div class="channel-list">
     <div class="channel-item" (click)="itemClicked(stream)" *ngFor="let stream of streams">
       <div class="channel-content">
-        <div class="channel-title"><span>{{stream.broadcaster.displayName}}</span></div>
-        <img class="channel-cover" src="{{ stream.previewImageURL | twScaleImage:'320':'180' }}">
+        <div class="channel-title">
+          <span>{{stream.broadcaster && stream.broadcaster.displayName}}</span>
+        </div>
+        <div class="channel-image">
+          <img class="channel-cover" src="{{ stream.previewImageURL | twScaleImage:'320':'180' }}">
+        </div>
         <div class="channel-info">
-          <div class="channel-uptime"><span><span
-                class="material-icons">schedule</span>{{stream.createdAt | twTimeSince}}</span></div>
-          <div class="channel-viewers"><span><span
-                class="material-icons">people</span>{{stream.viewersCount | number}}</span></div>
+          <div class="channel-description">
+            <span title="{{stream.broadcaster && stream.broadcaster.broadcastSettings.title}}">
+              {{stream.broadcaster && stream.broadcaster.broadcastSettings.title}}
+            </span>
+          </div>
+          <div class="channel-footer">
+            <div class="channel-uptime">
+              <span>
+                <span class="material-icons">schedule</span>
+                {{stream.createdAt | twTimeSince}}
+              </span>
+            </div>
+            <div class="channel-viewers"><span><span
+                  class="material-icons">people</span>{{stream.viewersCount | number}}</span></div>
+          </div>
         </div>
       </div>
     </div>

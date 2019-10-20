@@ -23,6 +23,10 @@ html, body {
   vertical-align: middle;
 }
 
+button {
+  outline:none !important;
+}
+
 .row {
   margin-right: 0px;
   margin-left: 0px;
@@ -49,21 +53,21 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
 }
 
 .custom-control-label:before{
-  background-color:#dad8de !important;
+  background-color:rgb(24, 24, 27) !important;
 }
 
 .custom-checkbox .custom-control-input:checked~.custom-control-label::before{
-  background-color:#7550b9 !important;
-  border-color: #3A1F64 !important;
+  background-color:rgb(24, 24, 27) !important;
+  border-color: #bf94ff !important;
 }
 
 .custom-control-input:active~.custom-control-label::before{
-  background-color:#7550b9 !important;
+  background-color:rgb(24, 24, 27) !important;
 }
 
 /** focus shadow pinkish **/
 .custom-checkbox .custom-control-input:focus~.custom-control-label::before{
-  box-shadow: 0 0 0 1px #dad8de, 0 0 0 0.2rem rgba(117, 80, 185, 0.25) !important; 
+  box-shadow: none !important;
 }
 .custom-control {
   position: relative !important;
@@ -88,7 +92,7 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
   position: relative !important;
   margin-bottom: 0 !important;
   vertical-align: top !important;
-  font-size: 25px !important;
+  font-size: 20px !important;
   padding-left: 0.75em !important;
   display: flex !important;
   align-items: center !important;

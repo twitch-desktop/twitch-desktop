@@ -37,16 +37,18 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.stream = this.channelService.currentStream;
     });
 
-    this.chat_url = `https://www.twitch.tv/embed/${this.stream.broadcaster.login}/chat?darkpopout`;
+    if (this.stream.broadcaster && this.stream.broadcaster.login) {
+      this.chat_url = `https://www.twitch.tv/embed/${this.stream.broadcaster.login}/chat?darkpopout`;
+    }
 
     // Set toolbar title and logo
-    this.toolbarService.setTitle(this.stream.broadcaster.broadcastSettings.title);
+    this.toolbarService.setTitle(this.stream.broadcaster && this.stream.broadcaster.broadcastSettings.title);
     this.toolbarService.setLogo("");
 
     // Set toolbar subheader info
     this.toolbarService.setSubheader({
-      player_username: this.stream.broadcaster.displayName,
-      player_game: this.stream.broadcaster.broadcastSettings.game.name,
+      player_username: this.stream.broadcaster && this.stream.broadcaster.displayName,
+      player_game: this.stream.broadcaster && this.stream.broadcaster.broadcastSettings && this.stream.broadcaster.broadcastSettings.game.name,
       player_logo: "" // FIXME
     });
 

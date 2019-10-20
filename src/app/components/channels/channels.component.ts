@@ -39,6 +39,7 @@ export class ChannelsComponent implements OnInit {
         this.toolbarService.setTitle("Top Streams");
         this.fetchingMore = true;
         this.channelService.getTopStreams().then((streams: Stream[]) => {
+          console.log(streams);
           this.streams = streams;
           this.fetchingMore = false;
           this.spinnerService.hide();

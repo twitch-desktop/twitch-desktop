@@ -5,7 +5,10 @@
       <div class="game-content">
         <img class="game-cover" src="{{game.boxArtURL | twScaleImage:'285':'380'}}">
       </div>
-      <div class="game-name" [hidden]="!game.hovered"><span>{{game.viewersCount | number}}</span></div>
+      <div class="game-name">
+        <span class="material-icons">people</span>
+        <span>{{game.viewersCount | number}}</span>
+      </div>
     </div>
 
     <div class="fetching-more" [hidden]="!fetchingMore">
