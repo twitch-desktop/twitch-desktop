@@ -17,6 +17,18 @@
         <label class="custom-control-label" for="checkbox-openlinks">Allow to open Twitch Chat urls in browser</label>
     </div>
 
+    <div class="custom-control form-control-lg">
+        <label class="quality-label" for="selectbox-quality">Preferred video quality:</label>
+        <select id="selectbox-quality" [(ngModel)]="config.preferred_quality" (ngModelChange)="configChanged()">
+            <option value="auto">Auto</option>
+            <option value="160p">160p</option>
+            <option value="360p">360p</option>
+            <option value="480p">480p</option>
+            <option value="720p">720p</option>
+            <option value="source">Source</option>
+        </select>
+    </div>
+
     <div class="custom-control custom-input">
         <label class="input-label" for="buffer-length">Max buffer length (seconds):</label>
         <input type="number" [(ngModel)]="config.buffer_length" (ngModelChange)="configChanged()" class="form-control"

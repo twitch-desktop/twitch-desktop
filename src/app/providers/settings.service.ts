@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import Store from "electron-store";
 
-interface ConfigType {
+export interface ConfigType {
   betterttv: boolean;
   autologin: boolean;
   openlinks: boolean;
   buffer_length: number;
   notifications: boolean;
+  preferred_quality: string;
 }
 
 const defaults: ConfigType = {
@@ -14,7 +15,8 @@ const defaults: ConfigType = {
   autologin: true,
   openlinks: true,
   buffer_length: 10,
-  notifications: false
+  notifications: false,
+  preferred_quality: "auto"
 };
 
 @Injectable()

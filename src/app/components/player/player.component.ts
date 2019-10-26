@@ -67,7 +67,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       },
       levelSelectorConfig: {
         title: "Quality",
-        labelCallback: function (playbackLevel, customLabel) {
+        labelCallback: (playbackLevel, customLabel) => {
           return (
             playbackLevel.level.height +
             "p" +
@@ -88,6 +88,19 @@ export class PlayerComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.player.listenToOnce(this.player.core.activePlayback, Clappr.Events.PLAYBACK_LEVELS_AVAILABLE, (levels) => {
+      let target_quality_id = -1;
+      this.player.getPlugin('hls').levels.forEach(level => {
+        if (level.label.includes(this.settingsService.getConfig().preferred_quality)) {
+          target_quality_id = level.id;
+        }
+      });
+
+      this.player.getPlugin('hls').currentLevel = target_quality_id;
+      this.player.getPlugin('level_selector').selectedLevelId = target_quality_id;
+    })
+
 
     this.player.on(Clappr.Events.PLAYER_PLAY, () => {
       this.isLoading = false;
