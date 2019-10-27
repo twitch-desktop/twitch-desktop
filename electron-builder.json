@@ -22,12 +22,24 @@
   "win": {
     "icon": "build",
     "target": [
-      "nsis-web",
-      "nsis",
-      "portable"
-    ],
-    "arch": [
-      "x64"
+      {
+        "target": "nsis-web",
+        "arch": [
+          "x64"
+        ]
+      },
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      },
+      {
+        "target": "portable",
+        "arch": [
+          "x64"
+        ]
+      }
     ],
     "publish": [
       "github"
