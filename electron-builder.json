@@ -49,8 +49,18 @@
     "icon": "build",
     "category": "public.app-category.entertainment",
     "target": [
-      "dmg",
-      "zip"
+      {
+        "target": "dmg",
+        "arch": [
+          "x64"
+        ]
+      },
+      {
+        "target": "zip",
+        "arch": [
+          "x64"
+        ]
+      }
     ],
     "publish": [
       "github"
@@ -60,7 +70,12 @@
     "icon": "build/icon.icns",
     "category": "Video",
     "target": [
-      "AppImage"
+      {
+        "target": "AppImage",
+        "arch": [
+          "x64"
+        ]
+      }
     ],
     "artifactName": "${productName}.${ext}",
     "publish": [
