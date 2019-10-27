@@ -37,16 +37,18 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.stream = this.channelService.currentStream;
     });
 
-    this.chat_url = `https://www.twitch.tv/embed/${this.stream.broadcaster.login}/chat?darkpopout`;
+    if (this.stream.broadcaster && this.stream.broadcaster.login) {
+      this.chat_url = `https://www.twitch.tv/embed/${this.stream.broadcaster.login}/chat?darkpopout`;
+    }
 
     // Set toolbar title and logo
-    this.toolbarService.setTitle(this.stream.broadcaster.broadcastSettings.title);
+    this.toolbarService.setTitle(this.stream.broadcaster && this.stream.broadcaster.broadcastSettings.title);
     this.toolbarService.setLogo("");
 
     // Set toolbar subheader info
     this.toolbarService.setSubheader({
-      player_username: this.stream.broadcaster.displayName,
-      player_game: this.stream.broadcaster.broadcastSettings.game.name,
+      player_username: this.stream.broadcaster && this.stream.broadcaster.displayName,
+      player_game: this.stream.broadcaster && this.stream.broadcaster.broadcastSettings && this.stream.broadcaster.broadcastSettings.game.name,
       player_logo: "" // FIXME
     });
 
@@ -65,7 +67,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       },
       levelSelectorConfig: {
         title: "Quality",
-        labelCallback: function (playbackLevel, customLabel) {
+        labelCallback: (playbackLevel, customLabel) => {
           return (
             playbackLevel.level.height +
             "p" +
@@ -86,6 +88,26 @@ export class PlayerComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.player.listenToOnce(this.player.core.activePlayback, Clappr.Events.PLAYBACK_LEVELS_AVAILABLE, (levels) => {
+
+      if (this.settingsService.getConfig().preferred_quality !== "auto") {
+        let target_quality_id = -1;
+
+        if (this.settingsService.getConfig().preferred_quality === "source") {
+          target_quality_id = levels[levels.length - 1].id;
+        } else {
+          levels.forEach(level => {
+            if (level.label.includes(this.settingsService.getConfig().preferred_quality)) {
+              target_quality_id = level.id;
+            }
+          });
+        }
+
+        this.player.getPlugin('hls').currentLevel = target_quality_id;
+        this.player.getPlugin('level_selector').selectedLevelId = target_quality_id;
+      }
+    })
 
     this.player.on(Clappr.Events.PLAYER_PLAY, () => {
       this.isLoading = false;

@@ -1,6 +1,6 @@
 
 html {
-  background: #221F2A;
+  background: black;
   height: 100%;
   overflow: hidden;
 }
@@ -9,17 +9,12 @@ body {
   font-family: 'Roboto';
   font-size: 14px;
   line-height: 20px;
-  background: #221F2A;
+  background: black;
   height: 100%;
 }
 
 [hidden] {
   display: none !important;
-}
-
-.dragzone {
-  border: 2px dotted #ccc;
-  margin: 10px;
 }
 
 #sidebar {
@@ -31,7 +26,8 @@ body {
   top: 70px;
   left: 0;
   overflow-y: auto;
-  background: #17141f;
+  background: black;
+  border: 1px solid #212126;
   color: #dad8de;
   padding: 5px;
 }
@@ -60,5 +56,5 @@ body {
 .content {
   max-height: calc(100% - 70px);
   height: calc(100% - 70px);
-  background-color: #221F2A;
+  background-color: black;
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { SettingsService } from "../../providers/settings.service";
+import { SettingsService, ConfigType } from "../../providers/settings.service";
+import { ToolbarService } from "../../providers/toolbar.service";
 
 @Component({
   templateUrl: "./settings.component.html",
@@ -7,13 +8,18 @@ import { SettingsService } from "../../providers/settings.service";
   styleUrls: ["./settings.component.scss"]
 })
 export class SettingsComponent implements OnInit {
-  config: any = {};
+  config: ConfigType;
 
-  constructor(private settings: SettingsService) {
+  constructor(
+    private settings: SettingsService,
+    private toolbarService: ToolbarService) {
     this.config = this.settings.getConfig();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.toolbarService.setTitle("Settings");
+    this.toolbarService.setLogo("settings");
+  }
 
   configChanged() {
     this.settings.setConfig(this.config);

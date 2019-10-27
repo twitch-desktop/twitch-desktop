@@ -1,5 +1,5 @@
 #main-container {
-  background: #221F2A;
+  background: black;
   display: flex;
   color: #dad8de;
   flex-direction: column;
@@ -10,3 +10,8 @@
   max-width: 350px;
 }
 
+.quality-label {
+  margin-left: -20px;
+  margin-right: 20px;
+  
+}

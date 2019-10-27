@@ -24,8 +24,9 @@ try {
       autoHideMenuBar: true,
       height: 300,
       show: true,
-      backgroundColor: "#221F2A",
+      backgroundColor: "#000",
       webPreferences: {
+        webviewTag: true,
         nodeIntegration: true,
         webSecurity: false,
         partition: "persist:twitch"
@@ -107,9 +108,10 @@ async function createMainWindow() {
     frame: false,
     icon: icon,
     title: "Twitch Desktop",
-    backgroundColor: "#221F2A",
+    backgroundColor: "#000",
     show: false,
     webPreferences: {
+      webviewTag: true,
       nodeIntegration: true,
       webSecurity: false,
       partition: "persist:twitch"

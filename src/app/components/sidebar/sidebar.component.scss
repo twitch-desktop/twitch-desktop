@@ -10,18 +10,15 @@
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-radius: 5px;
   
   &:hover {
-    background: #7550b9;
+    color: #bf94ff;;
     cursor: pointer;
   }
 }
 
 .active {
-  background: #7550b9;
+  color: #bf94ff;;
 }
 
 .menu-item-icon {

@@ -1,7 +1,7 @@
 <div class="toolbar">
 
   <div class="toolbar-topline">
-    <h1>Twitch Desktop</h1>
+    <h1></h1>
     <button class="window-control minimize-button" (click)="minimizeWindow()">
       <span class="material-icons">keyboard_arrow_down</span>
     </button>
@@ -34,7 +34,7 @@
 
       <div class="toolbar-button login-button" (click)="router.navigate(['/login'])">
         <div class="login-button-content">
-          <span class="material-icons">{{ login.logued? 'person': 'person_outline'}}</span>
+          <span class="material-icons">{{ login.logued? '': 'person_outline'}}</span>
           <span class="login-username">{{login.username}}</span>
         </div>
       </div>

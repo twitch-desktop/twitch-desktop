@@ -105,8 +105,6 @@ export class ChannelService {
           this.streams = _map(result.data.currentUser.followedLiveUsers.edges, (e) => {
             return e.node.stream;
           });
-
-          console.log(this.streams);
           resolve(this.streams);
         } else {
           reject();
