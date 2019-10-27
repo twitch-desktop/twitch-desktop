@@ -3,22 +3,22 @@
   "directories": {
     "output": "release/"
   },
-    "files": [
-        "**/*",
-        "!**/*.ts",
-        "!*.code-workspace",
-        "!LICENSE.md",
-        "!package.json",
-        "!package-lock.json",
-        "!src/",
-        "!e2e/",
-        "!hooks/",
-        "!angular.json",
-        "!_config.yml",
-        "!karma.conf.js",
-        "!tsconfig.json",
-        "!tslint.json"
-    ],
+  "files": [
+    "**/*",
+    "!**/*.ts",
+    "!*.code-workspace",
+    "!LICENSE.md",
+    "!package.json",
+    "!package-lock.json",
+    "!src/",
+    "!e2e/",
+    "!hooks/",
+    "!angular.json",
+    "!_config.yml",
+    "!karma.conf.js",
+    "!tsconfig.json",
+    "!tslint.json"
+  ],
   "win": {
     "icon": "build",
     "target": [
@@ -26,7 +26,12 @@
       "nsis",
       "portable"
     ],
-    "publish": ["github"]
+    "arch": [
+      "x64"
+    ],
+    "publish": [
+      "github"
+    ]
   },
   "mac": {
     "icon": "build",
@@ -35,7 +40,9 @@
       "dmg",
       "zip"
     ],
-    "publish": ["github"]
+    "publish": [
+      "github"
+    ]
   },
   "linux": {
     "icon": "build/icon.icns",
@@ -44,6 +51,8 @@
       "AppImage"
     ],
     "artifactName": "${productName}.${ext}",
-    "publish": ["github"]
+    "publish": [
+      "github"
+    ]
   }
 }
