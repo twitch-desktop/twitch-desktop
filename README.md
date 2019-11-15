@@ -1,8 +1,8 @@
 # Twitch Desktop Client (Unofficial)
 
-![gamelist](https://i.imgur.com/FNIYpE5.jpg)
-![channellist](https://i.imgur.com/Kyv1cbo.jpg)
-![player](https://i.imgur.com/KRZ3KQa.jpg)
+![gamelist](https://i.imgur.com/lvL89Qq.png)
+![channellist](https://i.imgur.com/17r3cZU.png)
+![player](https://i.imgur.com/eE38Uh7.png)
 
 ## Working right now
 + Browse games and live streams
@@ -10,11 +10,11 @@
 + User login and current online streams list
 + Chat
 + Autoupdater
++ Notifications
 
 ## Upcoming
 - Browse and play VODs
 - Ability to follow streams and games
-- Push notifications
 - Chromecast support
 - Something more 
 
