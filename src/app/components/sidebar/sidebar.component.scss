@@ -10,15 +10,15 @@
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
-  
+
   &:hover {
-    color: #bf94ff;;
+    color: #bf94ff;
     cursor: pointer;
   }
 }
 
 .active {
-  color: #bf94ff;;
+  color: #bf94ff;
 }
 
 .menu-item-icon {
@@ -56,7 +56,7 @@ hr {
   min-height: 50px;
   height: 50px;
   transition: background 0.4s;
-  
+
   &:hover {
     background: #201c2b;
     cursor: pointer;
@@ -69,7 +69,7 @@ hr {
   height: calc(100% - 70px);
 }
 
-.sidebar-stream-item-inner{
+.sidebar-stream-item-inner {
   display: flex;
   height: 24px;
   width: 100%;
@@ -79,7 +79,7 @@ hr {
   align-items: center;
   padding-left: 10px;
   margin-top: 6px;
-  
+
   img {
     width: 24px;
     height: 24px;
@@ -87,7 +87,7 @@ hr {
     margin: 0px;
     margin-right: 10px;
   }
-  
+
   h3 {
     display: flex;
     -webkit-margin-before: 0px;

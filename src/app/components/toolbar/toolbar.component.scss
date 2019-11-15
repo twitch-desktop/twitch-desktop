@@ -29,7 +29,7 @@
   background: rgb(24, 24, 27);
   min-height: 20px;
   cursor: move;
-  
+
   h1 {
     font-size: 12px;
     text-align: center;
@@ -37,7 +37,7 @@
     display: inline-block;
     width: 100%;
   }
-  
+
   button {
     -webkit-app-region: no-drag;
   }
@@ -55,7 +55,7 @@
   margin-right: auto;
 }
 
-.toolbar-header{
+.toolbar-header {
   font-size: 18px;
   font-weight: bold;
   white-space: nowrap;
@@ -64,7 +64,7 @@
 }
 
 .two-rows {
-  font-size:18px !important;
+  font-size: 18px !important;
 }
 
 .toolbar-button {
@@ -102,7 +102,7 @@
 .login-button {
   display: inline-block;
   width: auto;
-  color: #DAD8DE;
+  color: #dad8de;
   cursor: pointer;
   margin-right: 10px;
   padding: 5px;
@@ -139,7 +139,6 @@
   border-width: 0px;
   background: rgb(24, 24, 27);
 
-  
   &:hover {
     span {
       color: #bf94ff;

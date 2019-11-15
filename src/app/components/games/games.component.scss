@@ -14,7 +14,7 @@
 }
 
 .game-item {
-  cursor:  pointer;
+  cursor: pointer;
   margin: 5px;
   background: black;
   transition: border-color 0.4s ease;
@@ -32,7 +32,7 @@
   }
 
   &:hover {
-    border-color: #bf94ff;;
+    border-color: #bf94ff;
 
     .game-name {
       visibility: visible;
@@ -52,14 +52,14 @@
 
 .game-name {
   width: 100%;
-  color: #DAD8DE;
+  color: #dad8de;
   height: 25px;
   position: absolute;
   bottom: 0px;
   left: 0px;
   display: flex;
   justify-content: center;
-  
+
   span {
     display: flex;
     height: 25px;
@@ -84,5 +84,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #DAD8DE;
+  color: #dad8de;
 }

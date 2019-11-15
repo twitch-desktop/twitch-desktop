@@ -1,34 +1,37 @@
-import { Component, OnInit } from "@angular/core";
-import { ToolbarService } from "../../providers/toolbar.service";
-import { TwitchAuthService, Login } from "../../providers/twitch-auth-graphql.service";
-import { SpinnerService } from "../../providers/spinner.service";
+import { Component, OnInit } from '@angular/core';
+import { SpinnerService } from '../../providers/spinner.service';
+import { ToolbarService } from '../../providers/toolbar.service';
+import {
+  ILogin,
+  TwitchAuthService
+} from '../../providers/twitch-auth-graphql.service';
 
 @Component({
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"]
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  login: Login;
-  error = "";
+  login: ILogin;
+  error = '';
 
   login_form = {
-    username: "",
-    password: ""
+    username: '',
+    password: ''
   };
 
   constructor(
     private toolbarService: ToolbarService,
     private twitchAuthService: TwitchAuthService,
-    private spinnerService: SpinnerService) {
-
+    private spinnerService: SpinnerService
+  ) {
     this.login = this.twitchAuthService.getLogin();
   }
 
   ngOnInit() {
-    this.toolbarService.setTitle("");
-    this.toolbarService.setLogo("");
+    this.toolbarService.setTitle('');
+    this.toolbarService.setLogo('');
 
-    this.twitchAuthService.loginChange$.subscribe((login: Login) => {
+    this.twitchAuthService.loginChange$.subscribe((login: ILogin) => {
       this.login = login;
     });
   }
@@ -36,15 +39,13 @@ export class LoginComponent implements OnInit {
   async logIn() {
     this.spinnerService.show();
 
-    let result: Login = await this.twitchAuthService.logIn(this.login_form.username, this.login_form.password);
-    if (result.error) {
-      this.error = `Could not log in, ${result.error}`;
-    } else {
-      this.error = "";
-    }
+    let result: ILogin = await this.twitchAuthService.logIn(
+      this.login_form.username,
+      this.login_form.password
+    );
 
+    this.error = result.error ? `Could not log in, ${result.error}` : '';
     this.spinnerService.hide();
-
   }
 
   logOut() {

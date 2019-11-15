@@ -1,26 +1,26 @@
-import { Component, OnInit } from "@angular/core";
-import { Router, NavigationStart } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 
-import { ErrorService, ErrorValue } from "../../providers/errorhandler.service";
+import {
+  ErrorService,
+  IErrorValue
+} from '../../providers/errorhandler.service';
 
 // Error display component
 @Component({
-  templateUrl: "./errorhandler.component.html",
-  selector: "tw-error",
-  styleUrls: ["./errorhandler.component.scss"]
+  templateUrl: './errorhandler.component.html',
+  selector: 'tw-error',
+  styleUrls: ['./errorhandler.component.scss']
 })
 export class ErrorComponent implements OnInit {
   displayError = false;
   error: string;
   reason = null;
 
-  constructor(
-    private router: Router,
-    private errorService: ErrorService
-  ) {
+  constructor(private router: Router, private errorService: ErrorService) {
     // Subscribe to the onError event of the service to show or hide
     // the component bassed on its value
-    this.errorService.onError$.subscribe((error_value: ErrorValue) => {
+    this.errorService.onError$.subscribe((error_value: IErrorValue) => {
       if (error_value.error) {
         this.error = error_value.error;
         this.reason = error_value.reason;
@@ -28,7 +28,7 @@ export class ErrorComponent implements OnInit {
       } else {
         // `null` is used as the hide value
         this.displayError = false;
-        this.error = "";
+        this.error = '';
         this.reason = null;
       }
     });
@@ -37,17 +37,17 @@ export class ErrorComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         this.displayError = false;
-        this.error = "";
+        this.error = '';
         this.reason = null;
       }
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   retry() {
     this.displayError = false;
-    this.error = "";
+    this.error = '';
 
     // TODO
     // Maybe reloading the current component?

@@ -1,23 +1,23 @@
-import { Component } from "@angular/core";
-import { ElectronService } from "./providers/electron.service";
-import { TwitchAuthService } from "./providers/twitch-auth-graphql.service";
-import { SettingsService } from "./providers/settings.service";
-import { Router } from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
-import { AppConfig } from "../environments/environment";
-import { TwitchService } from "./providers/twitch.service";
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { remote } from 'electron';
+import { AppConfig } from '../environments/environment';
+import { ElectronService } from './providers/electron.service';
+import { SettingsService } from './providers/settings.service';
+import { TwitchAuthService } from './providers/twitch-auth-graphql.service';
+import { TwitchService } from './providers/twitch.service';
 
-
-let mainWindow = require("electron").remote.getGlobal("mainWindow");
-let auth_token = localStorage.getItem("auth_token");
+let mainWindow = remote.getGlobal('mainWindow');
+let auth_token = localStorage.getItem('auth_token');
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  sidebarState = "visible";
+  sidebarState = 'visible';
 
   constructor(
     public electronService: ElectronService,
@@ -27,15 +27,15 @@ export class AppComponent {
     private twitchService: TwitchService,
     private settingsService: SettingsService
   ) {
-    translate.setDefaultLang("en");
-    console.log("AppConfig", AppConfig);
+    translate.setDefaultLang('en');
+    console.log('AppConfig', AppConfig);
 
     if (electronService.isElectron()) {
-      console.log("Mode electron");
-      console.log("Electron ipcRenderer", electronService.ipcRenderer);
-      console.log("NodeJS childProcess", electronService.childProcess);
+      console.log('Mode electron');
+      console.log('Electron ipcRenderer', electronService.ipcRenderer);
+      console.log('NodeJS childProcess', electronService.childProcess);
     } else {
-      console.log("Mode web");
+      console.log('Mode web');
     }
   }
 
@@ -43,11 +43,11 @@ export class AppComponent {
     if (auth_token && this.settingsService.getConfig().autologin) {
       this.twitchAuthService.setAuthToken(auth_token);
     } else {
-      localStorage.removeItem("auth_token");
+      localStorage.removeItem('auth_token');
     }
 
     // Browse games as start page
-    this.router.navigate(["/games"]);
+    this.router.navigate(['/games']);
   }
 
   closeWindow() {
@@ -71,10 +71,10 @@ export class AppComponent {
   }
 
   toggleSidebar() {
-    if (this.sidebarState === "visible") {
-      this.sidebarState = "hidden";
-    } else if (this.sidebarState === "hidden") {
-      this.sidebarState = "visible";
+    if (this.sidebarState === 'visible') {
+      this.sidebarState = 'hidden';
+    } else if (this.sidebarState === 'hidden') {
+      this.sidebarState = 'visible';
     }
   }
 }

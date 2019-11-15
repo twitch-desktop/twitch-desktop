@@ -1,9 +1,11 @@
 <div class="row sidebar-container">
-  <div class="sidebar-menu-item row align-items-center" 
-  [ngClass]="{'active': item.active }"
-  (click)="navigate(item)" 
-  [hidden]="!item.visible" 
-  *ngFor="let item of items">
-    <span class="material-icons menu-item-icon">{{item.icon}}</span>
+  <div
+    class="sidebar-menu-item row align-items-center"
+    [ngClass]="{ active: item.active }"
+    (click)="navigate(item)"
+    [hidden]="!item.visible"
+    *ngFor="let item of items"
+  >
+    <span class="material-icons menu-item-icon">{{ item.icon }}</span>
   </div>
 </div>

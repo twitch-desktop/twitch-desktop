@@ -1,36 +1,58 @@
 <div infinite-scroll class="channel-list-wrapper" (scrolled)="onScrolled()">
-
   <div class="channel-list">
-    <div class="channel-item" (click)="itemClicked(stream)" *ngFor="let stream of streams">
+    <div
+      class="channel-item"
+      (click)="itemClicked(stream)"
+      *ngFor="let stream of streams"
+    >
       <div class="channel-content">
         <div class="channel-title">
-          <span>{{stream.broadcaster && stream.broadcaster.displayName}}</span>
+          <span>{{
+            stream.broadcaster && stream.broadcaster.displayName
+          }}</span>
         </div>
         <div class="channel-image">
-          <img class="channel-cover" src="{{ stream.previewImageURL | twScaleImage:'320':'180' }}">
+          <img
+            class="channel-cover"
+            src="{{ stream.previewImageURL | twScaleImage: '320':'180' }}"
+          />
         </div>
         <div class="channel-info">
           <div class="channel-description">
-            <span title="{{stream.broadcaster && stream.broadcaster.broadcastSettings.title}}">
-              {{stream.broadcaster && stream.broadcaster.broadcastSettings.title}}
+            <span
+              title="{{
+                stream.broadcaster && stream.broadcaster.broadcastSettings.title
+              }}"
+            >
+              {{
+                stream.broadcaster && stream.broadcaster.broadcastSettings.title
+              }}
             </span>
           </div>
           <div class="channel-footer">
             <div class="channel-uptime">
               <span>
                 <span class="material-icons">schedule</span>
-                {{stream.createdAt | twTimeSince}}
+                {{ stream.createdAt | twTimeSince }}
               </span>
             </div>
-            <div class="channel-viewers"><span><span
-                  class="material-icons">people</span>{{stream.viewersCount | number}}</span></div>
+            <div class="channel-viewers">
+              <span
+                ><span class="material-icons">people</span
+                >{{ stream.viewersCount | number }}</span
+              >
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="fetching-more" [hidden]="!fetchingMore">
-      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+      <div
+        class="spinner-border"
+        style="width: 3rem; height: 3rem;"
+        role="status"
+      >
         <span class="sr-only">Loading...</span>
       </div>
     </div>

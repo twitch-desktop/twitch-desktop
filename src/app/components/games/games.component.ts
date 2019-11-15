@@ -1,20 +1,20 @@
-import { Component, OnInit, NgZone } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { concat as _concat } from "lodash";
+import { Component, NgZone, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { concat as _concat } from 'lodash';
 
-import { TwitchService } from "../../providers/twitch.service";
-import { ToolbarService } from "../../providers/toolbar.service";
-import { SpinnerService } from "../../providers/spinner.service";
-import { ErrorService } from "../../providers/errorhandler.service";
-import { GameService } from "../../providers/games.service";
+import { ErrorService } from '../../providers/errorhandler.service';
+import { GameService } from '../../providers/games.service';
+import { SpinnerService } from '../../providers/spinner.service';
+import { ToolbarService } from '../../providers/toolbar.service';
+import { TwitchService } from '../../providers/twitch.service';
 
 @Component({
-  templateUrl: "./games.component.html",
-  styleUrls: ["./games.component.scss"]
+  templateUrl: './games.component.html',
+  styleUrls: ['./games.component.scss']
 })
 export class GamesComponent implements OnInit {
-  games: Array<Object> = [];
-  fetchingMore: Boolean = false;
+  games = [];
+  fetchingMore = false;
 
   constructor(
     private router: Router,
@@ -23,14 +23,14 @@ export class GamesComponent implements OnInit {
     private errorService: ErrorService,
     private gameService: GameService,
     private zone: NgZone
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.spinnerService.show();
 
     // Set toolbar tile and logo
-    this.toolbarService.setTitle("Top Games");
-    this.toolbarService.setLogo("games");
+    this.toolbarService.setTitle('Top Games');
+    this.toolbarService.setLogo('games');
 
     // Load the list of top games and hide the spinner
     this.gameService
@@ -41,7 +41,7 @@ export class GamesComponent implements OnInit {
       })
       .catch(reason => {
         this.spinnerService.hide();
-        this.errorService.showError("Failed fetching games", reason);
+        this.errorService.showError('Failed fetching games', reason);
         console.log(reason);
       });
   }
@@ -51,19 +51,19 @@ export class GamesComponent implements OnInit {
     // Only fetch more if we are not already doing that
     if (!this.fetchingMore) {
       this.fetchingMore = true;
-      this.zone.run(() => { });
+      this.zone.run(() => {});
 
       this.gameService
         .fetchMoreTopGames()
         .then((games: any) => {
           this.games = games;
           this.fetchingMore = false;
-          this.zone.run(() => { });
+          this.zone.run(() => {});
         })
         .catch(reason => {
           console.log(reason);
           this.fetchingMore = false;
-          this.zone.run(() => { });
+          this.zone.run(() => {});
         });
     }
   }

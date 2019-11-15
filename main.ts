@@ -1,42 +1,45 @@
-import { app, BrowserWindow, screen } from "electron";
-import { autoUpdater } from "electron-updater";
-import log from "electron-log";
-const path = require("path");
-const url = require("url");
-const fs = require("fs");
-const request = require("request-promise-native");
+import { app, BrowserWindow, screen } from 'electron';
+import log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
+// tslint:disable: no-var-requires
+const path = require('path');
+const url = require('url');
+const fs = require('fs');
+const request = require('request-promise-native');
+// tslint:enable: no-var-requires
 
-let win, aux_window, serve;
+let win;
+let aux_window;
 const args = process.argv.slice(1);
-serve = args.some(val => val === "--serve");
+let serve = args.some(val => val === '--serve');
 
 autoUpdater.logger = log;
 autoUpdater.autoDownload = false;
 
-log.info("App starting...");
+log.info('App starting...');
 
 try {
-  app.on("ready", () => {
+  app.on('ready', () => {
     aux_window = new BrowserWindow({
       frame: true,
-      icon: path.join(__dirname, "dist/assets/icon.png"),
+      icon: path.join(__dirname, 'dist/assets/icon.png'),
       width: 600,
       autoHideMenuBar: true,
       height: 300,
       show: true,
-      backgroundColor: "#000",
+      backgroundColor: '#000',
       webPreferences: {
         webviewTag: true,
         nodeIntegration: true,
         webSecurity: false,
-        partition: "persist:twitch"
+        partition: 'persist:twitch'
       }
     });
 
     if (serve) {
       createMainWindow();
     } else {
-      aux_window.on("close", event => {
+      aux_window.on('close', event => {
         autoUpdater.removeAllListeners();
         aux_window.removeAllListeners();
         createMainWindow();
@@ -46,7 +49,7 @@ try {
       aux_window.loadURL(
         url.format({
           pathname: path.join(__dirname, `dist/update.html`),
-          protocol: "file:",
+          protocol: 'file:',
           slashes: true
         })
       );
@@ -55,39 +58,39 @@ try {
     }
   });
 
-  autoUpdater.on("checking-for-update", () => {
-    sendStatusToWindow("Checking for updates");
+  autoUpdater.on('checking-for-update', () => {
+    sendStatusToWindow('Checking for updates');
   });
 
-  autoUpdater.on("update-available", info => {
-    sendStatusToWindow("New update avaliable.");
+  autoUpdater.on('update-available', info => {
+    sendStatusToWindow('New update avaliable.');
     autoUpdater.downloadUpdate();
   });
 
-  autoUpdater.on("update-not-available", info => {
+  autoUpdater.on('update-not-available', info => {
     aux_window.close();
   });
 
-  autoUpdater.on("error", err => {
-    sendStatusToWindow("Error in auto-updater. " + err);
+  autoUpdater.on('error', err => {
+    sendStatusToWindow('Error in auto-updater. ' + err);
     aux_window.close();
   });
 
-  autoUpdater.on("download-progress", progressObj => {
-    let log_message = "Download speed: " + progressObj.bytesPerSecond;
-    log_message = log_message + " - Downloaded " + progressObj.percent + "%";
+  autoUpdater.on('download-progress', progressObj => {
+    let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
     log_message =
       log_message +
-      " (" +
+      ' (' +
       progressObj.transferred +
-      "/" +
+      '/' +
       progressObj.total +
-      ")";
+      ')';
     sendStatusToWindow(log_message);
   });
 
-  autoUpdater.on("update-downloaded", info => {
-    sendStatusToWindow("Update downloaded");
+  autoUpdater.on('update-downloaded', info => {
+    sendStatusToWindow('Update downloaded');
     setImmediate(() => autoUpdater.quitAndInstall());
   });
 } catch (e) {
@@ -97,7 +100,7 @@ try {
 async function createMainWindow() {
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
-  let icon = path.join(__dirname, "dist/assets/icon.png");
+  let icon = path.join(__dirname, 'dist/assets/icon.png');
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -106,36 +109,41 @@ async function createMainWindow() {
     width: size.width,
     height: size.height,
     frame: false,
-    icon: icon,
-    title: "Twitch Desktop",
-    backgroundColor: "#000",
+    icon,
+    title: 'Twitch Desktop',
+    backgroundColor: '#000',
     show: false,
     webPreferences: {
       webviewTag: true,
       nodeIntegration: true,
       webSecurity: false,
-      partition: "persist:twitch"
+      partition: 'persist:twitch'
     }
   });
 
   // We set this to be able to acces the main window object inside angular application
-  (<any>global).mainWindow = win;
+  (global as any).mainWindow = win;
 
   aux_window.close();
 
   if (serve) {
-    (<any>global).betterttv = await request("http://localhost:4200/assets/betterttv.js");
-    require("electron-reload")(__dirname, {
+    (global as any).betterttv = await request(
+      'http://localhost:4200/assets/betterttv.js'
+    );
+    require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
-    win.loadURL("http://localhost:4200");
+    win.loadURL('http://localhost:4200');
     win.show();
   } else {
-    (<any>global).betterttv = fs.readFileSync(path.resolve(__dirname, "dist/assets/betterttv.js"), "utf8");
+    (global as any).betterttv = fs.readFileSync(
+      path.resolve(__dirname, 'dist/assets/betterttv.js'),
+      'utf8'
+    );
     win.loadURL(
       url.format({
-        pathname: path.join(__dirname, "dist/index.html"),
-        protocol: "file:",
+        pathname: path.join(__dirname, 'dist/index.html'),
+        protocol: 'file:',
         slashes: true
       })
     );
@@ -147,7 +155,7 @@ async function createMainWindow() {
   }
 
   // Emitted when the window is closed.
-  win.on("closed", () => {
+  win.on('closed', () => {
     win = null;
     app.quit();
   });
@@ -155,5 +163,5 @@ async function createMainWindow() {
 
 function sendStatusToWindow(text) {
   log.info(text);
-  aux_window.webContents.send("message", text);
+  aux_window.webContents.send('message', text);
 }
