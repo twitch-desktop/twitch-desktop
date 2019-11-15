@@ -1,8 +1,5 @@
 # Twitch Desktop Client (Unofficial)
-
-![gamelist](https://i.imgur.com/lvL89Qq.png)
-![channellist](https://i.imgur.com/17r3cZU.png)
-![player](https://i.imgur.com/eE38Uh7.png)
+[Screenshots](https://imgur.com/a/GsSVoVC)
 
 ## Working right now
 + Browse games and live streams
