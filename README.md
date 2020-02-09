@@ -1,5 +1,9 @@
 # Twitch Desktop Client (Unofficial)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/hzeroo/twitch-desktop)
+![David](https://img.shields.io/david/hzeroo/twitch-desktop)
 ![Build/release](https://github.com/hzeroo/twitch-desktop/workflows/Build/release/badge.svg?branch=master)
+![GitHub top language](https://img.shields.io/github/languages/top/hzeroo/twitch-desktop)
+![GitHub](https://img.shields.io/github/license/hzeroo/twitch-desktop)
 
 [Screenshots](https://imgur.com/a/GsSVoVC)
 
