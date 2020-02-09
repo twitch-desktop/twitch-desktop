@@ -16,7 +16,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #221f2a;
+  background-color: black;
   color: #dad8de;
   height: 100%;
   width: 100%;
@@ -52,8 +52,7 @@ input:focus,
 input[type]:focus,
 .uneditable-input:focus {
   border-color: rgba(117, 80, 185, 0.25) !important;
-  box-shadow: 0 1px 1px rgba(117, 80, 185, 0.25) inset,
-    0 0 8px rgba(117, 80, 185, 0.25) !important;
+  box-shadow: 0 1px 1px rgba(117, 80, 185, 0.25) inset, 0 0 8px rgba(117, 80, 185, 0.25) !important;
   outline: 0 none !important;
 }
 

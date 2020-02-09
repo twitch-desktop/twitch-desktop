@@ -1,35 +1,13 @@
 <div class="login-container h-100">
-  <div class="login-display" [hidden]="!login.logued">
+  <div class="login-display" *ngIf="login.logued; else loginform">
     <span class="material-icons logo">person</span>
     <span class="login-message">Logued in as {{ login.username }}</span>
     <button class="logout-button" (click)="logOut()">Logout</button>
   </div>
-  <div class="login-form" [hidden]="login.logued">
-    <span class="material-icons logo">person_outline</span>
-    <div class="custom-control custom-input">
-      <label class="input-label" for="username">Username:</label>
-      <input
-        autofocus
-        type="text"
-        [(ngModel)]="login_form.username"
-        class="form-control"
-        id="username"
-        placeholder=""
-      />
+
+  <ng-template #loginform>
+    <div class="login-form">
+      <tw-login-form></tw-login-form>
     </div>
-    <div class="custom-control custom-input">
-      <label class="input-label" for="password">Password:</label>
-      <input
-        type="password"
-        [(ngModel)]="login_form.password"
-        class="form-control"
-        id="password"
-        placeholder=""
-      />
-    </div>
-    <button class="login-button" (click)="logIn()" (keyup.enter)="logIn()">
-      Login
-    </button>
-    <span class="error-message" [hidden]="error === ''">{{ error }}</span>
-  </div>
+  </ng-template>
 </div>

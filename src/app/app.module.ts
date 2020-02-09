@@ -1,17 +1,17 @@
 import 'reflect-metadata';
 import '../polyfills';
 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule, Pipe, PipeTransform } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {NgModule, Pipe, PipeTransform} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import moment from 'moment';
-import { AppRoutingModule } from './app-routing.module';
-import { GraphQLModule } from './graphql.module';
+import {AppRoutingModule} from './app-routing.module';
+import {GraphQLModule} from './graphql.module';
 
 // Pipes
 // Transforms a time string into a string representing time since that moment
@@ -29,12 +29,7 @@ export class TimeSincePipe implements PipeTransform {
 })
 export class ScaleImagePipe implements PipeTransform {
   transform(url: string, width: string, height: string) {
-    if (
-      url &&
-      url !== '' &&
-      url.includes('{width}') &&
-      url.includes('{height}')
-    ) {
+    if (url && url !== '' && url.includes('{width}') && url.includes('{height}')) {
       return url.replace('{width}', width).replace('{height}', height);
     } else {
       return url;
@@ -43,31 +38,32 @@ export class ScaleImagePipe implements PipeTransform {
 }
 
 // Components
-import { AppComponent } from './app.component';
-import { ChannelsComponent } from './components/channels/channels.component';
-import { ErrorComponent } from './components/error-handler/errorhandler.component';
-import { GamesComponent } from './components/games/games.component';
-import { LoginComponent } from './components/login/login.component';
-import { ChatComponent } from './components/player/chat/chat.component';
-import { PlayerComponent } from './components/player/player.component';
-import { SettingsComponent } from './components/settings/settings.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { SpinnerComponent } from './components/spinner/spinner.component';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import {AppComponent} from './app.component';
+import {ChannelsComponent} from './components/channels/channels.component';
+import {ErrorComponent} from './components/error-handler/errorhandler.component';
+import {GamesComponent} from './components/games/games.component';
+import {LoginFormComponent} from './components/login/login-form/login-form.component';
+import {LoginComponent} from './components/login/login.component';
+import {ChatComponent} from './components/player/chat/chat.component';
+import {PlayerComponent} from './components/player/player.component';
+import {SettingsComponent} from './components/settings/settings.component';
+import {SidebarComponent} from './components/sidebar/sidebar.component';
+import {SpinnerComponent} from './components/spinner/spinner.component';
+import {ToolbarComponent} from './components/toolbar/toolbar.component';
 
 // Services
-import { ChannelService } from './providers/channels.service';
-import { ElectronService } from './providers/electron.service';
-import { ErrorService } from './providers/errorhandler.service';
-import { GameService } from './providers/games.service';
-import { SettingsService } from './providers/settings.service';
-import { SpinnerService } from './providers/spinner.service';
-import { ToolbarService } from './providers/toolbar.service';
-import { TwitchService } from './providers/twitch.service';
+import {ChannelService} from './providers/channels.service';
+import {ElectronService} from './providers/electron.service';
+import {ErrorService} from './providers/errorhandler.service';
+import {GameService} from './providers/games.service';
+import {SettingsService} from './providers/settings.service';
+import {SpinnerService} from './providers/spinner.service';
+import {ToolbarService} from './providers/toolbar.service';
+import {TwitchService} from './providers/twitch.service';
 
 // Directives
-import { InfiniteScroll } from './directives/infinitescroll.directive';
-import { WebviewDirective } from './directives/webview.directive';
+import {InfiniteScroll} from './directives/infinitescroll.directive';
+import {WebviewDirective} from './directives/webview.directive';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -88,6 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ErrorComponent,
     ChatComponent,
     SettingsComponent,
+    LoginFormComponent,
 
     // Directives
     WebviewDirective,

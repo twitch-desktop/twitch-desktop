@@ -1,8 +1,6 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { remote, shell } from 'electron';
-import { SettingsService } from '../../../providers/settings.service';
-import { ToolbarService } from '../../../providers/toolbar.service';
+import {Component, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {remote, shell} from 'electron';
+import {SettingsService} from '../../../providers/settings.service';
 
 let betterttv = remote.getGlobal('betterttv');
 
@@ -17,12 +15,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   isLoading = true;
   store = null;
 
-  constructor(
-    private element: ElementRef,
-    private router: Router,
-    private toolbarService: ToolbarService,
-    private settings: SettingsService
-  ) {}
+  constructor(private element: ElementRef, private settings: SettingsService) {}
 
   ngOnInit() {
     // Set dark mode in chat

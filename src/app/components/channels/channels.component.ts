@@ -1,10 +1,10 @@
-import { Component, NgZone, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ChannelService, IStream } from '../../providers/channels.service';
-import { ErrorService } from '../../providers/errorhandler.service';
-import { GameService, IGame } from '../../providers/games.service';
-import { SpinnerService } from '../../providers/spinner.service';
-import { ToolbarService } from '../../providers/toolbar.service';
+import {Component, NgZone, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ChannelService, IStream} from '../../providers/channels.service';
+import {ErrorService} from '../../providers/errorhandler.service';
+import {GameService, IGame} from '../../providers/games.service';
+import {SpinnerService} from '../../providers/spinner.service';
+import {ToolbarService} from '../../providers/toolbar.service';
 
 @Component({
   templateUrl: './channels.component.html',
@@ -39,7 +39,6 @@ export class ChannelsComponent implements OnInit {
         this.toolbarService.setTitle('Top Streams');
         this.fetchingMore = true;
         this.channelService.getTopStreams().then((streams: IStream[]) => {
-          console.log(streams);
           this.streams = streams;
           this.fetchingMore = false;
           this.spinnerService.hide();
@@ -55,13 +54,11 @@ export class ChannelsComponent implements OnInit {
       } else if (this.game) {
         this.toolbarService.setTitle(this.game.name);
         this.fetchingMore = true;
-        this.channelService
-          .getGameStreams(this.game)
-          .then((streams: IStream[]) => {
-            this.streams = streams;
-            this.fetchingMore = false;
-            this.spinnerService.hide();
-          });
+        this.channelService.getGameStreams(this.game).then((streams: IStream[]) => {
+          this.streams = streams;
+          this.fetchingMore = false;
+          this.spinnerService.hide();
+        });
       }
 
       // Set toolbar icon
