@@ -3,17 +3,17 @@
 
 ## Working right now
 + Browse games and live streams
-+ Play live streams (without Flash!)
++ Play live streams
 + User login and current online streams list
 + Chat
 + Autoupdater
 + Notifications
++ OTP
 
 ## Upcoming
 - Browse and play VODs
 - Ability to follow streams and games
 - Chromecast support
-- Something more 
 
 ## Downloads
 
