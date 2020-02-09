@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import Store from "electron-store";
+import { Injectable } from '@angular/core';
+import Store from 'electron-store';
 
-export interface ConfigType {
+export interface IConfigType {
   betterttv: boolean;
   autologin: boolean;
   openlinks: boolean;
@@ -10,13 +10,13 @@ export interface ConfigType {
   preferred_quality: string;
 }
 
-const defaults: ConfigType = {
+const defaults: IConfigType = {
   betterttv: false,
   autologin: true,
   openlinks: true,
   buffer_length: 10,
   notifications: false,
-  preferred_quality: "auto"
+  preferred_quality: 'auto'
 };
 
 @Injectable()
@@ -24,10 +24,10 @@ export class SettingsService {
   store = null;
 
   constructor() {
-    this.store = new Store<ConfigType>({ defaults: defaults });
+    this.store = new Store<IConfigType>({ defaults });
   }
 
-  getConfig(): ConfigType {
+  getConfig(): IConfigType {
     return this.store.store;
   }
 

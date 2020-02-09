@@ -1,42 +1,45 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { TwitchAuthService, Login } from "../../providers/twitch-auth-graphql.service";
+import {
+  ILogin,
+  TwitchAuthService
+} from '../../providers/twitch-auth-graphql.service';
 
 // Sidebar component
 @Component({
-  templateUrl: "./sidebar.component.html",
-  selector: "tw-sidebar",
-  styleUrls: ["./sidebar.component.scss"]
+  templateUrl: './sidebar.component.html',
+  selector: 'tw-sidebar',
+  styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-  login: Login;
+  login: ILogin;
   items = [
     {
-      name: "Games",
-      route: "/games",
-      icon: "games",
+      name: 'Games',
+      route: '/games',
+      icon: 'games',
       visible: true,
       active: true
     },
     {
-      name: "Channels",
-      route: "/channels/top",
-      icon: "videocam",
+      name: 'Channels',
+      route: '/channels/top',
+      icon: 'videocam',
       visible: true,
       active: false
     },
     {
-      name: "Following",
-      route: "/channels/following",
-      icon: "star",
+      name: 'Following',
+      route: '/channels/following',
+      icon: 'star',
       visible: false,
       active: false
     },
     {
-      name: "Settings",
-      route: "/settings",
-      icon: "settings",
+      name: 'Settings',
+      route: '/settings',
+      icon: 'settings',
       visible: true,
       active: false
     }
@@ -46,14 +49,14 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private twitchAuthService: TwitchAuthService) { }
+    private twitchAuthService: TwitchAuthService
+  ) {}
 
   ngOnInit() {
-    this.twitchAuthService.loginChange$.subscribe((login: Login) => {
+    this.twitchAuthService.loginChange$.subscribe((login: ILogin) => {
       this.login = login;
       this.items[2].visible = this.login.logued;
     });
-
   }
 
   navigate(item) {

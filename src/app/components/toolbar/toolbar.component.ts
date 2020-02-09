@@ -1,10 +1,13 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { TwitchAuthService, Login } from "../../providers/twitch-auth-graphql.service";
-import { ToolbarService } from "../../providers/toolbar.service";
+import { ToolbarService } from '../../providers/toolbar.service';
+import {
+  ILogin,
+  TwitchAuthService
+} from '../../providers/twitch-auth-graphql.service';
 
-export interface SubheaderValue {
+export interface ISubheaderValue {
   player_username: string;
   player_game: string;
   player_logo: string;
@@ -12,11 +15,11 @@ export interface SubheaderValue {
 
 // Toolbar component
 @Component({
-  templateUrl: "./toolbar.component.html",
-  selector: "tw-toolbar",
-  styleUrls: ["./toolbar.component.scss"]
+  templateUrl: './toolbar.component.html',
+  selector: 'tw-toolbar',
+  styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit, SubheaderValue {
+export class ToolbarComponent implements OnInit, ISubheaderValue {
   // Toolbar button events
   @Output() close = new EventEmitter();
   @Output() maximize = new EventEmitter();
@@ -26,7 +29,7 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
 
   title: string = null;
   logo: string = null;
-  login: Login;
+  login: ILogin;
   isFullscreen = false;
   player_username: string = null;
   player_game: string = null;
@@ -36,15 +39,16 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   constructor(
     public router: Router,
     private toolbarService: ToolbarService,
-    private twitchAuthService: TwitchAuthService) {
+    private twitchAuthService: TwitchAuthService
+  ) {
     this.login = this.twitchAuthService.getLogin();
-    if (this.login.username === "") {
-      this.login.username = "Guest";
+    if (this.login.username === '') {
+      this.login.username = 'Guest';
     }
   }
 
   ngOnInit() {
-    this.twitchAuthService.loginChange$.subscribe((login: Login) => {
+    this.twitchAuthService.loginChange$.subscribe((login: ILogin) => {
       this.login = login;
     });
 
@@ -73,24 +77,24 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   }
 
   closeWindow() {
-    this.close.emit("event");
+    this.close.emit('event');
   }
 
   maximizeWindow() {
-    this.maximize.emit("event");
+    this.maximize.emit('event');
   }
 
   minimizeWindow() {
-    this.minimize.emit("event");
+    this.minimize.emit('event');
   }
 
   enterFullscreen() {
-    this.fullscreen.emit("event");
+    this.fullscreen.emit('event');
     this.isFullscreen = !this.isFullscreen;
   }
 
   collapseSidebar() {
     this.sidebar_collapsed = !this.sidebar_collapsed;
-    this.collapse.emit("event");
+    this.collapse.emit('event');
   }
 }

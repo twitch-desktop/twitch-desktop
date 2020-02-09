@@ -1,39 +1,32 @@
-import { Component, ElementRef, OnInit, OnDestroy, Input } from "@angular/core";
-import { Router } from "@angular/router";
-import { ToolbarService } from "../../../providers/toolbar.service";
-import { SettingsService } from "../../../providers/settings.service";
-const { shell } = require("electron");
+import {Component, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {remote, shell} from 'electron';
+import {SettingsService} from '../../../providers/settings.service';
 
-let betterttv = require("electron").remote.getGlobal("betterttv");
+let betterttv = remote.getGlobal('betterttv');
 
 // Player component
 @Component({
-  templateUrl: "./chat.component.html",
-  selector: "tw-chat",
-  styleUrls: ["./chat.component.scss"]
+  templateUrl: './chat.component.html',
+  selector: 'tw-chat',
+  styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit, OnDestroy {
   @Input() chat_url: string;
   isLoading = true;
   store = null;
 
-  constructor(
-    private element: ElementRef,
-    private router: Router,
-    private toolbarService: ToolbarService,
-    private settings: SettingsService
-  ) { }
+  constructor(private element: ElementRef, private settings: SettingsService) {}
 
   ngOnInit() {
     // Set dark mode in chat
     let webview = this.element.nativeElement.lastElementChild;
-    webview.addEventListener("load-commit", event => {
+    webview.addEventListener('load-commit', event => {
       webview.executeJavaScript(
         `localStorage.setItem('bttv_darkenedMode',true);`
       );
     });
 
-    webview.addEventListener("did-finish-load", event => {
+    webview.addEventListener('did-finish-load', event => {
       if (this.settings.getConfig().betterttv === true) {
         webview.executeJavaScript(betterttv, false, result => {
           this.isLoading = false;
@@ -44,11 +37,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
 
     if (this.settings.getConfig().openlinks) {
-      webview.addEventListener("new-window", e => {
+      webview.addEventListener('new-window', e => {
         shell.openExternal(e.url);
       });
     }
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 }

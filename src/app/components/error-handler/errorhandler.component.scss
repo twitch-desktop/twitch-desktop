@@ -1,5 +1,5 @@
 #main-container {
-  background: #221F2A;
+  background: #221f2a;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,11 +15,11 @@
 }
 
 .retry-button {
-  background: #3A1F64;
+  background: #3a1f64;
   transition: background 0.4s;
   color: #dad8de;
-  
+
   &:hover {
-    background: #772ce8;;
+    background: #772ce8;
   }
 }

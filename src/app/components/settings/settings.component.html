@@ -1,44 +1,85 @@
 <div id="main-container" class="h-100 w-100">
-    <div class="custom-control form-control-lg custom-checkbox">
-        <input type="checkbox" [(ngModel)]="config.autologin" (ngModelChange)="configChanged()"
-            class="custom-control-input" id="checkbox-autologin">
-        <label class="custom-control-label" for="checkbox-autologin">Enable autologin at start</label>
-    </div>
+  <div class="custom-control form-control-lg custom-checkbox">
+    <input
+      type="checkbox"
+      [(ngModel)]="config.autologin"
+      (ngModelChange)="configChanged()"
+      class="custom-control-input"
+      id="checkbox-autologin"
+    />
+    <label class="custom-control-label" for="checkbox-autologin"
+      >Enable autologin at start</label
+    >
+  </div>
 
-    <div class="custom-control form-control-lg custom-checkbox">
-        <input type="checkbox" [(ngModel)]="config.betterttv" (ngModelChange)="configChanged()"
-            class="custom-control-input" id="checkbox-ttv">
-        <label class="custom-control-label" for="checkbox-ttv">Enable BetterTTV in chat</label>
-    </div>
+  <div class="custom-control form-control-lg custom-checkbox">
+    <input
+      type="checkbox"
+      [(ngModel)]="config.betterttv"
+      (ngModelChange)="configChanged()"
+      class="custom-control-input"
+      id="checkbox-ttv"
+    />
+    <label class="custom-control-label" for="checkbox-ttv"
+      >Enable BetterTTV in chat</label
+    >
+  </div>
 
-    <div class="custom-control form-control-lg custom-checkbox">
-        <input type="checkbox" [(ngModel)]="config.openlinks" (ngModelChange)="configChanged()"
-            class="custom-control-input" id="checkbox-openlinks">
-        <label class="custom-control-label" for="checkbox-openlinks">Allow to open Twitch Chat urls in browser</label>
-    </div>
+  <div class="custom-control form-control-lg custom-checkbox">
+    <input
+      type="checkbox"
+      [(ngModel)]="config.openlinks"
+      (ngModelChange)="configChanged()"
+      class="custom-control-input"
+      id="checkbox-openlinks"
+    />
+    <label class="custom-control-label" for="checkbox-openlinks"
+      >Allow to open Twitch Chat urls in browser</label
+    >
+  </div>
 
-    <div class="custom-control form-control-lg">
-        <label class="quality-label" for="selectbox-quality">Preferred video quality:</label>
-        <select id="selectbox-quality" [(ngModel)]="config.preferred_quality" (ngModelChange)="configChanged()">
-            <option value="auto">Auto</option>
-            <option value="160p">160p</option>
-            <option value="360p">360p</option>
-            <option value="480p">480p</option>
-            <option value="720p">720p</option>
-            <option value="source">Source</option>
-        </select>
-    </div>
+  <div class="custom-control form-control-lg">
+    <label class="quality-label" for="selectbox-quality"
+      >Preferred video quality:</label
+    >
+    <select
+      id="selectbox-quality"
+      [(ngModel)]="config.preferred_quality"
+      (ngModelChange)="configChanged()"
+    >
+      <option value="auto">Auto</option>
+      <option value="160p">160p</option>
+      <option value="360p">360p</option>
+      <option value="480p">480p</option>
+      <option value="720p">720p</option>
+      <option value="source">Source</option>
+    </select>
+  </div>
 
-    <div class="custom-control custom-input">
-        <label class="input-label" for="buffer-length">Max buffer length (seconds):</label>
-        <input type="number" [(ngModel)]="config.buffer_length" (ngModelChange)="configChanged()" class="form-control"
-            id="buffer-length" placeholder="10">
-    </div>
+  <div class="custom-control custom-input">
+    <label class="input-label" for="buffer-length"
+      >Max buffer length (seconds):</label
+    >
+    <input
+      type="number"
+      [(ngModel)]="config.buffer_length"
+      (ngModelChange)="configChanged()"
+      class="form-control"
+      id="buffer-length"
+      placeholder="10"
+    />
+  </div>
 
-    <div class="custom-control form-control-lg custom-checkbox">
-        <input type="checkbox" [(ngModel)]="config.notifications" (ngModelChange)="configChanged()"
-            class="custom-control-input" id="checkbox-notifications">
-        <label class="custom-control-label" for="checkbox-notifications">Enable notifications</label>
-    </div>
-
+  <div class="custom-control form-control-lg custom-checkbox">
+    <input
+      type="checkbox"
+      [(ngModel)]="config.notifications"
+      (ngModelChange)="configChanged()"
+      class="custom-control-input"
+      id="checkbox-notifications"
+    />
+    <label class="custom-control-label" for="checkbox-notifications"
+      >Enable notifications</label
+    >
+  </div>
 </div>

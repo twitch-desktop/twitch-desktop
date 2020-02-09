@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { Query } from "apollo-angular";
-import gql from "graphql-tag";
+import { Injectable } from '@angular/core';
+import { Query } from 'apollo-angular';
+import gql from 'graphql-tag';
 
 /***
  *
@@ -9,84 +9,89 @@ import gql from "graphql-tag";
  *
  ***/
 
-
-export interface UserInfoResponse {
+export interface IUserInfoResponse {
   currentUser: {
-    displayName: string
+    displayName: string;
   };
 }
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
-export class GetUserInfoGQL extends Query<UserInfoResponse> {
+export class GetUserInfoGQL extends Query<IUserInfoResponse> {
   document = gql`
-  query {
-    currentUser {
-      displayName
+    query {
+      currentUser {
+        displayName
+      }
     }
-  }
   `;
 }
 
-export interface TopGamesResponse {
+export interface ITopGamesResponse {
   games: {
-    edges: [{
-      node: {
-        id: string;
-        name: string;
-        boxArtURL: string;
-        viewersCount: number;
-      };
-      cursor: string;
-    }];
+    edges: [
+      {
+        node: {
+          id: string;
+          name: string;
+          boxArtURL: string;
+          viewersCount: number;
+        };
+        cursor: string;
+      }
+    ];
   };
 }
 
-interface Stream {
+interface IStream {
   id: string;
   broadcaster: {
     id: string;
     displayName: string;
     login: string;
     broadcastSettings: {
-      title: string
+      title: string;
       game: {
         id: string;
-        name: string
-      }
-    }
+        name: string;
+      };
+    };
   };
   previewImageURL: string;
   viewersCount: number;
   createdAt: Date;
 }
 
-export interface TopStreamsResponse {
+export interface ITopStreamsResponse {
   streams: {
-    edges: [{
-      node: Stream
-      cursor: string;
-    }]
+    edges: [
+      {
+        node: IStream;
+        cursor: string;
+      }
+    ];
   };
 }
 
-export interface GameStreamsResponse {
+export interface IGameStreamsResponse {
   game: {
     id: string;
     name: string;
     streams: {
-      edges: [{
-        node: Stream
-        cursor: string;
-      }]
-    }
+      edges: [
+        {
+          node: IStream;
+          cursor: string;
+        }
+      ];
+    };
   };
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
-export class GetTopGamesGQL extends Query<TopGamesResponse> {
+export class GetTopGamesGQL extends Query<ITopGamesResponse> {
   document = gql`
     query getTopGames($cursor: Cursor!) {
       games(first: 25, after: $cursor) {
@@ -104,52 +109,15 @@ export class GetTopGamesGQL extends Query<TopGamesResponse> {
   `;
 }
 
-
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
-export class GetTopStreamsGQL extends Query<TopStreamsResponse> {
+export class GetTopStreamsGQL extends Query<ITopStreamsResponse> {
   document = gql`
-  query getTopStreams ($cursor: Cursor!){
-    streams(first: 25 after: $cursor) {
-      edges {
-        node{
-          id
-          broadcaster {
-            id
-            displayName
-            login
-            broadcastSettings {
-              title
-              game {
-                id
-                name
-              }
-            }
-          }
-          previewImageURL
-          viewersCount
-          createdAt
-        }
-        cursor
-        }
-      }
-    }
-  `;
-}
-
-@Injectable({
-  providedIn: "root"
-})
-export class GetGameStreamsGQL extends Query<GameStreamsResponse> {
-  document = gql`
-  query ($name: String!, $cursor: Cursor!){
-    game(name: $name) {
-      id
-      name
-      streams(first: 25 after: $cursor) {
+    query getTopStreams($cursor: Cursor!) {
+      streams(first: 25, after: $cursor) {
         edges {
-          node{
+          node {
             id
             broadcaster {
               id
@@ -171,35 +139,21 @@ export class GetGameStreamsGQL extends Query<GameStreamsResponse> {
         }
       }
     }
-  }
   `;
-}
-export interface FollowsResponse {
-  currentUser: {
-    displayName: string
-    followedLiveUsers: {
-      edges: [{
-        node: {
-          stream: Stream
-        }
-        cursor: string;
-      }]
-    }
-  };
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
-export class GetCurrentUserOnlineFollowsGQL extends Query<FollowsResponse> {
+export class GetGameStreamsGQL extends Query<IGameStreamsResponse> {
   document = gql`
-  query ($cursor: Cursor!) {
-    currentUser {
-      displayName
-      followedLiveUsers(first: 25 after: $cursor) {
-        edges {
-          node {
-            stream {
+    query($name: String!, $cursor: Cursor!) {
+      game(name: $name) {
+        id
+        name
+        streams(first: 25, after: $cursor) {
+          edges {
+            node {
               id
               broadcaster {
                 id
@@ -217,13 +171,63 @@ export class GetCurrentUserOnlineFollowsGQL extends Query<FollowsResponse> {
               viewersCount
               createdAt
             }
+            cursor
           }
-          cursor
         }
       }
     }
-  }
   `;
 }
+export interface IFollowsResponse {
+  currentUser: {
+    displayName: string;
+    followedLiveUsers: {
+      edges: [
+        {
+          node: {
+            stream: IStream;
+          };
+          cursor: string;
+        }
+      ];
+    };
+  };
+}
 
-
+@Injectable({
+  providedIn: 'root'
+})
+export class GetCurrentUserOnlineFollowsGQL extends Query<IFollowsResponse> {
+  document = gql`
+    query($cursor: Cursor!) {
+      currentUser {
+        displayName
+        followedLiveUsers(first: 25, after: $cursor) {
+          edges {
+            node {
+              stream {
+                id
+                broadcaster {
+                  id
+                  displayName
+                  login
+                  broadcastSettings {
+                    title
+                    game {
+                      id
+                      name
+                    }
+                  }
+                }
+                previewImageURL
+                viewersCount
+                createdAt
+              }
+            }
+            cursor
+          }
+        }
+      }
+    }
+  `;
+}

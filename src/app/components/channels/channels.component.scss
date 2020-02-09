@@ -15,7 +15,7 @@
 }
 
 .channel-item {
-  cursor:  pointer;
+  cursor: pointer;
   padding: 5px;
   display: flex;
   flex: 25%;
@@ -23,12 +23,16 @@
   min-width: 250px;
   min-height: 250px;
 
-  .channel-title, .channel-info, .channel-image{
+  .channel-title,
+  .channel-info,
+  .channel-image {
     transition: color 0.4s ease, border-color 0.4s ease;
   }
 
   &:hover {
-    .channel-title, .channel-info, .channel-image {
+    .channel-title,
+    .channel-info,
+    .channel-image {
       color: #bf94ff;
       border-color: #bf94ff;
     }
@@ -48,14 +52,14 @@
 .channel-title {
   width: 100%;
   background: black;
-  color: #DAD8DE;
+  color: #dad8de;
   height: 25px;
   font-size: 18px;
   display: flex;
   justify-content: center;
   border: 1px solid rgb(24, 24, 27);
   border-bottom: none;
-  
+
   span {
     height: 22px;
     display: flex;
@@ -72,7 +76,7 @@
 .channel-info {
   width: 100%;
   background: black;
-  color: #DAD8DE;
+  color: #dad8de;
   height: 22px;
   font-size: 18px;
   padding-left: 2px;
@@ -108,23 +112,22 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      
     }
-    
+
     .channel-viewers {
       width: 50%;
       display: flex;
       align-items: center;
       justify-content: flex-end;
     }
-    
+
     span {
       height: 22px;
       display: flex;
       align-items: center;
       margin-right: 5px;
     }
-    
+
     i {
       font-size: 20px;
       margin-right: 5px;
@@ -142,5 +145,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #DAD8DE;
+  color: #dad8de;
 }

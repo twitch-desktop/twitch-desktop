@@ -1,24 +1,25 @@
-import { Component, OnInit } from "@angular/core";
-import { SettingsService, ConfigType } from "../../providers/settings.service";
-import { ToolbarService } from "../../providers/toolbar.service";
+import { Component, OnInit } from '@angular/core';
+import { IConfigType, SettingsService } from '../../providers/settings.service';
+import { ToolbarService } from '../../providers/toolbar.service';
 
 @Component({
-  templateUrl: "./settings.component.html",
-  selector: "tw-settings",
-  styleUrls: ["./settings.component.scss"]
+  templateUrl: './settings.component.html',
+  selector: 'tw-settings',
+  styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
-  config: ConfigType;
+  config: IConfigType;
 
   constructor(
     private settings: SettingsService,
-    private toolbarService: ToolbarService) {
+    private toolbarService: ToolbarService
+  ) {
     this.config = this.settings.getConfig();
   }
 
   ngOnInit() {
-    this.toolbarService.setTitle("Settings");
-    this.toolbarService.setLogo("settings");
+    this.toolbarService.setTitle('Settings');
+    this.toolbarService.setLogo('settings');
   }
 
   configChanged() {

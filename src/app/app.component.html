@@ -1,19 +1,31 @@
 <div class="container-fluid h-100">
+  <tw-toolbar
+    class="row"
+    (close)="closeWindow()"
+    (maximize)="maximizeWindow()"
+    (minimize)="minimizeWindow()"
+    (collapse)="toggleSidebar()"
+    (fullscreen)="enterFullscreen()"
+  ></tw-toolbar>
 
-  <tw-toolbar class="row" (close)="closeWindow()" (maximize)="maximizeWindow()" (minimize)="minimizeWindow()"
-    (collapse)="toggleSidebar()" (fullscreen)="enterFullscreen()"></tw-toolbar>
-
-  <div class="content row" (dragover)="false" (dragend)="false" (drop)="false">
-
-    <div id="sidebar" class="container" [hidden]="sidebarState==='hidden'">
+  <div
+    class="content row"
+    (dragover)="(false)"
+    (dragend)="(false)"
+    (drop)="(false)"
+  >
+    <div id="sidebar" class="container" [hidden]="sidebarState === 'hidden'">
       <tw-sidebar></tw-sidebar>
     </div>
 
-    <div id="main-content" class="container" [ngClass]="[sidebarState==='hidden'?'expanded':'']">
+    <div
+      id="main-content"
+      class="container"
+      [ngClass]="[sidebarState === 'hidden' ? 'expanded' : '']"
+    >
       <tw-spinner></tw-spinner>
       <tw-error></tw-error>
       <router-outlet></router-outlet>
     </div>
-
   </div>
 </div>
