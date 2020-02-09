@@ -1,5 +1,6 @@
 # Twitch Desktop Client (Unofficial)
 ![Build/release](https://github.com/hzeroo/twitch-desktop/workflows/Build/release/badge.svg?branch=master)
+
 [Screenshots](https://imgur.com/a/GsSVoVC)
 
 ## Working right now
