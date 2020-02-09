@@ -1,22 +1,29 @@
-import {AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {SpinnerService} from '../../../providers/spinner.service';
 import {ILogin, TwitchAuthService} from '../../../providers/twitch-auth-graphql.service';
 
 // tslint:disable-next-line: no-var-requires
 import {Router} from '@angular/router';
-import {remote, WebviewTag} from 'electron';
+import {remote, WebviewTag, Filter} from 'electron';
 const session = remote.session;
+
+type Listener = (
+  details: Electron.OnBeforeSendHeadersListenerDetails,
+  callback: (beforeSendResponse: Electron.BeforeSendResponse) => void
+) => void;
 
 @Component({
   selector: 'tw-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
-export class LoginFormComponent implements OnInit, AfterViewInit {
+export class LoginFormComponent implements AfterViewInit, OnDestroy {
   @ViewChild('webview') webview: ElementRef;
   login: ILogin;
   login_url = 'https://passport.twitch.tv/sessions/new?client_id=settings_page';
   ready: boolean;
+  listener: Listener;
+  filter: Filter;
 
   constructor(
     private twitchAuthService: TwitchAuthService,
@@ -26,6 +33,9 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   ) {
     this.login = this.twitchAuthService.getLogin();
     this.ready = false;
+    this.filter = {
+      urls: ['https://www.twitch.tv/', 'https://gql.twitch.tv/*']
+    };
   }
 
   ngAfterViewInit() {
@@ -74,13 +84,13 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
     `);
 
       if (!this.ready) {
+        console.log(this.ready);
+        console.log('hide!');
         this.spinnerService.hide();
         this.ready = true;
       }
     });
-  }
 
-  ngOnInit() {
     this.spinnerService.show();
     this.twitchAuthService.loginChange$.subscribe((login: ILogin) => {
       this.login = login;
@@ -88,43 +98,39 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
 
     const ses = session.fromPartition('persist:twitch');
 
-    const filter = {
-      urls: ['https://gql.twitch.tv/*']
-    };
-    const filter2 = {
-      urls: ['https://www.twitch.tv/']
-    };
-
-    let loginCompleted = false;
-    ses.webRequest.onBeforeSendHeaders(filter2, (details, callback) => {
-      this.ngZone.run(() => {
-        this.spinnerService.show();
-        this.ready = true;
-      });
+    this.listener = (details, callback) => {
       if (details.url === 'https://www.twitch.tv/') {
-        loginCompleted = true;
-        callback({requestHeaders: details.requestHeaders});
-      }
-    });
-
-    ses.webRequest.onCompleted(filter, (details: any) => {
-      if (!this.login.logued) {
-        const authHeader = details.headers['Authorization'];
-        if (authHeader) {
-          const regex = /OAuth ([^;]+)/;
-          const token = authHeader.match(regex)[1];
-          if (token) {
-            this.twitchAuthService.setAuthToken(token);
-            this.ngZone.run(() => {
-              this.router.navigate(['/games']);
-            });
+        this.ngZone.run(() => {
+          this.spinnerService.show();
+          this.ready = true;
+        });
+      } else {
+        if (!this.login.logued) {
+          const authHeader = details.requestHeaders['Authorization'];
+          if (authHeader) {
+            const regex = /OAuth ([^;]+)/;
+            const token = authHeader.match(regex)[1];
+            if (token) {
+              this.twitchAuthService.setAuthToken(token);
+              this.ngZone.run(() => {
+                this.router.navigate(['/games']);
+              });
+            }
           }
         }
       }
-    });
+      callback({requestHeaders: details.requestHeaders});
+    };
+
+    ses.webRequest.onBeforeSendHeaders(this.filter, this.listener);
   }
 
   logOut() {
     this.twitchAuthService.logOut();
+  }
+
+  ngOnDestroy() {
+    const ses = session.fromPartition('persist:twitch');
+    ses.webRequest.onBeforeSendHeaders(this.filter, null);
   }
 }
