@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult } from 'apollo-client';
-import { concat as _concat, map as _map, uniqBy as _uniqBy } from 'lodash';
-import { IGame } from './games.service';
+import { uniqBy } from 'lodash';
+import { Game } from './games.service';
 import {
   GetCurrentUserOnlineFollowsGQL,
   GetGameStreamsGQL,
   GetTopStreamsGQL,
-  IFollowsResponse,
-  IGameStreamsResponse,
-  ITopStreamsResponse
+  FollowsResponse,
+  GameStreamsResponse,
+  TopStreamsResponse
 } from './twitch-graphql.service';
 import { TwitchService } from './twitch.service';
 
-export interface IStream {
+export interface Stream {
   id: string;
   broadcaster: {
     id: string;
@@ -39,11 +39,11 @@ enum StreamListType {
 // Service that allows components to get channel list information
 @Injectable()
 export class ChannelService {
-  private streams: IStream[] = [];
-  private active_stream: IStream;
-  private streams_list_type: StreamListType;
+  private streams: Stream[] = [];
+  private activeStream: Stream;
+  private streamsListType: StreamListType;
   private cursor = '';
-  private game: IGame;
+  private game: Game;
 
   constructor(
     private twitchService: TwitchService,
@@ -52,26 +52,23 @@ export class ChannelService {
     private getOnlineFollowsGQL: GetCurrentUserOnlineFollowsGQL
   ) {}
 
-  set currentStream(stream: IStream) {
-    this.active_stream = stream;
+  set currentStream(stream: Stream) {
+    this.activeStream = stream;
   }
 
-  get currentStream(): IStream {
-    return this.active_stream;
+  get currentStream(): Stream {
+    return this.activeStream;
   }
 
-  getTopStreams() {
+  getTopStreams(): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getTopStreamsGQL
         .fetch()
-        .subscribe((result: ApolloQueryResult<ITopStreamsResponse>) => {
+        .subscribe((result: ApolloQueryResult<TopStreamsResponse>) => {
           if (result.data) {
-            this.streams_list_type = StreamListType.TopStreams;
+            this.streamsListType = StreamListType.TopStreams;
             this.cursor = result.data.streams.edges.slice(-1)[0].cursor;
-            this.streams = _map(result.data.streams.edges, e => {
-              return e.node;
-            });
-
+            this.streams = result.data.streams.edges.map((e) => e.node);
             resolve(this.streams);
           } else {
             reject();
@@ -80,19 +77,16 @@ export class ChannelService {
     });
   }
 
-  getGameStreams(game: IGame) {
+  getGameStreams(game: Game): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getGameStreamsGQL
         .fetch({ name: game.name })
-        .subscribe((result: ApolloQueryResult<IGameStreamsResponse>) => {
+        .subscribe((result: ApolloQueryResult<GameStreamsResponse>) => {
           if (result.data) {
             this.game = game;
-            this.streams_list_type = StreamListType.GameStreams;
+            this.streamsListType = StreamListType.GameStreams;
             this.cursor = result.data.game.streams.edges.slice(-1)[0].cursor;
-            this.streams = _map(result.data.game.streams.edges, e => {
-              return e.node;
-            });
-
+            this.streams = result.data.game.streams.edges.map((e) => e.node);
             resolve(this.streams);
           } else {
             reject();
@@ -101,21 +95,18 @@ export class ChannelService {
     });
   }
 
-  getFollowedStreams() {
+  getFollowedStreams(): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getOnlineFollowsGQL
         .fetch()
-        .subscribe((result: ApolloQueryResult<IFollowsResponse>) => {
+        .subscribe((result: ApolloQueryResult<FollowsResponse>) => {
           if (result.data) {
-            this.streams_list_type = StreamListType.FollowingStreams;
+            this.streamsListType = StreamListType.FollowingStreams;
             this.cursor = result.data.currentUser.followedLiveUsers.edges.slice(
               -1
             )[0].cursor;
-            this.streams = _map(
-              result.data.currentUser.followedLiveUsers.edges,
-              e => {
-                return e.node.stream;
-              }
+            this.streams = result.data.currentUser.followedLiveUsers.edges.map(
+              (e) => e.node.stream
             );
             resolve(this.streams);
           } else {
@@ -125,8 +116,8 @@ export class ChannelService {
     });
   }
 
-  fetchMoreStreams() {
-    switch (this.streams_list_type) {
+  fetchMoreStreams(): Promise<unknown> {
+    switch (this.streamsListType) {
       case StreamListType.TopStreams:
         return this.fetchMoreTopStreams();
         break;
@@ -141,18 +132,15 @@ export class ChannelService {
     }
   }
 
-  private fetchMoreTopStreams() {
+  private fetchMoreTopStreams(): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getTopStreamsGQL
         .fetch({ cursor: this.cursor })
-        .subscribe((result: ApolloQueryResult<ITopStreamsResponse>) => {
+        .subscribe((result: ApolloQueryResult<TopStreamsResponse>) => {
           if (result.data) {
             this.cursor = result.data.streams.edges.slice(-1)[0].cursor;
-            this.streams = _uniqBy(
-              _concat(
-                this.streams,
-                _map(result.data.streams.edges, e => e.node)
-              ),
+            this.streams = uniqBy(
+              this.streams.concat(result.data.streams.edges.map((e) => e.node)),
               'id'
             );
 
@@ -164,17 +152,16 @@ export class ChannelService {
     });
   }
 
-  private fetchMoreGameStreams(game: IGame) {
+  private fetchMoreGameStreams(game: Game): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getGameStreamsGQL
         .fetch({ name: game.name, cursor: this.cursor })
-        .subscribe((result: ApolloQueryResult<IGameStreamsResponse>) => {
+        .subscribe((result: ApolloQueryResult<GameStreamsResponse>) => {
           if (result.data) {
             this.cursor = result.data.game.streams.edges.slice(-1)[0].cursor;
-            this.streams = _uniqBy(
-              _concat(
-                this.streams,
-                _map(result.data.game.streams.edges, e => e.node)
+            this.streams = uniqBy(
+              this.streams.concat(
+                result.data.game.streams.edges.map((e) => e.node)
               ),
               'id'
             );
@@ -187,21 +174,19 @@ export class ChannelService {
     });
   }
 
-  private fetchMoreFollowedStreams() {
+  private fetchMoreFollowedStreams(): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getOnlineFollowsGQL
         .fetch({ cursor: this.cursor })
-        .subscribe((result: ApolloQueryResult<IFollowsResponse>) => {
+        .subscribe((result: ApolloQueryResult<FollowsResponse>) => {
           if (result.data) {
             this.cursor = result.data.currentUser.followedLiveUsers.edges.slice(
               -1
             )[0].cursor;
-            this.streams = _uniqBy(
-              _concat(
-                this.streams,
-                _map(
-                  result.data.currentUser.followedLiveUsers.edges,
-                  e => e.node.stream
+            this.streams = uniqBy(
+              this.streams.concat(
+                result.data.currentUser.followedLiveUsers.edges.map(
+                  (e) => e.node.stream
                 )
               ),
               'id'

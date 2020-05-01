@@ -3,12 +3,12 @@ import { ApolloQueryResult } from 'apollo-client';
 import request from 'request-promise-native';
 import { Subject } from 'rxjs';
 import { SettingsService } from './settings.service';
-import { GetUserInfoGQL, IUserInfoResponse } from './twitch-graphql.service';
+import { GetUserInfoGQL, UserInfoResponse } from './twitch-graphql.service';
 import { TwitchService } from './twitch.service';
 
-export interface ILogin {
+export interface Login {
   logued?: boolean;
-  auth_token?: string;
+  authToken?: string;
   username?: string;
   error?: string;
 }
@@ -17,9 +17,9 @@ export interface ILogin {
   providedIn: 'root'
 })
 export class TwitchAuthService {
-  private login: ILogin = {
+  private login: Login = {
     username: '',
-    auth_token: '',
+    authToken: '',
     logued: false,
     error: ''
   };
@@ -30,17 +30,17 @@ export class TwitchAuthService {
     private settingsService: SettingsService
   ) {}
 
-  private loginChange: Subject<ILogin> = new Subject<ILogin>();
+  private loginChange: Subject<Login> = new Subject<Login>();
   loginChange$ = this.loginChange.asObservable();
 
-  setAuthToken(token: string) {
-    this.login.auth_token = token;
+  setAuthToken(token: string): void {
+    this.login.authToken = token;
     this.login.logued = true;
-    localStorage.setItem('auth_token', token);
+    localStorage.setItem('authToken', token);
 
     this.getUserInfoGQL
       .fetch()
-      .subscribe((result: ApolloQueryResult<IUserInfoResponse>) => {
+      .subscribe((result: ApolloQueryResult<UserInfoResponse>) => {
         this.login.username = result.data.currentUser.displayName;
         this.loginChange.next(this.login);
 
@@ -50,7 +50,7 @@ export class TwitchAuthService {
 
         this.settingsService
           .getStore()
-          .onDidChange('notifications', (newValue, oldValue) => {
+          .onDidChange('notifications', (newValue) => {
             if (newValue === false) {
               this.twitchService.unsubscribeToFollowsOnline();
             } else {
@@ -60,15 +60,15 @@ export class TwitchAuthService {
       });
   }
 
-  getLogin() {
+  getLogin(): Login {
     return this.login;
   }
 
-  logIn(username, password) {
-    return new Promise<ILogin>((resolve, reject) => {
+  logIn(username, password): Promise<Login> {
+    return new Promise((resolve) => {
       const j = request.jar();
       const url = 'https://passport.twitch.tv/login';
-      let options = {
+      const options = {
         method: 'POST',
         url,
         headers: {
@@ -78,14 +78,14 @@ export class TwitchAuthService {
         body: {
           username,
           password,
-          client_id: 'kimne78kx3ncx6brgo4mv6wki5h1ko'
+          clientId: 'kimne78kx3ncx6brgo4mv6wki5h1ko'
         },
         json: true,
         jar: j
       };
 
       request(options)
-        .then(data => {
+        .then((data) => {
           if (data.access_token) {
             this.setAuthToken(data.access_token);
             resolve(this.login);
@@ -95,7 +95,7 @@ export class TwitchAuthService {
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           resolve({
             error: err.error.error_description
@@ -104,14 +104,14 @@ export class TwitchAuthService {
     });
   }
 
-  logOut() {
+  logOut(): void {
     this.login = {
       username: '',
-      auth_token: '',
+      authToken: '',
       logued: false,
       error: ''
     };
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('authToken');
     this.loginChange.next(this.login);
   }
 }

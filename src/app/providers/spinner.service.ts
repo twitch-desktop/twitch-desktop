@@ -11,12 +11,12 @@ export class SpinnerService {
   private loadingChange: Subject<boolean> = new Subject<boolean>();
   loadingChange$ = this.loadingChange.asObservable();
 
-  hide() {
+  hide(): void {
     this.isLoading = false;
     this.loadingChange.next(false);
   }
 
-  show() {
+  show(): void {
     this.isLoading = true;
     this.loadingChange.next(true);
   }

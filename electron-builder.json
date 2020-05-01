@@ -16,34 +16,25 @@
     "!angular.json",
     "!_config.yml",
     "!karma.conf.js",
-    "!tsconfig.json",
-    "!tslint.json"
+    "!tsconfig.json"
   ],
   "win": {
     "icon": "build",
     "target": [
       {
         "target": "nsis-web",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       },
       {
         "target": "nsis",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       },
       {
         "target": "portable",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       }
     ],
-    "publish": [
-      "github"
-    ]
+    "publish": ["github"]
   },
   "mac": {
     "icon": "build",
@@ -51,20 +42,14 @@
     "target": [
       {
         "target": "dmg",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       },
       {
         "target": "zip",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       }
     ],
-    "publish": [
-      "github"
-    ]
+    "publish": ["github"]
   },
   "linux": {
     "icon": "build/icon.icns",
@@ -72,14 +57,10 @@
     "target": [
       {
         "target": "AppImage",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       }
     ],
     "artifactName": "${productName}.${ext}",
-    "publish": [
-      "github"
-    ]
+    "publish": ["github"]
   }
 }
