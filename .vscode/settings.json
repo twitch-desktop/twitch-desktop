@@ -1,7 +1,6 @@
 {
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.tslint": true
-  },
-  "prettier.printWidth": 120
+    "eslint.packageManager": "npm",
+    "eslint.format.enable": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true
 }

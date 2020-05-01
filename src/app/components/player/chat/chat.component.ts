@@ -1,8 +1,8 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
-import {remote, shell} from 'electron';
-import {SettingsService} from '../../../providers/settings.service';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { remote, shell } from 'electron';
+import { SettingsService } from '../../../providers/settings.service';
 
-let betterttv = remote.getGlobal('betterttv');
+const betterttv = remote.getGlobal('betterttv');
 
 // Player component
 @Component({
@@ -10,25 +10,25 @@ let betterttv = remote.getGlobal('betterttv');
   selector: 'tw-chat',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit, OnDestroy {
-  @Input() chat_url: string;
+export class ChatComponent implements OnInit {
+  @Input() chatUrl: string;
   isLoading = true;
   store = null;
 
   constructor(private element: ElementRef, private settings: SettingsService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Set dark mode in chat
-    let webview = this.element.nativeElement.lastElementChild;
-    webview.addEventListener('load-commit', event => {
+    const webview = this.element.nativeElement.lastElementChild;
+    webview.addEventListener('load-commit', () => {
       webview.executeJavaScript(
         `localStorage.setItem('bttv_darkenedMode',true);`
       );
     });
 
-    webview.addEventListener('did-finish-load', event => {
+    webview.addEventListener('did-finish-load', () => {
       if (this.settings.getConfig().betterttv === true) {
-        webview.executeJavaScript(betterttv, false, result => {
+        webview.executeJavaScript(betterttv, false, () => {
           this.isLoading = false;
         });
       } else {
@@ -37,11 +37,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
 
     if (this.settings.getConfig().openlinks) {
-      webview.addEventListener('new-window', e => {
+      webview.addEventListener('new-window', (e) => {
         shell.openExternal(e.url);
       });
     }
   }
-
-  ngOnDestroy() {}
 }

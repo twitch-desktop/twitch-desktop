@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
-  ILogin,
+  Login,
   TwitchAuthService
 } from '../../providers/twitch-auth-graphql.service';
 
@@ -13,7 +13,7 @@ import {
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-  login: ILogin;
+  login: Login;
   items = [
     {
       name: 'Games',
@@ -45,24 +45,24 @@ export class SidebarComponent implements OnInit {
     }
   ];
 
-  active_item = this.items[0];
+  activeItem = this.items[0];
 
   constructor(
     public router: Router,
     private twitchAuthService: TwitchAuthService
   ) {}
 
-  ngOnInit() {
-    this.twitchAuthService.loginChange$.subscribe((login: ILogin) => {
+  ngOnInit(): void {
+    this.twitchAuthService.loginChange$.subscribe((login: Login) => {
       this.login = login;
       this.items[2].visible = this.login.logued;
     });
   }
 
-  navigate(item) {
-    this.active_item.active = false;
+  navigate(item): void {
+    this.activeItem.active = false;
     item.active = true;
-    this.active_item = item;
+    this.activeItem = item;
     this.router.navigate([item.route]);
   }
 }

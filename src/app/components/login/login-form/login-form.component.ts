@@ -1,10 +1,19 @@
-import {AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {SpinnerService} from '../../../providers/spinner.service';
-import {ILogin, TwitchAuthService} from '../../../providers/twitch-auth-graphql.service';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  NgZone,
+  ViewChild,
+  OnDestroy
+} from '@angular/core';
+import { SpinnerService } from '../../../providers/spinner.service';
+import {
+  Login,
+  TwitchAuthService
+} from '../../../providers/twitch-auth-graphql.service';
 
-// tslint:disable-next-line: no-var-requires
-import {Router} from '@angular/router';
-import {remote, WebviewTag, Filter} from 'electron';
+import { Router } from '@angular/router';
+import { remote, WebviewTag, Filter } from 'electron';
 const session = remote.session;
 
 type Listener = (
@@ -19,8 +28,8 @@ type Listener = (
 })
 export class LoginFormComponent implements AfterViewInit, OnDestroy {
   @ViewChild('webview') webview: ElementRef;
-  login: ILogin;
-  login_url = 'https://passport.twitch.tv/sessions/new?client_id=settings_page';
+  login: Login;
+  login_url = 'https://passport.twitch.tv/sessions/new?clientId=settings_page';
   ready: boolean;
   listener: Listener;
   filter: Filter;
@@ -38,8 +47,8 @@ export class LoginFormComponent implements AfterViewInit, OnDestroy {
     };
   }
 
-  ngAfterViewInit() {
-    let webviewNative: WebviewTag = this.webview.nativeElement;
+  ngAfterViewInit(): void {
+    const webviewNative: WebviewTag = this.webview.nativeElement;
     webviewNative.addEventListener('dom-ready', () => {
       webviewNative.insertCSS(`
       body.kraken-page {
@@ -92,13 +101,13 @@ export class LoginFormComponent implements AfterViewInit, OnDestroy {
     });
 
     this.spinnerService.show();
-    this.twitchAuthService.loginChange$.subscribe((login: ILogin) => {
+    this.twitchAuthService.loginChange$.subscribe((login: Login) => {
       this.login = login;
     });
 
     const ses = session.fromPartition('persist:twitch');
 
-    this.listener = (details, callback) => {
+    this.listener = (details, callback): void => {
       if (details.url === 'https://www.twitch.tv/') {
         this.ngZone.run(() => {
           this.spinnerService.show();
@@ -119,17 +128,17 @@ export class LoginFormComponent implements AfterViewInit, OnDestroy {
           }
         }
       }
-      callback({requestHeaders: details.requestHeaders});
+      callback({ requestHeaders: details.requestHeaders });
     };
 
     ses.webRequest.onBeforeSendHeaders(this.filter, this.listener);
   }
 
-  logOut() {
+  logOut(): void {
     this.twitchAuthService.logOut();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     const ses = session.fromPartition('persist:twitch');
     ses.webRequest.onBeforeSendHeaders(this.filter, null);
   }

@@ -24,32 +24,32 @@
     <div class="d-flex h-100 w-100 align-items-center">
       <button class="toolbar-button menu-button" (click)="collapseSidebar()">
         <span class="material-icons">{{
-          sidebar_collapsed
+          sidebarCollapsed
             ? 'format_indent_increase'
             : 'format_indent_decrease'
         }}</span>
       </button>
 
-      <span class="material-icons logo-icon" [hidden]="player_logo !== null">{{
+      <span class="material-icons logo-icon" [hidden]="playerLogo !== null">{{
         logo
       }}</span>
       <img
-        src="{{ player_logo | twScaleImage: '48':'48' }}"
+        src="{{ playerLogo | twScaleImage: '48':'48' }}"
         class="player-logo"
-        [hidden]="player_logo === null"
+        [hidden]="playerLogo === null"
       />
       <div layout="column" class="toolbar-title">
         <span
           class="toolbar-header"
-          [ngClass]="player_username === null ? undefined : 'two-rows'"
+          [ngClass]="playerUsername === null ? undefined : 'two-rows'"
           >{{ title }}</span
         >
         <span
           class="toolbar-subheader two-rows"
-          [hidden]="player_username === null"
+          [hidden]="playerUsername === null"
         >
-          <span class="player-username two-rows">{{ player_username }}</span>
-          playing <span class="player-game two-rows">{{ player_game }}</span>
+          <span class="player-username two-rows">{{ playerUsername }}</span>
+          playing <span class="player-game two-rows">{{ playerGame }}</span>
         </span>
       </div>
 

@@ -6,15 +6,30 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
 import { RetryLink } from 'apollo-link-retry';
 
+interface Apollo {
+  link: ApolloLink;
+  cache: InMemoryCache;
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: string;
+      errorPolicy: string;
+    };
+    query: {
+      fetchPolicy: string;
+      errorPolicy: string;
+    };
+  };
+}
+
 const uri = 'https://gql.twitch.tv/gql';
-export function createApollo(httpLink: HttpLink) {
+export function createApollo(httpLink: HttpLink): Apollo {
   // Middleware to inject Client-ID header on all GraphQL requests
   const authMiddleware = new ApolloLink((operation, forward) => {
-    if (localStorage.getItem('auth_token')) {
+    if (localStorage.getItem('authToken')) {
       operation.setContext({
         headers: new HttpHeaders().set(
           'Authorization',
-          `OAuth ${localStorage.getItem('auth_token')}`
+          `OAuth ${localStorage.getItem('authToken')}`
         )
       });
       return forward(operation);
