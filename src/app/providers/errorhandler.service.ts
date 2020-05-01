@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-export interface IErrorValue {
+export interface ErrorValue {
   error: string;
   reason: any;
 }
@@ -12,11 +12,11 @@ export interface IErrorValue {
 export class ErrorService {
   // Observable used to spread the show and hide error request from
   // any component to the errorhandler component
-  private onError: Subject<IErrorValue> = new Subject<IErrorValue>();
+  private onError: Subject<ErrorValue> = new Subject<ErrorValue>();
   onError$ = this.onError.asObservable();
 
-  showError(err: string, reason?) {
-    let errorValue: IErrorValue = {
+  showError(err: string, reason?): void {
+    const errorValue: ErrorValue = {
       error: err,
       reason
     };
@@ -24,7 +24,7 @@ export class ErrorService {
     this.onError.next(errorValue);
   }
 
-  hide() {
+  hide(): void {
     this.onError.next(null);
   }
 }

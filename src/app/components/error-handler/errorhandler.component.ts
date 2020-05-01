@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
-import {
-  ErrorService,
-  IErrorValue
-} from '../../providers/errorhandler.service';
+import { ErrorService, ErrorValue } from '../../providers/errorhandler.service';
 
 // Error display component
 @Component({
@@ -20,10 +17,10 @@ export class ErrorComponent implements OnInit {
   constructor(private router: Router, private errorService: ErrorService) {
     // Subscribe to the onError event of the service to show or hide
     // the component bassed on its value
-    this.errorService.onError$.subscribe((error_value: IErrorValue) => {
-      if (error_value.error) {
-        this.error = error_value.error;
-        this.reason = error_value.reason;
+    this.errorService.onError$.subscribe((errorValue: ErrorValue) => {
+      if (errorValue.error) {
+        this.error = errorValue.error;
+        this.reason = errorValue.reason;
         this.displayError = true;
       } else {
         // `null` is used as the hide value
@@ -34,7 +31,7 @@ export class ErrorComponent implements OnInit {
     });
 
     // Hide error message on any route change
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.displayError = false;
         this.error = '';
@@ -43,9 +40,9 @@ export class ErrorComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
-  retry() {
+  retry(): void {
     this.displayError = false;
     this.error = '';
 

@@ -14,7 +14,7 @@ export class SpinnerComponent implements OnInit {
 
   constructor(private router: Router, private spinnerService: SpinnerService) {
     // Subscribe to loading change component to show or hide the spinner
-    spinnerService.loadingChange$.subscribe(isLoading => {
+    spinnerService.loadingChange$.subscribe((isLoading) => {
       this.isLoading = isLoading;
     });
   }

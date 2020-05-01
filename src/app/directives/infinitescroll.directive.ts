@@ -27,8 +27,8 @@ export class InfiniteScroll {
     });
   }
 
-  onScroll() {
-    let scrollElement = this.scrollbar.getScrollElement();
+  onScroll(): void {
+    const scrollElement = this.scrollbar.getScrollElement();
     if (
       scrollElement.scrollTop ===
       scrollElement.scrollHeight - scrollElement.offsetHeight

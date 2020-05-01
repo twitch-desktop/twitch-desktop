@@ -3,14 +3,14 @@ import { Router } from '@angular/router';
 
 import { ToolbarService } from '../../providers/toolbar.service';
 import {
-  ILogin,
+  Login,
   TwitchAuthService
 } from '../../providers/twitch-auth-graphql.service';
 
-export interface ISubheaderValue {
-  player_username: string;
-  player_game: string;
-  player_logo: string;
+export interface SubheaderValue {
+  playerUsername: string;
+  playerGame: string;
+  playerLogo: string;
 }
 
 // Toolbar component
@@ -19,7 +19,7 @@ export interface ISubheaderValue {
   selector: 'tw-toolbar',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit, ISubheaderValue {
+export class ToolbarComponent implements OnInit, SubheaderValue {
   // Toolbar button events
   @Output() close = new EventEmitter();
   @Output() maximize = new EventEmitter();
@@ -29,12 +29,12 @@ export class ToolbarComponent implements OnInit, ISubheaderValue {
 
   title: string = null;
   logo: string = null;
-  login: ILogin;
+  login: Login;
   isFullscreen = false;
-  player_username: string = null;
-  player_game: string = null;
-  player_logo: string = null;
-  sidebar_collapsed = false;
+  playerUsername: string = null;
+  playerGame: string = null;
+  playerLogo: string = null;
+  sidebarCollapsed = false;
 
   constructor(
     public router: Router,
@@ -47,54 +47,54 @@ export class ToolbarComponent implements OnInit, ISubheaderValue {
     }
   }
 
-  ngOnInit() {
-    this.twitchAuthService.loginChange$.subscribe((login: ILogin) => {
+  ngOnInit(): void {
+    this.twitchAuthService.loginChange$.subscribe((login: Login) => {
       this.login = login;
     });
 
     // Subscribe to title changes
-    this.toolbarService.titleChange$.subscribe(title => {
+    this.toolbarService.titleChange$.subscribe((title) => {
       this.title = title;
     });
 
     // Subscribe to logo changes
-    this.toolbarService.logoChange$.subscribe(logo => {
+    this.toolbarService.logoChange$.subscribe((logo) => {
       this.logo = logo;
     });
 
     // Subscribe to subheader change
-    this.toolbarService.subheaderChange$.subscribe(subHeader => {
+    this.toolbarService.subheaderChange$.subscribe((subHeader) => {
       if (!subHeader) {
-        this.player_username = null;
-        this.player_game = null;
-        this.player_logo = null;
+        this.playerUsername = null;
+        this.playerGame = null;
+        this.playerLogo = null;
       } else {
-        this.player_username = subHeader.player_username;
-        this.player_game = subHeader.player_game;
-        this.player_logo = subHeader.player_logo;
+        this.playerUsername = subHeader.playerUsername;
+        this.playerGame = subHeader.playerGame;
+        this.playerLogo = subHeader.playerLogo;
       }
     });
   }
 
-  closeWindow() {
+  closeWindow(): void {
     this.close.emit('event');
   }
 
-  maximizeWindow() {
+  maximizeWindow(): void {
     this.maximize.emit('event');
   }
 
-  minimizeWindow() {
+  minimizeWindow(): void {
     this.minimize.emit('event');
   }
 
-  enterFullscreen() {
+  enterFullscreen(): void {
     this.fullscreen.emit('event');
     this.isFullscreen = !this.isFullscreen;
   }
 
-  collapseSidebar() {
-    this.sidebar_collapsed = !this.sidebar_collapsed;
+  collapseSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
     this.collapse.emit('event');
   }
 }

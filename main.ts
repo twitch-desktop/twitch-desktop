@@ -1,106 +1,22 @@
 import { app, BrowserWindow, screen } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
-// tslint:disable: no-var-requires
-const path = require('path');
-const url = require('url');
-const fs = require('fs');
-const request = require('request-promise-native');
-// tslint:enable: no-var-requires
+import * as path from 'path';
+import * as url from 'url';
 
 let win;
-let aux_window;
+let auxWindow;
 const args = process.argv.slice(1);
-let serve = args.some(val => val === '--serve');
+const serve = args.some((val) => val === '--serve');
 
 autoUpdater.logger = log;
 autoUpdater.autoDownload = false;
 
 log.info('App starting...');
 
-try {
-  app.on('ready', () => {
-    aux_window = new BrowserWindow({
-      frame: true,
-      icon: path.join(__dirname, 'dist/assets/icon.png'),
-      width: 600,
-      autoHideMenuBar: true,
-      height: 300,
-      show: true,
-      backgroundColor: '#000',
-      webPreferences: {
-        webviewTag: true,
-        nodeIntegration: true,
-        webSecurity: false,
-        partition: 'persist:twitch'
-      }
-    });
-
-    if (serve) {
-      createMainWindow();
-    } else {
-      aux_window.on('close', event => {
-        autoUpdater.removeAllListeners();
-        aux_window.removeAllListeners();
-        createMainWindow();
-        event.preventDefault();
-      });
-
-      aux_window.loadURL(
-        url.format({
-          pathname: path.join(__dirname, `dist/update.html`),
-          protocol: 'file:',
-          slashes: true
-        })
-      );
-
-      autoUpdater.checkForUpdates();
-    }
-  });
-
-  autoUpdater.on('checking-for-update', () => {
-    sendStatusToWindow('Checking for updates');
-  });
-
-  autoUpdater.on('update-available', info => {
-    sendStatusToWindow('New update avaliable.');
-    autoUpdater.downloadUpdate();
-  });
-
-  autoUpdater.on('update-not-available', info => {
-    aux_window.close();
-  });
-
-  autoUpdater.on('error', err => {
-    sendStatusToWindow('Error in auto-updater. ' + err);
-    aux_window.close();
-  });
-
-  autoUpdater.on('download-progress', progressObj => {
-    let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
-    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-    log_message =
-      log_message +
-      ' (' +
-      progressObj.transferred +
-      '/' +
-      progressObj.total +
-      ')';
-    sendStatusToWindow(log_message);
-  });
-
-  autoUpdater.on('update-downloaded', info => {
-    sendStatusToWindow('Update downloaded');
-    setImmediate(() => autoUpdater.quitAndInstall());
-  });
-} catch (e) {
-  log.error(e);
-}
-
-async function createMainWindow() {
+const createMainWindow = (): void => {
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
-  let icon = path.join(__dirname, 'dist/assets/icon.png');
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -109,7 +25,6 @@ async function createMainWindow() {
     width: size.width,
     height: size.height,
     frame: false,
-    icon,
     title: 'Twitch Desktop',
     backgroundColor: '#000',
     show: false,
@@ -117,29 +32,18 @@ async function createMainWindow() {
       webviewTag: true,
       nodeIntegration: true,
       webSecurity: false,
-      partition: 'persist:twitch'
+      partition: 'persist:twitch',
+      allowRunningInsecureContent: serve ? true : false
     }
   });
 
   // We set this to be able to acces the main window object inside angular application
   (global as any).mainWindow = win;
 
-  aux_window.close();
-
   if (serve) {
-    (global as any).betterttv = await request(
-      'http://localhost:4200/assets/betterttv.js'
-    );
-    require('electron-reload')(__dirname, {
-      electron: require(`${__dirname}/node_modules/electron`)
-    });
     win.loadURL('http://localhost:4200');
     win.show();
   } else {
-    (global as any).betterttv = fs.readFileSync(
-      path.resolve(__dirname, 'dist/assets/betterttv.js'),
-      'utf8'
-    );
     win.loadURL(
       url.format({
         pathname: path.join(__dirname, 'dist/index.html'),
@@ -159,9 +63,90 @@ async function createMainWindow() {
     win = null;
     app.quit();
   });
+};
+
+function sendStatusToWindow(text): void {
+  log.info(text);
+  auxWindow.webContents.send('message', text);
 }
 
-function sendStatusToWindow(text) {
-  log.info(text);
-  aux_window.webContents.send('message', text);
+try {
+  app.allowRendererProcessReuse = true;
+
+  app.on('ready', () => {
+    auxWindow = new BrowserWindow({
+      frame: true,
+      width: 600,
+      autoHideMenuBar: true,
+      height: 300,
+      show: true,
+      backgroundColor: '#000',
+      webPreferences: {
+        webviewTag: true,
+        nodeIntegration: true,
+        webSecurity: false,
+        partition: 'persist:twitch'
+      }
+    });
+
+    if (serve) {
+      auxWindow.close();
+      createMainWindow();
+    } else {
+      auxWindow.on('close', (event) => {
+        autoUpdater.removeAllListeners();
+        auxWindow.removeAllListeners();
+        createMainWindow();
+        event.preventDefault();
+      });
+
+      auxWindow.loadURL(
+        url.format({
+          pathname: path.join(__dirname, `dist/update.html`),
+          protocol: 'file:',
+          slashes: true
+        })
+      );
+
+      autoUpdater.checkForUpdates();
+    }
+  });
+
+  autoUpdater.on('checking-for-update', () => {
+    sendStatusToWindow('Checking for updates');
+  });
+
+  autoUpdater.on('update-available', () => {
+    sendStatusToWindow('New update avaliable.');
+    autoUpdater.downloadUpdate();
+  });
+
+  autoUpdater.on('update-not-available', () => {
+    auxWindow.close();
+  });
+
+  autoUpdater.on('error', (err) => {
+    sendStatusToWindow('Error in auto-updater. ' + err);
+    auxWindow.close();
+  });
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    let logMessage = 'Download speed: ' + progressObj.bytesPerSecond;
+    logMessage = logMessage + ' - Downloaded ' + progressObj.percent + '%';
+    logMessage =
+      logMessage +
+      ' (' +
+      progressObj.transferred +
+      '/' +
+      progressObj.total +
+      ')';
+    sendStatusToWindow(logMessage);
+  });
+
+  autoUpdater.on('update-downloaded', () => {
+    sendStatusToWindow('Update downloaded');
+    setImmediate(() => autoUpdater.quitAndInstall());
+  });
+} catch (e) {
+  log.error(e);
 }

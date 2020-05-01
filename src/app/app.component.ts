@@ -8,8 +8,8 @@ import { SettingsService } from './providers/settings.service';
 import { TwitchAuthService } from './providers/twitch-auth-graphql.service';
 import { TwitchService } from './providers/twitch.service';
 
-let mainWindow = remote.getGlobal('mainWindow');
-let auth_token = localStorage.getItem('auth_token');
+const mainWindow = remote.getGlobal('mainWindow');
+const authToken = localStorage.getItem('authToken');
 
 @Component({
   selector: 'app-root',
@@ -39,22 +39,22 @@ export class AppComponent {
     }
   }
 
-  ngOnInit() {
-    if (auth_token && this.settingsService.getConfig().autologin) {
-      this.twitchAuthService.setAuthToken(auth_token);
+  ngOnInit(): void {
+    if (authToken && this.settingsService.getConfig().autologin) {
+      this.twitchAuthService.setAuthToken(authToken);
     } else {
-      localStorage.removeItem('auth_token');
+      localStorage.removeItem('authToken');
     }
 
     // Browse games as start page
     this.router.navigate(['/games']);
   }
 
-  closeWindow() {
+  closeWindow(): void {
     mainWindow.close();
   }
 
-  maximizeWindow() {
+  maximizeWindow(): void {
     if (mainWindow.isMaximized()) {
       mainWindow.unmaximize();
     } else {
@@ -62,15 +62,15 @@ export class AppComponent {
     }
   }
 
-  minimizeWindow() {
+  minimizeWindow(): void {
     mainWindow.minimize();
   }
 
-  enterFullscreen() {
+  enterFullscreen(): void {
     mainWindow.setFullScreen(!mainWindow.isFullScreen());
   }
 
-  toggleSidebar() {
+  toggleSidebar(): void {
     if (this.sidebarState === 'visible') {
       this.sidebarState = 'hidden';
     } else if (this.sidebarState === 'hidden') {

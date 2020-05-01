@@ -44,7 +44,7 @@
     >
     <select
       id="selectbox-quality"
-      [(ngModel)]="config.preferred_quality"
+      [(ngModel)]="config.preferredQuality"
       (ngModelChange)="configChanged()"
     >
       <option value="auto">Auto</option>
@@ -62,7 +62,7 @@
     >
     <input
       type="number"
-      [(ngModel)]="config.buffer_length"
+      [(ngModel)]="config.bufferLength"
       (ngModelChange)="configChanged()"
       class="form-control"
       id="buffer-length"

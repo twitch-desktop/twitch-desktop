@@ -9,7 +9,7 @@ import gql from 'graphql-tag';
  *
  ***/
 
-export interface IUserInfoResponse {
+export interface UserInfoResponse {
   currentUser: {
     displayName: string;
   };
@@ -17,7 +17,7 @@ export interface IUserInfoResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class GetUserInfoGQL extends Query<IUserInfoResponse> {
+export class GetUserInfoGQL extends Query<UserInfoResponse> {
   document = gql`
     query {
       currentUser {
@@ -27,7 +27,7 @@ export class GetUserInfoGQL extends Query<IUserInfoResponse> {
   `;
 }
 
-export interface ITopGamesResponse {
+export interface TopGamesResponse {
   games: {
     edges: [
       {
@@ -43,7 +43,7 @@ export interface ITopGamesResponse {
   };
 }
 
-interface IStream {
+interface Stream {
   id: string;
   broadcaster: {
     id: string;
@@ -62,25 +62,25 @@ interface IStream {
   createdAt: Date;
 }
 
-export interface ITopStreamsResponse {
+export interface TopStreamsResponse {
   streams: {
     edges: [
       {
-        node: IStream;
+        node: Stream;
         cursor: string;
       }
     ];
   };
 }
 
-export interface IGameStreamsResponse {
+export interface GameStreamsResponse {
   game: {
     id: string;
     name: string;
     streams: {
       edges: [
         {
-          node: IStream;
+          node: Stream;
           cursor: string;
         }
       ];
@@ -91,7 +91,7 @@ export interface IGameStreamsResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class GetTopGamesGQL extends Query<ITopGamesResponse> {
+export class GetTopGamesGQL extends Query<TopGamesResponse> {
   document = gql`
     query getTopGames($cursor: Cursor!) {
       games(first: 25, after: $cursor) {
@@ -112,7 +112,7 @@ export class GetTopGamesGQL extends Query<ITopGamesResponse> {
 @Injectable({
   providedIn: 'root'
 })
-export class GetTopStreamsGQL extends Query<ITopStreamsResponse> {
+export class GetTopStreamsGQL extends Query<TopStreamsResponse> {
   document = gql`
     query getTopStreams($cursor: Cursor!) {
       streams(first: 25, after: $cursor) {
@@ -145,7 +145,7 @@ export class GetTopStreamsGQL extends Query<ITopStreamsResponse> {
 @Injectable({
   providedIn: 'root'
 })
-export class GetGameStreamsGQL extends Query<IGameStreamsResponse> {
+export class GetGameStreamsGQL extends Query<GameStreamsResponse> {
   document = gql`
     query($name: String!, $cursor: Cursor!) {
       game(name: $name) {
@@ -178,14 +178,14 @@ export class GetGameStreamsGQL extends Query<IGameStreamsResponse> {
     }
   `;
 }
-export interface IFollowsResponse {
+export interface FollowsResponse {
   currentUser: {
     displayName: string;
     followedLiveUsers: {
       edges: [
         {
           node: {
-            stream: IStream;
+            stream: Stream;
           };
           cursor: string;
         }
@@ -197,7 +197,7 @@ export interface IFollowsResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class GetCurrentUserOnlineFollowsGQL extends Query<IFollowsResponse> {
+export class GetCurrentUserOnlineFollowsGQL extends Query<FollowsResponse> {
   document = gql`
     query($cursor: Cursor!) {
       currentUser {

@@ -1,12 +1,18 @@
-import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
-import {SpinnerService} from '../../providers/spinner.service';
-import {ToolbarService} from '../../providers/toolbar.service';
-import {ILogin, TwitchAuthService} from '../../providers/twitch-auth-graphql.service';
+import {
+  Component,
+  ElementRef,
+  NgZone,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import { SpinnerService } from '../../providers/spinner.service';
+import { ToolbarService } from '../../providers/toolbar.service';
+import {
+  Login,
+  TwitchAuthService
+} from '../../providers/twitch-auth-graphql.service';
 
-// tslint:disable-next-line: no-var-requires
-import {Router} from '@angular/router';
-import {remote, WebviewTag} from 'electron';
-const session = remote.session;
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './login.component.html',
@@ -14,8 +20,8 @@ const session = remote.session;
 })
 export class LoginComponent implements OnInit {
   @ViewChild('webview') webview: ElementRef;
-  login: ILogin;
-  login_url = 'https://passport.twitch.tv/sessions/new?client_id=settings_page';
+  login: Login;
+  login_url = 'https://passport.twitch.tv/sessions/new?clientId=settings_page';
 
   constructor(
     private toolbarService: ToolbarService,
@@ -27,16 +33,16 @@ export class LoginComponent implements OnInit {
     this.login = this.twitchAuthService.getLogin();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.toolbarService.setTitle('');
     this.toolbarService.setLogo('');
 
-    this.twitchAuthService.loginChange$.subscribe((login: ILogin) => {
+    this.twitchAuthService.loginChange$.subscribe((login: Login) => {
       this.login = login;
     });
   }
 
-  logOut() {
+  logOut(): void {
     this.twitchAuthService.logOut();
   }
 }
