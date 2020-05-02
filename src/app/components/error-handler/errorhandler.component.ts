@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
 import { ErrorService, ErrorValue } from '../../providers/errorhandler.service';
@@ -9,7 +9,7 @@ import { ErrorService, ErrorValue } from '../../providers/errorhandler.service';
   selector: 'tw-error',
   styleUrls: ['./errorhandler.component.scss']
 })
-export class ErrorComponent implements OnInit {
+export class ErrorComponent {
   displayError = false;
   error: string;
   reason = null;
@@ -39,8 +39,6 @@ export class ErrorComponent implements OnInit {
       }
     });
   }
-
-  ngOnInit(): void {}
 
   retry(): void {
     this.displayError = false;

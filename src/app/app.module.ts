@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import '../polyfills';
+import moment from 'moment';
 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
@@ -19,8 +20,7 @@ import { GraphQLModule } from './graphql.module';
 })
 export class TimeSincePipe implements PipeTransform {
   transform(startTime: string): string {
-    //TODO: FIX THIS
-    return '';
+    return moment(startTime).fromNow(true);
   }
 }
 
@@ -67,8 +67,7 @@ import { ToolbarService } from './providers/toolbar.service';
 import { TwitchService } from './providers/twitch.service';
 
 // Directives
-import { InfiniteScroll } from './directives/infinitescroll.directive';
-import { WebviewDirective } from './directives/webview.directive';
+import { InfiniteScrollDirective } from './directives/infinitescroll.directive';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -92,8 +91,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     LoginFormComponent,
 
     // Directives
-    WebviewDirective,
-    InfiniteScroll,
+    InfiniteScrollDirective,
 
     // Pipes
     TimeSincePipe,

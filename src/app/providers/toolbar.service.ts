@@ -27,10 +27,6 @@ export class ToolbarService implements SubHeaderValue {
   private logoChange = new Subject<string>();
   logoChange$ = this.logoChange.asObservable();
 
-  // Close request observable
-  private closeRequest = new Subject<any>();
-  closeRequest$ = this.closeRequest.asObservable();
-
   // Subheader change observable
   private subheaderChange = new Subject<SubHeaderValue>();
   subheaderChange$ = this.subheaderChange.asObservable();

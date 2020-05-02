@@ -26,7 +26,9 @@
               "src/favicon.256x256.png",
               "src/favicon.512x512.png"
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": [],
             "customWebpackConfig": {
               "path": "./angular.webpack.js"
@@ -92,12 +94,14 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": "src/eslintrc.config.json",
+            "eslintConfig": "src/.eslintrc.js",
             "tsConfig": [
               "src/tsconfig.app.json",
               "src/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }

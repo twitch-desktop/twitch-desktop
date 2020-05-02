@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { concat as _concat } from 'lodash';
 
 import { ErrorService } from '../../providers/errorhandler.service';
-import { GameService } from '../../providers/games.service';
+import { GameService, Game } from '../../providers/games.service';
 import { SpinnerService } from '../../providers/spinner.service';
 import { ToolbarService } from '../../providers/toolbar.service';
 
@@ -12,7 +12,7 @@ import { ToolbarService } from '../../providers/toolbar.service';
   styleUrls: ['./games.component.scss']
 })
 export class GamesComponent implements OnInit {
-  games = [];
+  games: Game[] = [];
   fetchingMore = false;
 
   constructor(
@@ -34,7 +34,7 @@ export class GamesComponent implements OnInit {
     // Load the list of top games and hide the spinner
     this.gameService
       .getTopGames()
-      .then((games: any) => {
+      .then((games) => {
         this.games = _concat(this.games, games);
         this.spinnerService.hide();
       })
@@ -50,19 +50,16 @@ export class GamesComponent implements OnInit {
     // Only fetch more if we are not already doing that
     if (!this.fetchingMore) {
       this.fetchingMore = true;
-      this.zone.run(() => {});
 
       this.gameService
         .fetchMoreTopGames()
-        .then((games: any) => {
+        .then((games) => {
           this.games = games;
           this.fetchingMore = false;
-          this.zone.run(() => {});
         })
         .catch((reason) => {
           console.log(reason);
           this.fetchingMore = false;
-          this.zone.run(() => {});
         });
     }
   }

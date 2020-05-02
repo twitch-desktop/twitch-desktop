@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 
 export interface ErrorValue {
   error: string;
-  reason: any;
+  reason: string;
 }
 
 // Service that allows components to display the error component from any

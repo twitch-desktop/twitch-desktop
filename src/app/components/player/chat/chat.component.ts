@@ -22,7 +22,7 @@ export class ChatComponent implements OnInit {
     const webview = this.element.nativeElement.lastElementChild;
     webview.addEventListener('load-commit', () => {
       webview.executeJavaScript(
-        `localStorage.setItem('bttv_darkenedMode',true);`
+        "localStorage.setItem('bttv_darkenedMode',true);"
       );
     });
 
