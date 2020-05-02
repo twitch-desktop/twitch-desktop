@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { remote } from 'electron';
@@ -12,11 +12,11 @@ const mainWindow = remote.getGlobal('mainWindow');
 const authToken = localStorage.getItem('authToken');
 
 @Component({
-  selector: 'app-root',
+  selector: 'tw-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   sidebarState = 'visible';
 
   constructor(

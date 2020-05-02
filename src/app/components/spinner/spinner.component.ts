@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { SpinnerService } from '../../providers/spinner.service';
@@ -9,7 +9,7 @@ import { SpinnerService } from '../../providers/spinner.service';
   selector: 'tw-spinner',
   styleUrls: ['./spinner.component.scss']
 })
-export class SpinnerComponent implements OnInit {
+export class SpinnerComponent {
   isLoading = false;
 
   constructor(private router: Router, private spinnerService: SpinnerService) {
@@ -18,6 +18,4 @@ export class SpinnerComponent implements OnInit {
       this.isLoading = isLoading;
     });
   }
-
-  ngOnInit() {}
 }

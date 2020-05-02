@@ -10,9 +10,9 @@ import SimpleBar from 'simplebar';
 // Infinite Scroll directive
 // Emits (scrolled) when a div is scrolled to the bottom
 @Directive({
-  selector: '[infinite-scroll]'
+  selector: '[twInfiniteScroll]'
 })
-export class InfiniteScroll {
+export class InfiniteScrollDirective {
   @Output() scrolled = new EventEmitter();
   private scrollbar;
 

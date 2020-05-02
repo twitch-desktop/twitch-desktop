@@ -21,7 +21,7 @@ export interface SubheaderValue {
 })
 export class ToolbarComponent implements OnInit, SubheaderValue {
   // Toolbar button events
-  @Output() close = new EventEmitter();
+  @Output() closed = new EventEmitter();
   @Output() maximize = new EventEmitter();
   @Output() minimize = new EventEmitter();
   @Output() collapse = new EventEmitter();
@@ -77,7 +77,7 @@ export class ToolbarComponent implements OnInit, SubheaderValue {
   }
 
   closeWindow(): void {
-    this.close.emit('event');
+    this.closed.emit('event');
   }
 
   maximizeWindow(): void {

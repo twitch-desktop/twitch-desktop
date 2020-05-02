@@ -18,6 +18,7 @@ import { TwitchService } from '../../providers/twitch.service';
 export class PlayerComponent implements OnInit, OnDestroy {
   stream: Stream;
   chatUrl: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   player: any;
   isLoading = true;
   player_source_resolution = 0;
