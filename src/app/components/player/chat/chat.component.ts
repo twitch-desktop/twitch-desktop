@@ -3,6 +3,7 @@ import { remote, shell } from 'electron';
 import { SettingsService } from '../../../providers/settings.service';
 
 const betterttv = remote.getGlobal('betterttv');
+const frankerfacez = remote.getGlobal('frankerfacez');
 
 // Player component
 @Component({
@@ -29,14 +30,17 @@ export class ChatComponent implements OnInit {
     webview.addEventListener('did-finish-load', () => {
       webview.openDevTools();
 
+      const pluginsPromises = [];
+
       if (this.settings.getConfig().betterttv === true) {
-        webview
-          .executeJavaScript(betterttv, false)
-          .then(() => (this.isLoading = false))
-          .catch(() => (this.isLoading = false));
-      } else {
-        this.isLoading = false;
+        pluginsPromises.push(webview.executeJavaScript(betterttv, false));
       }
+
+      if (this.settings.getConfig().frankerfacez === true) {
+        pluginsPromises.push(webview.executeJavaScript(frankerfacez, false));
+      }
+
+      Promise.allSettled(pluginsPromises).then(() => (this.isLoading = false));
     });
 
     if (this.settings.getConfig().openlinks) {

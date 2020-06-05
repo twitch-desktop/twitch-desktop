@@ -3,6 +3,7 @@ import Store from 'electron-store';
 
 export interface ConfigType {
   betterttv: boolean;
+  frankerfacez: boolean;
   autologin: boolean;
   openlinks: boolean;
   bufferLength: number;
@@ -12,6 +13,7 @@ export interface ConfigType {
 
 const defaults: ConfigType = {
   betterttv: false,
+  frankerfacez: false,
   autologin: true,
   openlinks: true,
   bufferLength: 10,
