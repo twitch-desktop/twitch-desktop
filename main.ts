@@ -45,6 +45,10 @@ async function createMainWindow(): Promise<BrowserWindow> {
     (global as any).betterttv = await request(
       'http://localhost:4200/assets/betterttv.js'
     );
+    (global as any).frankerfacez = await request(
+      'http://localhost:4200/assets/frankerfacez.js'
+    );
+
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
@@ -53,6 +57,10 @@ async function createMainWindow(): Promise<BrowserWindow> {
   } else {
     (global as any).betterttv = fs.readFileSync(
       path.resolve(__dirname, 'dist/assets/betterttv.js'),
+      'utf8'
+    );
+    (global as any).frankerfacez = fs.readFileSync(
+      path.resolve(__dirname, 'dist/assets/frankerfacez.js'),
       'utf8'
     );
     win.loadURL(
