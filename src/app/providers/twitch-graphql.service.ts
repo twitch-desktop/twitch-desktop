@@ -199,10 +199,10 @@ export interface FollowsResponse {
 })
 export class GetCurrentUserOnlineFollowsGQL extends Query<FollowsResponse> {
   document = gql`
-    query($cursor: Cursor!) {
+    query {
       currentUser {
         displayName
-        followedLiveUsers(first: 25, after: $cursor) {
+        followedLiveUsers(first: 100) {
           edges {
             node {
               stream {

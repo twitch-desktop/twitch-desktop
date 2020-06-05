@@ -50,16 +50,19 @@ export class GamesComponent implements OnInit {
     // Only fetch more if we are not already doing that
     if (!this.fetchingMore) {
       this.fetchingMore = true;
+      this.zone.run(() => {});
 
       this.gameService
         .fetchMoreTopGames()
-        .then((games) => {
+        .then((games: any) => {
           this.games = games;
           this.fetchingMore = false;
+          this.zone.run(() => {});
         })
         .catch((reason) => {
           console.log(reason);
           this.fetchingMore = false;
+          this.zone.run(() => {});
         });
     }
   }
