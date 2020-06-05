@@ -3,13 +3,15 @@ import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
+import * as fs from 'fs';
+import request from 'request-promise-native';
 
 let win;
 let auxWindow;
 const args = process.argv.slice(1);
 const serve = args.some((val) => val === '--serve');
 
-function createMainWindow(): BrowserWindow {
+async function createMainWindow(): Promise<BrowserWindow> {
   autoUpdater.logger = log;
   autoUpdater.autoDownload = false;
 
@@ -23,6 +25,7 @@ function createMainWindow(): BrowserWindow {
     width: size.width,
     height: size.height,
     frame: false,
+    icon: path.join(__dirname, 'dist/assets/icon.png'),
     title: 'Twitch Desktop',
     backgroundColor: '#000',
     show: false,
@@ -39,12 +42,19 @@ function createMainWindow(): BrowserWindow {
   (global as any).mainWindow = win;
 
   if (serve) {
+    (global as any).betterttv = await request(
+      'http://localhost:4200/assets/betterttv.js'
+    );
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
     win.loadURL('http://localhost:4200');
     win.show();
   } else {
+    (global as any).betterttv = fs.readFileSync(
+      path.resolve(__dirname, 'dist/assets/betterttv.js'),
+      'utf8'
+    );
     win.loadURL(
       url.format({
         pathname: path.join(__dirname, 'dist/index.html'),
@@ -82,6 +92,7 @@ try {
       } else {
         auxWindow = new BrowserWindow({
           frame: true,
+          icon: path.join(__dirname, 'dist/assets/icon.png'),
           width: 600,
           autoHideMenuBar: true,
           height: 300,

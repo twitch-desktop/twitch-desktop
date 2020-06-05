@@ -27,10 +27,13 @@ export class ChatComponent implements OnInit {
     });
 
     webview.addEventListener('did-finish-load', () => {
+      webview.openDevTools();
+
       if (this.settings.getConfig().betterttv === true) {
-        webview.executeJavaScript(betterttv, false, () => {
-          this.isLoading = false;
-        });
+        webview
+          .executeJavaScript(betterttv, false)
+          .then(() => (this.isLoading = false))
+          .catch(() => (this.isLoading = false));
       } else {
         this.isLoading = false;
       }
