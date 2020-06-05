@@ -73,7 +73,7 @@ export class TwitchService {
     this.pullingSubscription = interval(30000)
       .pipe(
         startWith(0),
-        switchMap(() => this.getOnlineFollowsGQL.fetch())
+        switchMap(() => this.getOnlineFollowsGQL.fetch({ cursor: '' }))
       )
       .subscribe((result: ApolloQueryResult<FollowsResponse>) => {
         const oldOnlineStreams = this.followedOnlineStreams;

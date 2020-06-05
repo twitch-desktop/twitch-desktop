@@ -63,7 +63,7 @@ export class ChannelService {
   getTopStreams(): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getTopStreamsGQL
-        .fetch()
+        .fetch({ cursor: '' })
         .subscribe((result: ApolloQueryResult<TopStreamsResponse>) => {
           if (result.data) {
             this.streamsListType = StreamListType.TopStreams;
@@ -80,7 +80,7 @@ export class ChannelService {
   getGameStreams(game: Game): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getGameStreamsGQL
-        .fetch({ name: game.name })
+        .fetch({ name: game.name, cursor: '' })
         .subscribe((result: ApolloQueryResult<GameStreamsResponse>) => {
           if (result.data) {
             this.game = game;
@@ -98,7 +98,7 @@ export class ChannelService {
   getFollowedStreams(): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.getOnlineFollowsGQL
-        .fetch()
+        .fetch({ cursor: '' })
         .subscribe((result: ApolloQueryResult<FollowsResponse>) => {
           if (result.data) {
             this.streamsListType = StreamListType.FollowingStreams;

@@ -78,15 +78,18 @@ export class ChannelsComponent implements OnInit {
     // Load more items only if we are not already doing that
     if (!this.fetchingMore) {
       this.fetchingMore = true;
+      this.zone.run(() => {});
       this.channelService
         .fetchMoreStreams()
         .then((streams: Stream[]) => {
           this.streams = streams;
           this.fetchingMore = false;
+          this.zone.run(() => {});
         })
         .catch((reason) => {
           console.log(reason);
           this.fetchingMore = false;
+          this.zone.run(() => {});
         });
     }
   }

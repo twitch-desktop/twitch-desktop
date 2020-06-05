@@ -21,7 +21,7 @@ export class GameService {
   async getTopGames(): Promise<Game[]> {
     return new Promise((resolve, reject) => {
       this.getTopGamesGQL
-        .fetch()
+        .fetch({ cursor: '' })
         .subscribe((result: ApolloQueryResult<TopGamesResponse>) => {
           if (result.data) {
             this.cursor = result.data.games.edges.slice(-1)[0].cursor;
