@@ -28,8 +28,6 @@ export class ChatComponent implements OnInit {
     });
 
     webview.addEventListener('did-finish-load', () => {
-      webview.openDevTools();
-
       const pluginsPromises = [];
 
       if (this.settings.getConfig().betterttv === true) {
