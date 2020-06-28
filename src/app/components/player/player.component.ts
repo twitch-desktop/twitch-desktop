@@ -38,7 +38,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     });
 
     if (this.stream.broadcaster && this.stream.broadcaster.login) {
-      this.chatUrl = `https://www.twitch.tv/embed/${this.stream.broadcaster.login}/chat?darkpopout`;
+      this.chatUrl = `https://www.twitch.tv/embed/${this.stream.broadcaster.login}/chat?darkpopout&parent=twitch.tv`;
     }
 
     // Set toolbar title and logo
