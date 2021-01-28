@@ -80,7 +80,7 @@
     "bootstrap-scss": "^4.4.1",
     "clappr": "^0.3.12",
     "core-js": "3.6.5",
-    "electron": "8.2.5",
+    "electron": "9.4.0",
     "electron-builder": "22.6.0",
     "electron-reload": "1.5.0",
     "electron-store": "^5.1.1",
